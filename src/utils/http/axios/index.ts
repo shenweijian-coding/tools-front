@@ -73,8 +73,10 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
       .request<any, AxiosResponse<IResponse>>(conf)
       .then((res: AxiosResponse<IResponse>) => {
         // resolve(res as unknown as Promise<T>);
-        const { data: { result } } = res
-        resolve(result as T)
+        const { data } = res
+        console.log(data);
+        
+        resolve(data as unknown as Promise<T>)
       })
   });
 }

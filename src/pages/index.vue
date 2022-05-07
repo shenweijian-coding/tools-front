@@ -2,34 +2,21 @@
 import { version } from "../../package.json"
 import SvgIcon from "@components/SvgIcon/index.vue"
 import { useAppStore } from '@/store/modules/app'
-import { framework } from "./data"
+// import { framework } from "./data"
 import Header from "@components/Header/index.vue"
-import { getHomeInfo } from '@/api/home'
+import { getHomeInfo } from '@api/home'
 const appStore = useAppStore()
-const data = ref(framework)
+// const data = ref(framework)
+let data = ref()
+getHomeInfo().then(res => { data.value = res.data.list })
+const href = ref(window.location.href)
+console.log(data.value);
 
-const list = await getHomeInfo()
-console.log(list);
-
-// const user = await userApi.getUserProfile()
-// console.log(user, '获取用户信息')
 </script>
 <template>
   <div class="dark:text-slate-400 dark:bg-slate-900">
     <Header />
-    <!-- <main class="max-w-5xl px-4 mx-auto pb-22 sm:px-6 md:px-8 xl:px-12 xl:max-w-6xl"> -->
-      <!-- <div class="pt-8 pb-7 sm:pb-8 sm:text-center"> -->
-        <!-- <h1
-          class="relative mb-4 text-4xl tracking-tight font-blimone sm:text-5xl lg:text-6xl text-slate-900 dark:text-slate-200"
-        >
-          {{ appStore.h1 }}
-          <span
-            class="absolute text-2xl tracking-wide version lg:text-4xl bg-gradient-to-br from-fuchsia-500 to-purple-600"
-          >{{ `V${version}` }}</span>
-        </h1> -->
-        <!-- <p class="text-2xl text-slate-800 dark:text-slate-400">最新Vue3技术流，超全配置，大厂协作规范，大佬必备神器</p> -->
-      <!-- </div> -->
-    <!-- </main> -->
+
     <article class="space-y-20 sm:space-y-32 md:space-y-40 lg:space-y-44">
       <ul
         class="flex flex-wrap items-center justify-center py-6 sm:px-20 lg:px-36 xl:px-52 sm:justify-start lg:justify-start"
@@ -63,7 +50,8 @@ console.log(list);
               </div>
               <cite class="flex">
                 <a
-                  :href="item.github"
+                  target="_blank"
+                  :href="href + item.github"
                   class="transition-opacity duration-200 opacity-50 hover:opacity-75"
                 >
                   <SvgIcon name="svg-github" />

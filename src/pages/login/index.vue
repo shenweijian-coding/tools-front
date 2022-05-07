@@ -1,11 +1,5 @@
 <template>
     <div class="container">
-        <div class="logo">
-            <img :src="logo" width="240" />
-            
-            <!-- <div class="logo-text">Arco Design Pro</div> -->
-        </div>
-        <LoginBanner />
         <div class="content">
             <div class="content-inner">
                 <LoginForm />
@@ -19,7 +13,6 @@
 
 <script setup lang="ts">
 import Footer from '@components/footer/index.vue';
-import LoginBanner from './components/banner.vue';
 import LoginForm from './components/login-form.vue';
 import logo from '@/assets/icons/svg/logo.svg'
 
