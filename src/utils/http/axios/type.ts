@@ -6,9 +6,8 @@ export interface RequestOptions {
 // 返回res.data的interface
 export interface IResponse<T = any> {
   code: number | string
-  result: T
-  message: string
-  status: string | number
+  data: T
+  msg: string
 }
 
 /**用户登录 */

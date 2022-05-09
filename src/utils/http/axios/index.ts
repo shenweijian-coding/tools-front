@@ -4,7 +4,7 @@ import { showMessage } from './status'
 import { IResponse, ILogin, RequestOptions } from './type'
 import { API_BASE_URL } from '../../../../config/constant'
 import { getToken, TokenPrefix } from '@/utils/auth'
-
+import { Message } from '@arco-design/web-vue';
 // 如果请求话费了超过 `timeout` 的时间，请求将被中断
 axios.defaults.timeout = 5000
 // 表示跨域请求时是否需要使用凭证
@@ -75,8 +75,12 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
         // resolve(res as unknown as Promise<T>);
         const { data } = res
         console.log(data);
-        
-        resolve(data as unknown as Promise<T>)
+        if(data.code !== 200) {
+          Message.error(data.msg)
+          reject(data as unknown as Promise<T>)
+        }else {
+          resolve(data as unknown as Promise<T>)
+        }
       })
   });
 }
