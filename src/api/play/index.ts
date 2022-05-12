@@ -6,5 +6,10 @@ interface url {
   sid?: string
   vid?: string
 }
+interface params {
+  sid: string,
+  vid: string
+}
+export const getPlayUrl = async (data: url) => post<any>({ url: 'api/play/1', data })
 
-export const getPlayUrl = async (isDown: Boolean,data: url) => post<any>({ url: 'api/play/1?isDown' + isDown, data })
+export const getDownFile = async (data: params) => post<any>({ url: 'api/play/2', data })
