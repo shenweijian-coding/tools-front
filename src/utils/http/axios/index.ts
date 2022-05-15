@@ -74,7 +74,7 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
       .then((res: AxiosResponse<IResponse>) => {
         // resolve(res as unknown as Promise<T>);
         const { data } = res
-        console.log(data);
+        // console.log(data);
         if(data.code !== 200) {
           Message.error(data.msg)
           reject(data as unknown as Promise<T>)
