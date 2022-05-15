@@ -2,9 +2,7 @@ import request from '@/utils/http/axios'
 import { get, post } from '@utils/http/axios'
 
 interface url {
-  url?: string
-  sid?: string
-  vid?: string
+  url: string
 }
 interface params {
   sid: string,
