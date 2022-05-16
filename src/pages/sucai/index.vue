@@ -10,6 +10,8 @@ const options = reactive({
 const getDownUrl = async (url) => {
   try {
     loading.value = true
+    href.value = ''
+    options.list = []
     console.log(url.value);
     link = url.value
     const res = await getPngUrl({ url: url.value })
@@ -33,9 +35,6 @@ const getDownUrl = async (url) => {
 }
 const getCurDownUrl = async(item) => {
   try {
-    console.log('点击了', toRaw(item));
-    // loading.value = true
-    // debugger
     const res = await getPngUrl({
       url: link,
       option: toRaw(item)
@@ -54,7 +53,7 @@ const getCurDownUrl = async(item) => {
 
 <template>
   <Input @getPlay="getDownUrl" :loading="loading"/>
-  <a :href="href" v-if="href">
+  <a :href="href" v-if="href" target="_blank" referrerpolicy="no-referrer">
     <a-button class="mt-4" type="primary">立即下载</a-button>
   </a>
   <span v-if="options.list.length">
