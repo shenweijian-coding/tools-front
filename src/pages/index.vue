@@ -3,20 +3,19 @@ import { version } from "../../package.json"
 import SvgIcon from "@components/SvgIcon/index.vue"
 import { useAppStore } from '@/store/modules/app'
 // import { framework } from "./data"
-import Header from "@components/Header/index.vue"
 import { getHomeInfo } from '@api/home'
 const appStore = useAppStore()
 // const data = ref(framework)
-let data = ref()
-getHomeInfo().then(res => { data.value = res.data.list })
+let data = ref();
+(async () => {
+  const res = await getHomeInfo()
+  data.value = res.data.list
+})()
+// getHomeInfo().then(res => { data.value = res.data.list })
 const href = ref(window.location.href)
-console.log(data.value);
-
 </script>
 <template>
   <div class="dark:text-slate-400 dark:bg-slate-900">
-    <Header />
-
     <article class="space-y-20 sm:space-y-32 md:space-y-40 lg:space-y-44">
       <ul
         class="flex flex-wrap items-center justify-center py-6 sm:px-20 lg:px-36 xl:px-52 sm:justify-start lg:justify-start"
@@ -34,7 +33,7 @@ console.log(data.value);
               <p v-html="item.content"></p>
             </blockquote>
             <figcaption
-              class="flex items-center p-6 space-x-4 leading-6 text-white md:px-10 md:py-6 bg-gradient-to-br rounded-b-xl"
+              class="flex items-center p-2 space-x-2 leading-2 text-white md:px-4 md:py-6 rounded-b-xl"
               :class="item.color"
             >
               <div
@@ -52,9 +51,10 @@ console.log(data.value);
                 <a
                   target="_blank"
                   :href="href + item.github"
-                  class="transition-opacity duration-200 opacity-50 hover:opacity-75"
+                  class=""
                 >
-                  <SvgIcon name="svg-github" />
+                点击进入
+                  <!-- <SvgIcon name="svg-github" /> -->
                 </a>
               </cite>
             </figcaption>

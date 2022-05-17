@@ -1,72 +1,73 @@
 <template>
-    <div class="container">
-        <div class="content">
-            <div class="content-inner">
-                <LoginForm />
-            </div>
-            <div class="footer">
-                <Footer />
-            </div>
-        </div>
+ <div class="login">
+  <div class="loginPart">
+    <h2>用户登录</h2>
+  <a-form>
+    <div class="inputElement">
+      <a-input v-model="userInfo.username" placeholder="请输入用户名/手机号 "></a-input>
     </div>
+    <div class="inputElement">
+      <a-input v-model="userInfo.password" placeholder="请输入密码 "></a-input>
+    </div>
+    <div>
+    <a-button type="primary" >登录</a-button>
+    </div>
+    <div style="text-align: right;color: white;">
+    </div>
+  </a-form>
+  </div>
+  </div>
 </template>
 
-<script setup lang="ts">
-import Footer from '@components/footer/index.vue';
-import LoginForm from './components/login-form.vue';
-import logo from '@/assets/icons/svg/logo.svg'
-
-const theme = localStorage.getItem('theme')
-
-if(theme == 'dark'){
-    document.documentElement.classList.add('dark');
-    document.body.setAttribute('arco-theme', 'dark');
-} else {
-    document.documentElement.classList.remove('dark');
-    document.body.removeAttribute('arco-theme');
-}
+<script setup>
+    const imgSrc= ref('http://qiniu.mouae.com/header_bg_design.jpg')
+    const userInfo = reactive({
+        username: '',
+        password: '',
+    })
 </script>
-
-<style lang="less" scoped>
-.container {
-    display: flex;
-    height: 100vh;
-
-    .banner {
-        width: 550px;
-        background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
-    }
-
-    .content {
-        position: relative;
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        padding-bottom: 40px;
-    }
-
-    .footer {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-    }
-}
-
-.logo {
-    position: fixed;
-    top: 24px;
-    left: 22px;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-
-    &-text {
-        margin-right: 4px;
-        margin-left: 4px;
-        color: var(--color-fill-1);
-        font-size: 20px;
-    }
-}
+<style scoped>
+.loginPart{
+    position:absolute;
+    /*定位方式绝对定位absolute*/
+    top:40%;
+    left:50%;
+    /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
+    transform:translate(-50%,-50%);
+    /*实现块元素百分比下居中*/
+    box-shadow: 0 0 2.1875rem 0 rgb(154 161 171 / 15%);
+    width:450px;
+    padding:50px;
+    padding: 16px 8px;
+    background-color: hsla(0,0%,100%,.78);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    /* border-radius: 10px; */
+  }
+  .loginPart h2{
+    margin:0 0 30px;
+    padding:0;
+    color: #fff;
+    text-align:center;
+    /*文字居中*/
+  }
+  .loginPart .inputbox{
+    position:relative;
+  }
+  .loginPart .inputElement input{
+    width: 100%;
+    padding:10px 0;
+    font-size:16px;
+    color:#fff;
+    letter-spacing: 1px;
+    /*字符间的间距1px*/
+    margin-bottom: 30px;
+    border:none;
+    border-bottom: 1px solid #fff;
+    outline:none;
+    /*outline用于绘制元素周围的线
+    outline：none在这里用途是将输入框的边框的线条使其消失*/
+    background: transparent;
+    /*背景颜色为透明*/
+  }
 </style>

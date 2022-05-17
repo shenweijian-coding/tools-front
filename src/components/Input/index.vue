@@ -2,7 +2,7 @@
   <a-input-search
     :loading="loading"
     style="height: 44px"
-    placeholder="复制链接到此处，点击解析，稍等片刻即可观看！"
+    placeholder="复制链接到此处，点击解析，稍等片刻即可！"
     v-model="url"
     button-text="解析"
     search-button

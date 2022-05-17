@@ -1,14 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import SvgIcon from '../SvgIcon/index.vue'
 import { ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
-import { IconMoonFill, IconSunFill } from '@arco-design/web-vue/es/icon';
-const title = ref('I want to study typescript')
-// 检测浏览器系统主题
-const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)')
+import { useRoute } from 'vue-router';
 const appStore = useAppStore()
-const useStore = useUserStore()
 const theme = computed(() => {
   return appStore.theme
 })
@@ -18,23 +14,27 @@ const isDark = useDark({
   valueDark: 'dark',
   valueLight: 'light',
   storageKey: 'arco-theme',
-  onChanged(dark: boolean) {
+  onChanged(dark) {
     appStore.toggleTheme(dark);
   },
 })
-const toggleTheme = useToggle(isDark)
-// const setVisible = () => {
-//   appStore.updateSettings({ globalSettings: true });
-// };
-const ThemeChange = (val: string | number | boolean) => {
-  if (!val) {
-    document.documentElement.classList.add('dark')
-    document.body.setAttribute('arco-theme', 'dark')
-  } else {
-    document.body.removeAttribute('arco-theme')
-    document.documentElement.classList.remove('dark')
-  }
-}
+const curPath = ref((toRaw(useRoute()).path))
+console.log(curPath);
+const paths = reactive({
+  list: [{
+    name: '素材搜索',
+    path: '/sucai',
+    id: 1
+  },{
+    name: '虎课播放',
+    path: '/huke',
+    id: 2
+  },{
+    name: '视达播放',
+    path: '/shida',
+    id: 3
+  }]
+})
 </script>
 
 <template>
@@ -50,55 +50,31 @@ const ThemeChange = (val: string | number | boolean) => {
             <router-link
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
-            >tools</router-link>
-            <div class="relative items-center hidden ml-auto lg:flex">
+            >tools
+            </router-link>
+            <div class="relative items-center hidden flex justify-between lg:flex w-full">
+              <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
+                <ul class="flex space-x-14">
+                  <template v-for="it in paths.list" :key="it.id">
+                  <li class="ml-16" :class="curPath === it.path ? 'border-b-4 rounded-sm border-blue-400 text-blue-500' : ''">
+                    <router-link
+                      :to="it.path"
+                      class="hover:text-blue-500 dark:hover:text-blue-400"
+                    >{{it.name}}</router-link>
+                  </li>
+                  </template>
+                </ul>
+              </nav>
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-8">
-                  <!-- <li>
-                    <router-link
-                      to="/demo"
-                      class="hover:text-sky-500 dark:hover:text-sky-400"
-                    >GithubDemo</router-link>
-                  </li> -->
                   <li>
                     <router-link
                       to="/login"
-                      class="hover:text-sky-500 dark:hover:text-sky-400"
+                      class="hover:text-blue-500 dark:hover:text-blue-400"
                     >登录</router-link>
                   </li>
                 </ul>
               </nav>
-              <!-- <div
-                class="flex items-center pl-6 ml-6 border-l border-slate-200 dark:border-slate-800"
-              >
-                <a-tooltip
-                  :content="
-                    theme === 'light'
-                      ? '设置暗黑主题'
-                      : '设置明亮主题'
-                  "
-                >
-                  <a-button
-                    size="mini"
-                    class="nav-btn"
-                    type="outline"
-                    :shape="'circle'"
-                    @click="toggleTheme"
-                  >
-                    <template #icon>
-                      <icon-moon-fill v-if="theme === 'dark'" />
-                      <icon-sun-fill v-else />
-                    </template>
-                  </a-button>
-                </a-tooltip>
-                <a
-                  href="https://github.com/MaleWeb/fast-vue3"
-                  target="_bank"
-                  class="block ml-6 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
-                >
-                  <SvgIcon name="svg-github" size="small" color="#999999" />
-                </a>
-              </div> -->
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ import { ConfigMockPlugin } from './mock'
 import { ConfigVisualizerConfig } from './visualizer'
 import { ConfigCompressPlugin } from './compress'
 import { ConfigPagesPlugin } from './pages'
+import { ConfigLayoutsPlugin } from './layouts'
 import { ConfigRestartPlugin } from './restart'
 
 export function createVitePlugins(isBuild: boolean) {
@@ -30,6 +31,8 @@ export function createVitePlugins(isBuild: boolean) {
     ConfigCompressPlugin(),
     // 监听配置文件改动重启
     ConfigRestartPlugin(),
+    // 生产公共布局
+    ConfigLayoutsPlugin()
   ]
 
   // vite-plugin-svg-icons

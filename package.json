@@ -1,5 +1,5 @@
 {
-  "name": "fast-vue3",
+  "name": "tools",
   "version": "0.1.1",
   "author": "扫地盲僧",
   "scripts": {
@@ -66,6 +66,7 @@
     "vite-plugin-restart": "^0.1.1",
     "vite-plugin-style-import": "^2.0.0",
     "vite-plugin-svg-icons": "^2.0.1",
+    "vite-plugin-vue-layouts": "^0.6.0",
     "vue-tsc": "^0.34.10"
   },
   "husky": {

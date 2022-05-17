@@ -4,6 +4,7 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Blimone';
-    src        : local('Blimone'), url(../src/assets/fonts/Blimone-Light.woff);
+    /* font-family: 'Blimone'; */
+    /* font-family: "PingFang SC", "苹方", "Microsoft YaHei", sans-serif; */
+    /* src        : local('Blimone'), url(../src/assets/fonts/Blimone-Light.woff); */
 }

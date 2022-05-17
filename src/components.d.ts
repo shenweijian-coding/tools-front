@@ -6,7 +6,16 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AButton: typeof import('@arco-design/web-vue')['Button']
+    ACol: typeof import('@arco-design/web-vue')['Col']
+    AForm: typeof import('@arco-design/web-vue')['Form']
+    AInput: typeof import('@arco-design/web-vue')['Input']
     AInputSearch: typeof import('@arco-design/web-vue')['InputSearch']
+    ARow: typeof import('@arco-design/web-vue')['Row']
+    ASpace: typeof import('@arco-design/web-vue')['Space']
+    ElButton: typeof import('~icons/el/button')['default']
+    ElForm: typeof import('~icons/el/form')['default']
+    ElInput: typeof import('~icons/el/input')['default']
+    ElLink: typeof import('~icons/el/link')['default']
     Footer: typeof import('./components/footer/index.vue')['default']
     Header: typeof import('./components/Header/index.vue')['default']
     Input: typeof import('./components/Input/index.vue')['default']

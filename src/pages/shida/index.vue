@@ -3,12 +3,13 @@ import { getPlayUrl, getDownFile } from '@api/play'
 import { Message } from '@arco-design/web-vue';
 import useLoading from '../../hooks/loading'
 import { videoPlay } from 'vue3-video-play'
+import Header from "@components/Header/index.vue"
 
 const { loading, setLoading } = useLoading();
 
   const options =  reactive({
     width: 'auto', //播放器高度
-    height: '720px', //播放器高度
+    height: window.screen.availHeight -200 + 'px', //播放器高度
     color: "#409eff", //主题色
     title: '', //视频名称
     src: "https://video.shida66.com/m3u8_sd/2020/09/07/71DB98D0-2E85-E046-3803-E78F4AD65F35.m3u8", //视频源
@@ -58,7 +59,7 @@ const { loading, setLoading } = useLoading();
   }
 </script>
 <template>
-  <div class="container mx-auto px-60 mt-10 w-11/12 h-full">
+  <div class="container mx-auto px-60 pt-4">
     <!-- <div for="" class="text-3xl text-center mb-4">vue3+vite</div> -->
     <a-input-search
     :loading="loading"
