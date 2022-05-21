@@ -1,6 +1,8 @@
 <script setup>
 import Input from '@/components/Input/index.vue'
 import { getPngUrl, getInfo } from '@api/sucai/index'
+import { Modal } from '@arco-design/web-vue';
+import QR from '@/components/dialog/index.vue'
 const loading = ref(false)
 const href = ref('')
 const webList = reactive({
@@ -54,6 +56,13 @@ const getCurDownUrl = async(item) => {
     // loading.value = false
   }
 }
+const test = () => {
+      Modal.info({
+        footer: () => '',
+        width: '300px',
+        content: () => h(QR)
+      });
+}
 </script>
 
 <template>
@@ -77,10 +86,12 @@ const getCurDownUrl = async(item) => {
     <div class="app-web-list">
       <a-row>
         <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
+        <a :href="it.webUrl" target="_blank">
           <div class="app-weblist-item shou">
             <div class="item-logo"><img :src="it.webLogo"></div> 
             <div class="item-info"><div class="title">{{it.webName}}</div> 
             <div class="tips">{{it.webTips}}</div></div></div>
+        </a>
         </a-col>
       </a-row>
     </div>

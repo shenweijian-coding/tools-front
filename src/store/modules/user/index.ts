@@ -49,12 +49,14 @@ export const useUserStore = defineStore('user', {
         },
         // 异步登录并存储token
         async login(loginForm: LoginData) {
-            const result = await userLogin(loginForm);
-            const token = result?.token
+            const {data} = await userLogin(loginForm);
+            console.log(data);
+            
+            const token = data?._id
             if (token) {
                 setToken(token);
             }
-            return result;
+            return data;
         },
         // Logout
         async logout() {
