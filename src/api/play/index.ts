@@ -10,4 +10,6 @@ interface params {
 }
 export const getPlayUrl = async (data: url) => post<any>({ url: 'api/play/1', data })
 
+export const getClassList = async () => get<any>({url: 'api/play/list'})
+
 export const getDownFile = async (data: params) => post<any>({ url: 'api/play/2', data })

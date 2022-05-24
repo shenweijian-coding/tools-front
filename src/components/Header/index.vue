@@ -7,7 +7,6 @@ import { useRoute } from 'vue-router';
 import { Modal } from '@arco-design/web-vue';
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
-import loginDialog from '@/components/Header/loginDialog.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const theme = computed(() => {
@@ -47,9 +46,12 @@ const openLogin = () => {
 const login = () => {
   console.log(loginCode.value, '111');
   if(!loginCode.value) {
-    Message.warning('请输入登录码！')
+    Message.warning('请输入验证码！')
   }
   userStore.login({ code: loginCode.value })
+}
+const close = () => {
+  loginCode.value = ''
 }
 </script>
 
@@ -97,10 +99,10 @@ const login = () => {
       </div>
     </div>
   </header>
-  <a-modal v-model:visible="visible" :closable="false" width="300px" :footer="false">
-      <a-input-search placeholder="请输入5位登陆码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
+  <a-modal v-model:visible="visible" :closable="false" width="300px" :footer="false" @close="close">
+      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
       <a-popover position="right">
-        <span style="float:right;font-size:12px;color:#919499;cursor: pointer;">获取登录码？</span>
+        <span style="float:right;font-size:12px;color:#919499;cursor: pointer;">获取验证码？</span>
         <template #content>
           <QR />
         </template>

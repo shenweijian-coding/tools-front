@@ -4,6 +4,7 @@ import { getPngUrl, getInfo } from '@api/sucai/index'
 import { Modal } from '@arco-design/web-vue';
 import QR from '@/components/dialog/index.vue'
 const loading = ref(false)
+const listLoading = ref(false)
 const href = ref('')
 const webList = reactive({
   list:[]
@@ -12,9 +13,11 @@ let link = ''
 const options = reactive({
   list: []
 })
+listLoading.value = true
 getInfo().then(res => {
   console.log(res)
   webList.list = res.data.webList
+  listLoading.value = false
 })
 const getDownUrl = async (url) => {
   try {
@@ -67,12 +70,12 @@ const test = () => {
 
 <template>
 <div class="page-design app-page appView">
-  <div>
+  <div v-loading="loading">
     <div class="app-header-box">
       <h1 class="app-heade-title">设计资源搜索</h1>
       <h3 class="app-header-tips">已支持13+网站资源链接搜索服务</h3>
       <div class="app-header-input">
-          <Input @getPlay="getDownUrl" :loading="loading"/>
+          <Input @getPlay="getDownUrl"/>
           <a :href="href" v-if="href" target="_blank" referrerpolicy="no-referrer">
             <a-button class="mt-4" type="primary">立即下载</a-button>
           </a>
@@ -83,7 +86,7 @@ const test = () => {
           </span>
       </div>
     </div>
-    <div class="app-web-list">
+    <div class="app-web-list" v-loading="listLoading">
       <a-row>
         <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
         <a :href="it.webUrl" target="_blank">
@@ -99,7 +102,7 @@ const test = () => {
 </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .app-page {
   width: 95%;
   max-width: 1300px;
@@ -140,6 +143,7 @@ const test = () => {
     border-radius: 10px;
     width: 90%;
     max-width: 1400px;
+    min-height: 200px;
     margin: auto;
     -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
     box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
@@ -156,8 +160,11 @@ const test = () => {
         }
       }
       .item-logo {
-        width: 60px;
+        width: 48px;
         height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #fff;
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         justify-content: center;
@@ -168,7 +175,7 @@ const test = () => {
           border-radius: 50%;
           border-color: rgba(76 175 80/15%);
           overflow: hidden;
-          width: 48px;
+          // width: 48px;
           -webkit-transition: All .25s;
           transition: All .25s;
         }

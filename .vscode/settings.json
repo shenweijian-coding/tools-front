@@ -136,5 +136,8 @@
     "pnpm",
     "antd",
     "lint-staged"
-  ]
+  ],
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg"
+  }
 }
