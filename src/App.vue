@@ -2,29 +2,15 @@
   <router-view></router-view>
 </template>
 <script setup lang="ts">
-// import { useAppStore } from './store/modules/app'
-// const appStore = useAppStore()
-
-// provide('reload', reload)
-// function reload() {
-//   isRouterAlive.value = false
-//   nextTick(() => (isRouterAlive.value = true))
-// }
-
-// const isRouterAlive = ref(true)
-
-// watch(
-//   () => appStore.title,
-//   () => {
-//     const title: string = appStore.title
-//     document.title = title
-//       ? `${title} - ${import.meta.env.VITE_APP_TITLE}`
-//       : import.meta.env.VITE_APP_TITLE
-//   },
-//   {
-//     immediate: true,
-//   }
-// )
+import { useUserStore } from '@/store/modules/user/index'
+const instance = useUserStore()
+instance.$subscribe((_, state) => {
+    localStorage.setItem('user', JSON.stringify({ ...state }));
+});
+const old = localStorage.getItem('user');
+if (old) {
+    instance.$state = JSON.parse(old);
+}
 </script>
 
 <style>

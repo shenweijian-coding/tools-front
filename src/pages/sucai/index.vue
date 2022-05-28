@@ -194,7 +194,7 @@ const test = () => {
     margin-top: -120px;
 }
 .app-header-box{
-  background-image: url(http://qiniu.mouae.com/header_bg_design.jpg);
+  background-image: url(https://pic1.zhimg.com/v2-f86bcbe20a5d485df169c6bbb402e030_r.jpg);
 }
 .shou {
     cursor: pointer;

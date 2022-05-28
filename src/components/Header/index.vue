@@ -43,12 +43,14 @@ const loginCode = ref('');
 const openLogin = () => {
   visible.value = true;
 }
-const login = () => {
+const login = async () => {
   console.log(loginCode.value, '111');
   if(!loginCode.value) {
     Message.warning('请输入验证码！')
   }
-  userStore.login({ code: loginCode.value })
+  const res = await userStore.login({ code: loginCode.value, ip: returnCitySN["cip"] })
+    Message.success('登录成功')
+    window.location.reload()
 }
 const close = () => {
   loginCode.value = ''
@@ -87,9 +89,22 @@ const close = () => {
                 <ul class="flex space-x-8">
                   <li>
                     <span
+                    v-if="userStore.userIsLogin"
                       @click="openLogin"
                       class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer"
                     >登录</span>
+                    <span v-else class="cursor-pointer hover:text-blue-500">
+                      <router-link to="/user">用户中心</router-link>
+                      <!-- <a-space size="large">
+                      <a-dropdown trigger="hover">
+                        <span>用户中心</span>
+                        <template #content>
+                          <a-doption>Option 1</a-doption>
+                          <a-doption>Option 2</a-doption>
+                          <a-doption>Option 3</a-doption>
+                        </template>
+                      </a-dropdown></a-space> -->
+                    </span>
                   </li>
                 </ul>
               </nav>

@@ -9,7 +9,8 @@ interface LoginRes {
 }
 
 export interface LoginData {
-    code: string
+    code: string,
+    ip: string
 }
 
 const getUserProfile = async () => get<UserState>({ url: 'api/user/info' });

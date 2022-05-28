@@ -10,30 +10,28 @@ import { UserState } from './types'
 
 export const useUserStore = defineStore('user', {
     state: (): UserState => ({
-        user_name: undefined,
-        avatar: undefined,
-        organization: undefined,
-        location: undefined,
-        email: undefined,
-        blogJuejin: undefined,
-        blogZhihu: undefined,
-        blogGithub: undefined,
-        profileBio: undefined,
-        devLanguages: undefined,
-        role: '',
+        _id: '',
+        ip: '',
+        down_log: [],
+        create_time: undefined,
+        is_fans: false,
+        email: ''
     }),
     getters: {
         userProfile(state: UserState): UserState {
             return { ...state };
+        },
+        userIsLogin(state: UserState): boolean {
+            return !state._id
         }
     },
     actions: {
-        switchRoles() {
-            return new Promise((resolve) => {
-                this.role = this.role === 'user' ? 'user' : 'admin';
-                resolve(this.role);
-            })
-        },
+        // switchRoles() {
+        //     return new Promise((resolve) => {
+        //         this.role = this.role === 'user' ? 'user' : 'admin';
+        //         resolve(this.role);
+        //     })
+        // },
         // 设置用户的信息
         setInfo(partial: Partial<UserState>) {
             this.$patch(partial);
@@ -50,17 +48,13 @@ export const useUserStore = defineStore('user', {
         // 异步登录并存储token
         async login(loginForm: LoginData) {
             const {data} = await userLogin(loginForm);
-            console.log(data);
-            
-            const token = data?._id
-            if (token) {
-                setToken(token);
-            }
+            this.setInfo(data);
+            setToken(data?._id)
             return data;
         },
         // Logout
         async logout() {
-            await userLogout();
+            // await userLogout();
             this.resetInfo();
             clearToken();
             // 路由表重置

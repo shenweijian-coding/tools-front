@@ -101,7 +101,7 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
   :title="title"
   :mask-closable="false"
   :footer="false"
-  :unmount-on-close="false">
+  :unmount-on-close="true">
     <videoPlay class="w-full" type="m3u8" v-bind="options" ></videoPlay>
     <div class="mt-2 text-right">
       <a-button v-if="isDown" type="primary" status="" @click="downFile" >下载素材+课堂源文件</a-button>
@@ -309,6 +309,6 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
   }
 }
 .app-header-box{
-  background-image: url(http://qiniu.mouae.com/header_bg_design.jpg);
+  background-image: url(https://pic4.zhimg.com/v2-533002f6b59fd769aada9c3ff873a437_r.jpg);
 }
 </style>
