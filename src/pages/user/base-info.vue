@@ -5,27 +5,27 @@
         <div class="personal-info">
           <div class="info-row">
             登录账号唯一标识
-            <div class="spec">{{ userStore.userProfile._id }}</div>
+            <div class="spec">{{ data._id }}</div>
             <a-divider />
           </div>
           <div class="info-row">
             是否关注公众号
-            <div class="spec">{{userStore.userProfile.is_fans ? '已关注' : '未关注'}}</div>
+            <div class="spec">{{data.is_fans ? '已关注' : '未关注'}}</div>
             <a-divider />
           </div>
           <div class="info-row">
             关注时间
-            <div class="spec">{{timeConvert(+userStore.userProfile.create_time)}}</div>
+            <div class="spec">{{timeConvert(+data.create_time)}}</div>
             <a-divider />
           </div>
           <div class="info-row">
             邮箱
-            <div class="spec">{{userStore.userProfile.email || '-'}}</div>
+            <div class="spec">{{data.email || '-'}}</div>
             <a-divider />
           </div>
           <div class="info-row">
             登录IP
-            <div class="spec">{{userStore.userProfile.ip}}</div>
+            <div class="spec">{{data.ip}}</div>
             <a-divider />
           </div>
           <div class="float-right mt-10">
@@ -38,12 +38,16 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/store/modules/user/index'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue';
 import { timeConvert } from '@/utils/index'
 const router = useRouter()
-const userStore = useUserStore()
+const props = defineProps({
+  data: {
+    type: Object
+  }
+})
+
 const logout = async() => {
   await userStore.logout()
   setTimeout(() => {

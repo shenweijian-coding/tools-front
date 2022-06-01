@@ -1,12 +1,12 @@
 <template>
-<div class="w-9/12 mt-4 m-auto bg-white h-5/6 p-2" style="min-height: 600px">
+<div class="w-9/12 mt-4 m-auto bg-white h-5/6 p-2" style="min-height: 600px" v-loading="loading">
   <a-tabs default-active-key="1" position="left" size="large" type="line">
    <a-tab-pane key="1" title="基本信息">
-     <BaseInfo />
+     <BaseInfo :data="data.info" v-if="Object.keys(data.info).length"/>
    </a-tab-pane>
    <a-tab-pane key="2" title="下载记录">
      <!-- 下载记录 -->
-     <DownLog />
+     <DownLog :data="data.info" v-if="Object.keys(data.info).length"/>
    </a-tab-pane>
  </a-tabs>
 </div>
@@ -16,8 +16,15 @@
 import BaseInfo from './base-info.vue'
 import DownLog from './down-log.vue'
 import { useUserStore } from '@/store/modules/user/index'
-const userStore = useUserStore()
-userStore.info()
+const userStore = useUserStore();
+const loading = ref(false);
+let data = reactive({ info: {} });
+(async() => {
+  loading.value = true
+  data.info = await userStore.info()
+  console.log(data, 'res');
+  loading.value = false
+})()
 </script>
 
 <style lang="less">

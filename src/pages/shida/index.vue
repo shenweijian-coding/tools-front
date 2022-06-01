@@ -117,7 +117,7 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
     </div>
   </div>
   <div class="app-video-list" >
-    <div class="audioProject recommendClass" style="padding-top: 40px;">
+    <div class="audioProject recommendClass" style="padding-top: 20px;">
       <div class="layout">
         <div class="audioTitle">
           <div class="titleh4">推荐教程</div>
@@ -185,7 +185,7 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
   }
   .app-video-list{
     .audioTitle {
-        margin-bottom: 30px;
+        margin-bottom: 16px;
         height: 24px;
         line-height: 24px;
         .titleh4 {

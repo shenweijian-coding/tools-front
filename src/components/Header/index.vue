@@ -67,11 +67,12 @@ const close = () => {
           class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10"
         >
           <div class="relative flex items-center text-2xl sm:text-2xl font-blimone">
-            <router-link
+            <!-- <router-link
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
-            >tools
-            </router-link>
+            > -->
+            <img class="h-8" src="@/assets/images/logo.png" alt="">
+            <!-- </router-link> -->
             <div class="relative items-center hidden flex justify-between lg:flex w-full">
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-14">

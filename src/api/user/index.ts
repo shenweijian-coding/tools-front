@@ -13,7 +13,7 @@ export interface LoginData {
     ip: string
 }
 
-const getUserProfile = async () => get<UserState>({ url: 'api/user/info' });
+const getUserProfile = async () => get<any>({ url: 'api/user/info' });
 const login = async (data: LoginData) => post<any>({ url: 'api/user/login', data });
 
 const logout = async () => post<LoginRes>({ url: 'api/user/logout' });

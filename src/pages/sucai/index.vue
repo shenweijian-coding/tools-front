@@ -1,11 +1,13 @@
 <script setup>
 import Input from '@/components/Input/index.vue'
-import { getPngUrl, getInfo } from '@api/sucai/index'
-import { Modal } from '@arco-design/web-vue';
+import { getPngUrl, getInfo, checkInfo } from '@api/sucai/index'
+import { Message, Modal } from '@arco-design/web-vue';
 import QR from '@/components/dialog/index.vue'
 const loading = ref(false)
 const listLoading = ref(false)
 const href = ref('')
+const visible = ref(false)
+const downCode = ref('')
 const webList = reactive({
   list:[]
 })
@@ -27,6 +29,10 @@ const getDownUrl = async (url) => {
     console.log(url.value);
     link = url.value
     const res = await getPngUrl({ url: url.value })
+    if(res.data.status && res.data.status === 1001) { // 校验状态
+      visible.value = true
+      return
+    }
     if(res.data.result) {
       if(res.data.options) {
         options.list = res.data.options
@@ -59,6 +65,20 @@ const getCurDownUrl = async(item) => {
     // loading.value = false
   }
 }
+const close = () => {
+  downCode.value = ''
+}
+const checkCode = async() => {
+  if(!downCode.value) {
+    Message.warning('请前往公众号获取“验证码”')
+    return
+  }
+  const { data } = await checkInfo({ code: downCode.value })
+  if(data.result) {
+    Message.success('校验成功！请重新点击搜索进行下载！')
+    visible.value = false
+  }
+}
 const test = () => {
       Modal.info({
         footer: () => '',
@@ -73,7 +93,7 @@ const test = () => {
   <div v-loading="loading">
     <div class="app-header-box">
       <h1 class="app-heade-title">设计资源搜索</h1>
-      <h3 class="app-header-tips">已支持13+网站资源链接搜索服务</h3>
+      <h3 class="app-header-tips"></h3>
       <div class="app-header-input">
           <Input @getPlay="getDownUrl"/>
           <a :href="href" v-if="href" target="_blank" referrerpolicy="no-referrer">
@@ -99,6 +119,16 @@ const test = () => {
       </a-row>
     </div>
   </div>
+    <a-modal 
+    v-model:visible="visible" 
+    :closable="false" 
+    width="300px"
+    title="人机校验(验证成功继续下载)"
+    :footer="false" 
+    @close="close">
+      <a-input-search placeholder="请输入5位验证码" button-text="点击验证" v-model="downCode" search-button @search="checkCode"></a-input-search>
+        <QR class="mt-4"/>
+    </a-modal>
 </div>
 </template>
 

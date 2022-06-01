@@ -1,13 +1,17 @@
 <template>
   <div class="p-2">
-    <a-table :data="userStore.userProfile.down_log">
+    <a-table :data="data">
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site">
           <template #cell="{ record }">
             {{ webSiteMap[record.web_site] }}
           </template>
         </a-table-column>
-        <a-table-column title="下载链接" data-index="web_url"></a-table-column>
+        <a-table-column title="下载链接" data-index="web_url">
+          <template #cell="{ record }">
+            <a :href="record.web_url" target="_blank">{{record.web_url}}</a>
+          </template>
+        </a-table-column>
         <a-table-column title="下载时间">
           <template #cell="{ record }">
             {{ timeConvert(record.time) }}
@@ -25,10 +29,15 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/store/modules/user/index'
-const userStore = useUserStore()
 import { timeConvert } from '@/utils/index'
 import { webSiteMap } from '@/data-map/index'
+const props = defineProps({
+  data: {
+    type: Object
+  }
+})
+console.log(toRaw(props.data.down_log));
+const data = computed(() => (toRaw(props.data.down_log)).reverse());
 const columns = [{
     title: '网站名称',
     dataIndex: 'web_site',
