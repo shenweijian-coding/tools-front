@@ -28,7 +28,7 @@
             <div class="spec">{{data.ip}}</div>
             <a-divider />
           </div>
-          <div class="float-right mt-10">
+          <div class="float-right mt-2">
             <a-button size="large" @click="logout">退出登陆</a-button>
           </div>
         </div>
@@ -69,7 +69,7 @@ const logout = async() => {
       min-height: 100%;
       background: #FFFFFF;
       border-radius: 2px;
-      padding: 20px;
+      padding: 20px 20px 0 20px;
       .info-row {
         font-size: 18px;
         font-family: 'PingFangSC-Semibold', 'PingFang SC';

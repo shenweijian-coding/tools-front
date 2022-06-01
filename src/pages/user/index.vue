@@ -1,6 +1,6 @@
 <template>
-<div class="w-9/12 mt-4 m-auto bg-white h-5/6 p-2" style="min-height: 600px" v-loading="loading">
-  <a-tabs default-active-key="1" position="left" size="large" type="line">
+<div class="w-9/12 mt-2 m-auto bg-white p-2" style="min-height: 500px" v-loading="loading">
+  <a-tabs default-active-key="1" position="left" size="large" type="line" style="height: 560px">
    <a-tab-pane key="1" title="基本信息">
      <BaseInfo :data="data.info" v-if="Object.keys(data.info).length"/>
    </a-tab-pane>

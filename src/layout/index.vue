@@ -3,7 +3,7 @@
   <div class="top-tip_b" v-if="isClose">
     <div class="tipBox">
     <span class="desc">
-      <span>🎉</span>本站免费使用，仅供学习交流，有经济能力者请移步各大官网，感谢！
+      <span>🎉</span>{{notice}}
     </span>
     <icon-close style="line-height:30px;cursor: pointer;margin-left: 100px;" @click="close"/>
     </div>
@@ -16,6 +16,11 @@
 import Header from "@components/Header/index.vue"
 import Floor from "@components/floor/index.vue"
 import { IconClose } from '@arco-design/web-vue/es/icon';
+import { getNoticeInfo } from '@/api/home/index'
+const notice = ref('')
+getNoticeInfo().then(res => {
+  notice.value = res.data
+})
 const isClose = ref(true)
 const close = () => {
   isClose.value = false;
