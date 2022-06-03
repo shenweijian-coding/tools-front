@@ -1,5 +1,14 @@
 <script setup>
-
+import { getHuKeUrl } from '@/api/play'
+import { Message } from '@arco-design/web-vue';
+const getPlay = async(url) => {
+  const { data } = await getHuKeUrl({ url: url.value })
+  if (data.can_play) {
+    window.open(data.videoUrl, '_blank')
+  } else {
+    Message.error('当前资源搜索失败，请咨询站长！')
+  }
+}
 </script>
 
 <template>

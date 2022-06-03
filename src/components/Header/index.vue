@@ -71,7 +71,7 @@ const close = () => {
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
             > -->
-            <img class="h-8" src="@/assets/images/logo.png" alt="">
+            <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo"/></a>
             <!-- </router-link> -->
             <div class="relative items-center hidden flex justify-between lg:flex w-full">
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
