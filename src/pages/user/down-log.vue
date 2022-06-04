@@ -1,18 +1,18 @@
 <template>
   <div class="p-2">
-    <a-table :data="data">
+    <a-table :data="data" style="max-height:530px">
      <template #columns>
-        <a-table-column title="网站名称" data-index="web_site">
+        <a-table-column title="网站名称" data-index="web_site" width="100">
           <template #cell="{ record }">
             {{ webSiteMap[record.web_site] }}
           </template>
         </a-table-column>
-        <a-table-column title="下载链接" data-index="web_url">
+        <a-table-column title="下载链接" data-index="web_url" width="600" ellipsis>
           <template #cell="{ record }">
             <a :href="record.web_url" target="_blank">{{record.web_url}}</a>
           </template>
         </a-table-column>
-        <a-table-column title="下载时间">
+        <a-table-column title="下载时间" width="200">
           <template #cell="{ record }">
             {{ timeConvert(record.time) }}
           </template>
@@ -38,22 +38,6 @@ const props = defineProps({
 })
 console.log(toRaw(props.data.down_log));
 const data = computed(() => (toRaw(props.data.down_log)).reverse());
-const columns = [{
-    title: '网站名称',
-    dataIndex: 'web_site',
-  },
-  {
-    title: '下载链接',
-    dataIndex: 'web_url',
-  },
-  {
-    title: '下载时间',
-    dataIndex: 'time',
-  },
-  {
-    title: '结果',
-    dataIndex: 'is_ok',
-}]
 </script>
 
 <style>
