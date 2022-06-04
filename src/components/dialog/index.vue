@@ -10,13 +10,17 @@
   </div>
   <div 
   style="text-align: center; font-size: 16px; margin: 8px;"><span style="font-size: 14px; color: rgb(51, 51, 51); font-weight: bold;">
-  到公众号回复“<span style="margin: 0px 4px; color: rgb(32, 152, 209);">验证码</span>”获取</span>
+  到公众号回复“<span style="margin: 0px 4px; color: rgb(32, 152, 209);">{{tip}}</span>”获取</span>
   </div>
 </div>
 </template>
 
 <script setup>
-
+const props = defineProps({
+  tip: {
+    type: String
+  }
+})
 </script>
 
 <style>

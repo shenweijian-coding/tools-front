@@ -1,16 +1,24 @@
 <script setup>
 import { getHuKeUrl } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
+import CheckDialog from '@/components/check-dialog/index.vue'
+import { checkInfo } from '@api/sucai/index'
 const loading = ref(false)
 const visible = ref(false)
 const videoInfo = reactive({
   url: '',
   title: ''
 })
+const checkVisible = ref(false)
+
 const getPlay = async (url) => {
   loading.value = true
   const { data } = await getHuKeUrl({ url: url.value })
   loading.value = false
+  if (data.status && data.status === 1001) {
+    checkVisible.value = true
+    return
+  }
   if (data.data && data.data.can_play) {
     visible.value = true
     videoInfo.url = data.data.videoUrl
@@ -28,7 +36,16 @@ const copyUrl = () => {
   document.body.removeChild(aux)
   Message.success('链接复制成功，请前往播放器使用！')
 }
-
+const close = () => {
+  checkVisible.value = false
+}
+const checkCode = async(downCode) => {
+  const { data } = await checkInfo({ code: downCode })
+  if(data.result) {
+    Message.success('校验成功！请重新点击搜索进行下载！')
+    checkVisible.value = false
+  }
+}
 </script>
 
 <template>
@@ -100,6 +117,7 @@ const copyUrl = () => {
     </div>
   </div>
   </div>
+  <CheckDialog :visible="checkVisible" @checkCode="checkCode" @close="close"/>
 </template>
 <style lang="less">
   .app-page {

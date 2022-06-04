@@ -2,12 +2,11 @@
 import Input from '@/components/Input/index.vue'
 import { getPngUrl, getInfo, checkInfo } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
-import QR from '@/components/dialog/index.vue'
+import CheckDialog from '@/components/check-dialog/index.vue'
 const loading = ref(false)
 const listLoading = ref(false)
 const href = ref('')
 const visible = ref(false)
-const downCode = ref('')
 const webList = reactive({
   list:[]
 })
@@ -65,26 +64,15 @@ const getCurDownUrl = async(item) => {
     // loading.value = false
   }
 }
-const close = () => {
-  downCode.value = ''
-}
-const checkCode = async() => {
-  if(!downCode.value) {
-    Message.warning('请前往公众号获取“验证码”')
-    return
-  }
-  const { data } = await checkInfo({ code: downCode.value })
+const checkCode = async(downCode) => {
+  const { data } = await checkInfo({ code: downCode })
   if(data.result) {
     Message.success('校验成功！请重新点击搜索进行下载！')
     visible.value = false
   }
 }
-const test = () => {
-      Modal.info({
-        footer: () => '',
-        width: '300px',
-        content: () => h(QR)
-      });
+const close = () => {
+  visible.value = false
 }
 </script>
 
@@ -119,16 +107,7 @@ const test = () => {
       </a-row>
     </div>
   </div>
-    <a-modal 
-    v-model:visible="visible" 
-    :closable="false" 
-    width="300px"
-    title="人机校验(验证成功继续下载)"
-    :footer="false" 
-    @close="close">
-      <a-input-search placeholder="请输入5位验证码" button-text="点击验证" v-model="downCode" search-button @search="checkCode"></a-input-search>
-        <QR class="mt-4"/>
-    </a-modal>
+  <CheckDialog :visible="visible" @checkCode="checkCode" @close="close"/>
 </div>
 </template>
 

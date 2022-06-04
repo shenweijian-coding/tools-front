@@ -1,11 +1,13 @@
 <script setup>
 import { getPlayUrl, getDownFile, getClassList } from '@api/play'
 import { Message } from '@arco-design/web-vue';
+import { checkInfo } from '@api/sucai/index'
 import { videoPlay } from 'vue3-video-play'
 import Header from "@components/Header/index.vue"
 import Input from '@components/Input/index.vue'
 import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
-
+import CheckDialog from '@/components/check-dialog/index.vue'
+  const visible = ref(false)
   const options =  reactive({
     width: 'auto', //播放器高度
     height: '500px', //播放器高度
@@ -29,7 +31,7 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
   const listLoading = ref(false)
   const isDown = ref(false)
   const title = ref('')
-  const visible = ref(false)
+  const checkVisible = ref(false)
   const curDownUrl = ref('')
   let downParams = { vid: '', sid: '' }
   const classList = reactive({
@@ -55,17 +57,22 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
     }
     try {
       const { data } = await getPlayUrl({ url: url.value })
-      Message.success('success')
-      console.log(data, 'res');
-      data.playUrl && (visible.value = true)
-      options.poster = data.cover
-      options.src = data.playUrl
-      options.title = data.title
-      title.value = data.title
-      if(data.isDown) {
-        isDown.value = data.isDown
-        downParams.vid = data.vid
-        downParams.sid = data.sid
+      if (data.status && data.status === 1001) {
+        console.log(checkVisible.value, 'checkVisible.value');
+        checkVisible.value = true
+        return
+      }
+      if (data.playUrl) {
+        data.playUrl && (visible.value = true)
+        options.poster = data.cover
+        options.src = data.playUrl
+        options.title = data.title
+        title.value = data.title
+        if(data.isDown) {
+          isDown.value = data.isDown
+          downParams.vid = data.vid
+          downParams.sid = data.sid
+        }
       }
     } catch (error) {
       console.log(error);
@@ -92,6 +99,16 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
        curDownUrl.value = item.downUrl
     }
     visible.value = true
+}
+  const close = () => {
+    checkVisible.value = false
+  }
+  const checkCode = async(downCode) => {
+    const { data } = await checkInfo({ code: downCode })
+    if(data.result) {
+      Message.success('校验成功！请重新点击搜索进行下载！')
+      checkVisible.value = false
+    }
   }
 </script>
 <template>
@@ -154,6 +171,8 @@ import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
   </div>
   </div>
 </div>
+  <CheckDialog :visible="checkVisible" @checkCode="checkCode" @close="close"/>
+
 </template>
 <style scoped lang="less">
 .app-page {
