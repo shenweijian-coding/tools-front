@@ -8,11 +8,11 @@ interface params {
   sid: string,
   vid: string
 }
-export const getPlayUrl = async (data: url) => post<any>({ url: 'api/play/1', data })
+export const getPlayUrl = async (data: url) => post<any>({ url: 'play/1', data })
 
 // 虎课
-export const getHuKeUrl = async (data: url) => post<any>({ url: 'api/play/3', data })
+export const getHuKeUrl = async (data: url) => post<any>({ url: 'play/3', data })
 
-export const getClassList = async () => get<any>({url: 'api/play/list'})
+export const getClassList = async () => get<any>({url: 'play/list'})
 
-export const getDownFile = async (data: params) => post<any>({ url: 'api/play/2', data })
+export const getDownFile = async (data: params) => post<any>({ url: 'play/2', data })

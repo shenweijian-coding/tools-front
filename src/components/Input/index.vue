@@ -10,7 +10,7 @@
     size="large"/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Message } from '@arco-design/web-vue';
 const props = defineProps({
   loading: {

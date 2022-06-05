@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { getHuKeUrl } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
@@ -11,7 +11,7 @@ const videoInfo = reactive({
 })
 const checkVisible = ref(false)
 
-const getPlay = async (url) => {
+const getPlay = async (url:any) => {
   loading.value = true
   const { data } = await getHuKeUrl({ url: url.value })
   loading.value = false
@@ -110,11 +110,11 @@ const checkCode = async(downCode) => {
         <a href="https://wwt.lanzouj.com/b011p1qid" target="_blank" style="color: blue;">点我下载</a> 密码:he9j
       </p> 
     </div>
-    <div class="doc-item">
+    <!-- <div class="doc-item">
       <p class="item-title">
-        视频教程：<a href="" style="color: blue;">点我直达(B站)</a>  快速了解两种播放方式及使用教程 选择你自己喜欢的即可
+        视频教程：<a href="" target="_blank" style="color: blue;">点我直达(B站)</a>  快速了解两种播放方式及使用教程 选择你自己喜欢的即可
       </p>
-    </div>
+    </div> -->
   </div>
   </div>
   <CheckDialog :visible="checkVisible" @checkCode="checkCode" @close="close"/>

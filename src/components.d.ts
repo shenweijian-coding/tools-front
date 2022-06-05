@@ -18,7 +18,6 @@ declare module '@vue/runtime-core' {
     ATabPane: typeof import('@arco-design/web-vue')['TabPane']
     ATabs: typeof import('@arco-design/web-vue')['Tabs']
     ATag: typeof import('@arco-design/web-vue')['Tag']
-    ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
     Dialog: typeof import('./components/dialog/index.vue')['default']
     Floor: typeof import('./components/floor/index.vue')['default']

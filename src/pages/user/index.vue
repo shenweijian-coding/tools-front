@@ -12,7 +12,7 @@
 </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseInfo from './base-info.vue'
 import DownLog from './down-log.vue'
 import { useUserStore } from '@/store/modules/user/index'

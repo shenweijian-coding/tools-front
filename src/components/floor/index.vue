@@ -12,9 +12,7 @@
     </a-popover>
   </div>
 </template>
-<script setup>
-import SvgIcon from "@components/SvgIcon/index.vue"
-
+<script setup lang="ts">
 </script>
 <style lang="less">
   .floor {

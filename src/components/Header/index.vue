@@ -1,5 +1,4 @@
-<script setup>
-import SvgIcon from '../SvgIcon/index.vue'
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';

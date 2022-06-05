@@ -10,7 +10,7 @@
       <QR class="mt-4" tip="校验码"/>
   </a-modal>
 </template>
-<script setup>
+<script setup lang="ts">
 import { Message } from '@arco-design/web-vue';
 import QR from '@/components/dialog/index.vue'
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { getPlayUrl, getDownFile, getClassList } from '@api/play'
 import { Message } from '@arco-design/web-vue';
 import { checkInfo } from '@api/sucai/index'
@@ -121,7 +121,7 @@ import CheckDialog from '@/components/check-dialog/index.vue'
   :unmount-on-close="true">
     <videoPlay class="w-full" type="m3u8" v-bind="options" ></videoPlay>
     <div class="mt-2 text-right">
-      <a-button v-if="isDown" type="primary" status="" @click="downFile" >下载素材+课堂源文件</a-button>
+      <a-button v-if="isDown" type="primary" @click="downFile" >下载素材+课堂源文件</a-button>
     </div>
   </a-modal>
 <div class="page-design app-page appView">

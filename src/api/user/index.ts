@@ -13,9 +13,9 @@ export interface LoginData {
     ip: string
 }
 
-const getUserProfile = async () => get<any>({ url: 'api/user/info' });
-const login = async (data: LoginData) => post<any>({ url: 'api/user/login', data });
+const getUserProfile = async () => get<any>({ url: 'user/info' });
+const login = async (data: LoginData) => post<any>({ url: 'user/login', data });
 
-const logout = async () => post<LoginRes>({ url: 'api/user/logout' });
+const logout = async () => post<LoginRes>({ url: 'user/logout' });
 
 export { getUserProfile, login, logout };

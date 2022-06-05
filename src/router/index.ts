@@ -2,9 +2,6 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { getToken } from '@/utils/auth';
 
 const routes = [{
-  path: '/login',
-  component: () => import('@/pages/login/index.vue')
-  },{
   path: '/',
   redirect: 'sucai',
   component: () => import('@/layout/index.vue'),

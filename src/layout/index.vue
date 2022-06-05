@@ -12,7 +12,7 @@
   <floor></floor>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Header from "@components/Header/index.vue"
 import Floor from "@components/floor/index.vue"
 import { IconClose } from '@arco-design/web-vue/es/icon';

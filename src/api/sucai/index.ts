@@ -9,8 +9,8 @@ interface url {
 interface code{
   code: string
 }
-export const getPngUrl = async (data: url) => post<any>({ url: 'api/sucai', data })
+export const getPngUrl = async (data: url) => post<any>({ url: 'sucai', data })
 
-export const getInfo = async () => get<any>({ url: 'api/sucai/info' })
+export const getInfo = async () => get<any>({ url: 'sucai/info' })
 
-export const checkInfo = async (data:code) => post<any>({ url: 'api/user/check', data})
+export const checkInfo = async (data:code) => post<any>({ url: 'user/check', data})

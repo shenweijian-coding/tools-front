@@ -37,10 +37,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue';
 import { timeConvert } from '@/utils/index'
+import { useUserStore } from '@/store/modules/user/index'
+const userStore = useUserStore();
 const router = useRouter()
 const props = defineProps({
   data: {
