@@ -1,5 +1,9 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { getToken } from '@/utils/auth';
+import { useUserStore } from '@/store/index'
+import pinia from '@/store/index'
+const userStore = useUserStore(pinia)
+console.log(userStore.$state.isAdmin);
 
 const routes = [{
   path: '/',
@@ -18,7 +22,10 @@ const routes = [{
   },{
     path: '/user',
     component: () => import('@/pages/user/index.vue')
-  }]
+    }]
+},{
+  path: '/server-admin',
+  component: () => import('@/pages/server-admin/index.vue')
 }]
 //导入生成的路由数据
 const router = createRouter({
@@ -31,6 +38,11 @@ router.beforeEach((to, from, next) => {
   // 2. 要合理的搭配条件语句，避免出现路由死循环。
   const token = getToken()
   console.log(token);
+  if (to.path === '/server-admin' && userStore && !userStore.$state.isAdmin) {
+    router.replace({
+      path: '/'
+    })
+  }
   if (to.path === '/user') {
   	if (!token) {
   		router.replace({
@@ -39,9 +51,8 @@ router.beforeEach((to, from, next) => {
       return 
     }
     next()
-  } else {
-    next()
   }
+  next()
 })
 
 export default router
