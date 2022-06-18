@@ -10,7 +10,7 @@ export const ConfigCompressPlugin = () => {
         return viteCompression({
             ext: '.gz',
             verbose: true,
-            deleteOriginFile: false,
+            deleteOriginFile: true,
         })
     }
     return [];

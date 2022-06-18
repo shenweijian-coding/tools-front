@@ -4,6 +4,7 @@ import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
 import { Modal } from '@arco-design/web-vue';
+import sDialog from '../s-dialog/index.vue'
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 const appStore = useAppStore()
@@ -46,6 +47,7 @@ const login = async () => {
   console.log(loginCode.value, '111');
   if(!loginCode.value) {
     Message.warning('请输入验证码！')
+    return
   }
   const res = await userStore.login({ code: loginCode.value, ip: returnCitySN["cip"] })
     Message.success('登录成功')
@@ -92,7 +94,9 @@ const close = () => {
                     v-if="userStore.userIsLogin"
                       @click="openLogin"
                       class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer"
-                    >登录</span>
+                    >
+                    <!-- <span style="color: #919499;font-size: 12px;">请暂时使用谷歌、Edge浏览器登录</span> -->
+                    登录</span>
                     <span v-else class="cursor-pointer hover:text-blue-500">
                       <router-link to="/user">用户中心</router-link>
                       <!-- <a-space size="large">
@@ -114,7 +118,7 @@ const close = () => {
       </div>
     </div>
   </header>
-  <a-modal v-model:visible="visible" :closable="false" width="300px" :footer="false" @close="close">
+  <!-- <a-modal v-model:visible="" :closable="false" width="300px" :footer="false" @close="close">
       <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
       <a-popover position="right">
         <span style="float:right;font-size:12px;color:#919499;cursor: pointer;">获取验证码？</span>
@@ -122,7 +126,18 @@ const close = () => {
           <QR tip="验证码"/>
         </template>
       </a-popover>
-  </a-modal>
+  </a-modal> -->
+  <s-dialog v-model:visible="visible" width="300px" @close="close">
+    <div>
+      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
+      <a-popover position="right">
+        <span style="float:right;font-size:12px;line-height:22px;;cursor: pointer;">获取验证码？</span>
+        <template #content>
+          <QR tip="验证码"/>
+        </template>
+      </a-popover>
+    </div>
+  </s-dialog>
 </template>
 
 <style lang="less">
