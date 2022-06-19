@@ -106,12 +106,13 @@ export default {
   &-wrapper {
     position: fixed;
     left: 50%;
-    top: 40%;
+    top: 50%;
     transform: translate(-50%, -50%);
     z-index: 54;
   }
   > header {
-    padding: 2px;
+    padding: 10px 0;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;

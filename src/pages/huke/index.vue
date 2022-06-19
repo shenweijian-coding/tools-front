@@ -3,6 +3,8 @@ import { getHuKeUrl } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
 import { checkInfo } from '@api/sucai/index'
+import sDialog from '@/components/s-dialog/index.vue'
+
 const loading = ref(false)
 const visible = ref(false)
 const videoInfo = reactive({
@@ -49,13 +51,11 @@ const checkCode = async(downCode) => {
 </script>
 
 <template>
-  <a-modal 
+<s-dialog
   v-model:visible="visible"
   width="44%"
   title="虎课资源搜索成功"
-  :mask-closable="false"
-  :footer="false"
-  :unmount-on-close="true">
+>
   <div>
     <div class="item">
       <span>标题：</span>
@@ -87,7 +87,7 @@ const checkCode = async(downCode) => {
   </div>
   <div style="background-color: rgb(235, 235, 235); height: 1px; margin: 10px auto 10px;"></div>
   <span class="item-tips">请复制以上视频链接至m3u8播放器软件或者使用浏览器插件播放，具体可查看页面下方说明</span>
-  </a-modal>
+</s-dialog>
 <div class="page-design app-page appView">
   <div v-loading="loading">
     <div class="app-header-box">

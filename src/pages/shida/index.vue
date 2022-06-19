@@ -7,6 +7,8 @@ import Header from "@components/Header/index.vue"
 import Input from '@components/Input/index.vue'
 import { IconPlayCircle } from '@arco-design/web-vue/es/icon';
 import CheckDialog from '@/components/check-dialog/index.vue'
+import sDialog from '@/components/s-dialog/index.vue'
+
   const visible = ref(false)
   const options =  reactive({
     width: 'auto', //播放器高度
@@ -112,7 +114,7 @@ import CheckDialog from '@/components/check-dialog/index.vue'
   }
 </script>
 <template>
-  <a-modal 
+  <!-- <a-modal 
   v-model:visible="visible"
   width="60%"
   :title="title"
@@ -123,7 +125,17 @@ import CheckDialog from '@/components/check-dialog/index.vue'
     <div class="mt-2 text-right">
       <a-button v-if="isDown" type="primary" @click="downFile" >下载素材+课堂源文件</a-button>
     </div>
-  </a-modal>
+  </a-modal> -->
+  <s-dialog
+  v-model:visible="visible"
+  width="60%"
+  :title="title"
+>
+    <videoPlay class="w-full" type="m3u8" v-bind="options" ></videoPlay>
+    <div class="mt-2 text-right">
+      <a-button v-if="isDown" type="primary" @click="downFile" >下载素材+课堂源文件</a-button>
+    </div>
+  </s-dialog>
 <div class="page-design app-page appView">
   <div v-loading="loading">
     <div class="app-header-box">
