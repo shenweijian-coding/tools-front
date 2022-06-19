@@ -83,7 +83,7 @@ const close = () => {
       <h1 class="app-heade-title">设计资源搜索</h1>
       <h3 class="app-header-tips"></h3>
       <div class="app-header-input">
-          <Input @getPlay="getDownUrl"/>
+          <Input @getPlay="getDownUrl" :loading="loading"/>
           <a :href="href" v-if="href" target="_blank" referrerpolicy="no-referrer">
             <a-button class="mt-4" type="primary">立即下载</a-button>
           </a>

@@ -141,7 +141,7 @@ import sDialog from '@/components/s-dialog/index.vue'
     <div class="app-header-box">
       <h1 class="app-heade-title">视达教程资源搜索</h1>
       <div class="app-header-input">
-        <Input @getPlay="getPlay"/>
+        <Input @getPlay="getPlay" :loading="loading"/>
       </div>
     </div>
   </div>
