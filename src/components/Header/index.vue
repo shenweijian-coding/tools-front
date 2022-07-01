@@ -36,6 +36,10 @@ const paths = reactive({
     name: '视达播放',
     path: '/shida',
     id: 3
+    }, {
+    name: '短视频平台',
+    path: '/shorts',
+    id: 4
   }]
 })
 const visible = ref(false);

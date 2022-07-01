@@ -22,7 +22,10 @@ const routes = [{
   },{
     path: '/user',
     component: () => import('@/pages/user/index.vue')
-    }]
+  },{
+    path: '/shorts',
+    component: () => import('@/pages/shorts/index.vue')
+  }]
 },{
   path: '/server-admin',
   component: () => import('@/pages/server-admin/index.vue')
