@@ -16,8 +16,9 @@
 </script>
 <style lang="less">
   .floor {
-    position: absolute;
-    bottom: 0;
+    // position: fixed;
+    // bottom: 0;
+    margin-top: 20px;
     width: 100%;
     height: 40px;
     text-align: center;

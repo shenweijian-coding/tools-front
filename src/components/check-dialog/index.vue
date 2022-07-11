@@ -16,7 +16,7 @@
     @close="close"
   >
     <a-input-search placeholder="请输入5位校验码" button-text="点击验证" v-model="downCode" search-button @search="checkCode"></a-input-search>
-    <QR class="mt-4" tip="校验码"/>
+    <QR class="mt-4" tip="校验码" v-if="visible"/>
   </s-dialog>
 </template>
 <script setup lang="ts">

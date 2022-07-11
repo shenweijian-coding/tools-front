@@ -133,7 +133,7 @@ const close = () => {
       <a-popover position="right">
         <span style="float:right;font-size:12px;line-height:22px;;cursor: pointer;">获取验证码？</span>
         <template #content>
-          <QR tip="验证码"/>
+          <QR tip="验证码" v-if="visible"/>
         </template>
       </a-popover>
     </div>
