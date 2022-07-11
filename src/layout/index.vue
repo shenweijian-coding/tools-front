@@ -5,7 +5,7 @@
     <span class="desc">
       <span>🎉</span>{{notice}}
     </span>
-    <icon-close style="line-height:30px;cursor: pointer;margin-left: 100px;" @click="close"/>
+    <icon-close class="close" @click="close"/>
     </div>
     </div>
   <router-view></router-view>
@@ -41,6 +41,16 @@ const close = () => {
 
     .tipBox{
       text-align: center;
+      .close {
+        line-height:30px;cursor: 
+        pointer;
+        margin-left: 100px;
+      }
     }
+}
+@media screen and (max-width: 1300px) {
+  .top-tip_b {
+    display: none;
+  }
 }
 </style>

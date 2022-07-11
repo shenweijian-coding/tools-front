@@ -50,7 +50,6 @@ if (import.meta.env.MODE !== 'development') {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #ebebf3;
   background-image:url('');
   height: 100vh;
   width: 100vw;
