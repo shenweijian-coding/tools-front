@@ -36,6 +36,10 @@ const paths = reactive({
     name: '视达播放',
     path: '/shida',
     id: 3
+  },{
+    name: '短视频解析',
+    path: '/shorts',
+    id: 4
   }]
 })
 const visible = ref(false);
@@ -118,15 +122,6 @@ const close = () => {
       </div>
     </div>
   </header>
-  <!-- <a-modal v-model:visible="" :closable="false" width="300px" :footer="false" @close="close">
-      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
-      <a-popover position="right">
-        <span style="float:right;font-size:12px;color:#919499;cursor: pointer;">获取验证码？</span>
-        <template #content>
-          <QR tip="验证码"/>
-        </template>
-      </a-popover>
-  </a-modal> -->
   <s-dialog v-model:visible="visible" width="300px" @close="close">
     <div>
       <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
