@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="top-tip_b" v-if="isClose">
+  <div class="top-tip_b" v-if="isClose || notice">
     <div class="tipBox">
       <span class="desc">
         <span>🎉</span>{{ notice }}

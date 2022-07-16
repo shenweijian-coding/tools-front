@@ -163,7 +163,7 @@ const close = () => {
   .app-header-box {
     display: block;
     border-radius: 8px;
-    height: 420px;
+    height: 360px;
     background-color: #d3ddee;
     -webkit-box-shadow: 0 0 10px 0 rgb(0 0 0 / 24%);
     box-shadow: 0 0 10px 0 rgb(0 0 0 / 24%);
@@ -176,13 +176,13 @@ const close = () => {
     .app-heade-title {
       color: #f0f1f5;
       font-size: 28px;
-      padding: 60px 0 8px;
+      padding: 40px 0 8px;
     }
 
     .app-header-tips {
       color: hsla(0, 0%, 100%, .6);
       font-size: 14px;
-      margin-bottom: 48px;
+      margin-bottom: 28px;
     }
 
     .app-header-input {
@@ -255,7 +255,7 @@ const close = () => {
 }
 
 .page-design .app-web-list {
-  margin-top: -120px;
+  margin-top: -130px;
 }
 
 .app-header-box {

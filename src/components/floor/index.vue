@@ -6,8 +6,8 @@
     <a-popover>
       <span class="cursor-pointer">联系站长</span>
       <template #content>
-        <!-- <span>QQ号：1834638245</span><br> -->
-        <img src="@/assets/images/QR.jpg" alt="二维码">
+        <span>微信加我为好友</span><br>
+        <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
       </template>
     </a-popover>
   </div>
