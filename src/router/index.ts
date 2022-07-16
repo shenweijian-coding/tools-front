@@ -3,7 +3,6 @@ import { getToken } from '@/utils/auth';
 import { useUserStore } from '@/store/index'
 import pinia from '@/store/index'
 const userStore = useUserStore(pinia)
-console.log(userStore.$state.isAdmin);
 
 const routes = [{
   path: '/',
@@ -11,19 +10,23 @@ const routes = [{
   component: () => import('@/layout/index.vue'),
   children: [
     {
-    path: '/shida',
-    component: () => import('@/pages/shida/index.vue')
-  },{
-    path: '/huke',
-    component: () => import('@/pages/huke/index.vue')
-  },{
-    path: '/sucai',
-    component: () => import('@/pages/sucai/index.vue')
-  },{
-    path: '/user',
-    component: () => import('@/pages/user/index.vue')
-    }]
-},{
+      path: '/shida',
+      component: () => import('@/pages/shida/index.vue')
+    }, {
+      path: '/huke',
+      component: () => import('@/pages/huke/index.vue')
+    }, {
+      path: '/sucai',
+      component: () => import('@/pages/sucai/index.vue')
+    }, {
+      path: '/user',
+      component: () => import('@/pages/user/index.vue')
+    },
+    {
+      path: '/shorts',
+      component: () => import('@/pages/shorts/index.vue')
+    },]
+}, {
   path: '/server-admin',
   component: () => import('@/pages/server-admin/index.vue')
 }]
@@ -44,11 +47,11 @@ router.beforeEach((to, from, next) => {
     })
   }
   if (to.path === '/user') {
-  	if (!token) {
-  		router.replace({
-	      path: '/'
+    if (!token) {
+      router.replace({
+        path: '/'
       })
-      return 
+      return
     }
     next()
   }
