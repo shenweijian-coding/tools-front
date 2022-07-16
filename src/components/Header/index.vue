@@ -49,7 +49,7 @@ const login = async () => {
     Message.warning('请输入验证码！')
     return
   }
-  const res = await userStore.login({ code: loginCode.value, ip: returnCitySN["cip"] })
+  const res = await userStore.login({ code: loginCode.value})
     Message.success('登录成功')
     window.location.reload()
 }
@@ -118,15 +118,6 @@ const close = () => {
       </div>
     </div>
   </header>
-  <!-- <a-modal v-model:visible="" :closable="false" width="300px" :footer="false" @close="close">
-      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
-      <a-popover position="right">
-        <span style="float:right;font-size:12px;color:#919499;cursor: pointer;">获取验证码？</span>
-        <template #content>
-          <QR tip="验证码"/>
-        </template>
-      </a-popover>
-  </a-modal> -->
   <s-dialog v-model:visible="visible" width="300px" @close="close">
     <div>
       <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
