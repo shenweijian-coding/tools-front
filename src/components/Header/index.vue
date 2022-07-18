@@ -125,12 +125,7 @@ const close = () => {
   <s-dialog v-model:visible="visible" width="300px" @close="close">
     <div>
       <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
-      <a-popover position="right">
-        <span style="float:right;font-size:12px;line-height:22px;;cursor: pointer;">获取验证码？</span>
-        <template #content>
-          <QR tip="验证码" v-if="visible"/>
-        </template>
-      </a-popover>
+      <QR tip="验证码" v-if="visible" style="margin-top: 12px"/>
     </div>
   </s-dialog>
 </template>
