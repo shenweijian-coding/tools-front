@@ -99,19 +99,9 @@ const close = () => {
                       @click="openLogin"
                       class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer"
                     >
-                    <!-- <span style="color: #919499;font-size: 12px;">请暂时使用谷歌、Edge浏览器登录</span> -->
                     登录</span>
                     <span v-else class="cursor-pointer hover:text-blue-500">
                       <router-link to="/user">用户中心</router-link>
-                      <!-- <a-space size="large">
-                      <a-dropdown trigger="hover">
-                        <span>用户中心</span>
-                        <template #content>
-                          <a-doption>Option 1</a-doption>
-                          <a-doption>Option 2</a-doption>
-                          <a-doption>Option 3</a-doption>
-                        </template>
-                      </a-dropdown></a-space> -->
                     </span>
                   </li>
                 </ul>

@@ -18,7 +18,7 @@ if (import.meta.env.MODE !== 'development') {
           var d=new Date();
           debugger;
           if(new Date()-d>10){
-              document.body.innerHTML='<div>做网站不容易，请大哥高台贵手！谢谢你</div>';
+              document.body.innerHTML='<div>做网站不容易，请大哥高台贵手！谢谢你！加QQ18346638245，可以一起学习哈！</div>';
               return true;
           }
           return false;

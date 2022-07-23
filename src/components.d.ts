@@ -15,6 +15,11 @@ declare module '@vue/runtime-core' {
     APopover: typeof import('@arco-design/web-vue')['Popover']
     ARow: typeof import('@arco-design/web-vue')['Row']
     ASpace: typeof import('@arco-design/web-vue')['Space']
+    ATable: typeof import('@arco-design/web-vue')['Table']
+    ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
+    ATabPane: typeof import('@arco-design/web-vue')['TabPane']
+    ATabs: typeof import('@arco-design/web-vue')['Tabs']
+    ATag: typeof import('@arco-design/web-vue')['Tag']
     ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
     Dialog: typeof import('./components/dialog/index.vue')['default']
@@ -24,6 +29,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SDialog: typeof import('./components/s-dialog/index.vue')['default']
+    Slide: typeof import('./components/slide/index.vue')['default']
     SvgIcon: typeof import('./components/SvgIcon/index.vue')['default']
   }
 }

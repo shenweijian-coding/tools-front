@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="top-tip_b" v-if="isClose || notice">
+  <div class="top-tip_b" v-if="isClose && notice">
     <div class="tipBox">
       <span class="desc">
         <span>🎉</span>{{ notice }}
@@ -10,11 +10,13 @@
   </div>
   <router-view></router-view>
   <floor></floor>
+  <Slide></Slide>
 </template>
 
 <script setup lang="ts">
 import Header from "@components/Header/index.vue"
 import Floor from "@components/floor/index.vue"
+import Slide from '@/components/slide/index.vue'
 import { IconClose } from '@arco-design/web-vue/es/icon';
 import { getNoticeInfo } from '@/api/home/index'
 import { useRouter } from "vue-router";
