@@ -76,7 +76,10 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
         const { data } = res
         // console.log(data);
         if(data.code !== 200) {
-          Message.error(data.msg)
+          Message.error({
+            content: data.msg,
+            duration: 4000
+          })
           reject(data as unknown as Promise<T>)
         }else {
           resolve(data as unknown as Promise<T>)

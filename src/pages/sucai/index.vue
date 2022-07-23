@@ -65,6 +65,7 @@ const getDownUrl = async (url) => {
 }
 const getCurDownUrl = async (item) => {
   try {
+    loading.value = true
     const res = await getPngUrl({
       url: link,
       option: toRaw(item)
@@ -76,7 +77,7 @@ const getCurDownUrl = async (item) => {
   } catch (error) {
 
   } finally {
-    // loading.value = false
+    loading.value = false
   }
 }
 const checkCode = async (downCode) => {
@@ -98,7 +99,7 @@ const websitCheckCode = async () => {
     }
   } catch (error) {
     console.log(error);
-  } finally { 
+  } finally {
     close()
   }
 }
