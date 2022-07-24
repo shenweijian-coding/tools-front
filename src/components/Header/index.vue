@@ -7,11 +7,13 @@ import { Modal } from '@arco-design/web-vue';
 import sDialog from '../s-dialog/index.vue'
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
+
 const appStore = useAppStore()
 const userStore = useUserStore()
 const theme = computed(() => {
   return appStore.theme
 })
+
 const isDark = useDark({
   selector: 'body',
   attribute: 'arco-theme',
@@ -27,19 +29,28 @@ const paths = reactive({
   list: [{
     name: '素材搜索',
     path: '/sucai',
-    id: 1
-  },{
-    name: '虎课播放',
+    id: 1,
+    text: ''
+  }, {
+    name: '虎课网',
     path: '/huke',
-    id: 2
-  },{
-    name: '视达播放',
+    id: 2,
+    text: ''
+  }, {
+    name: '视达网',
     path: '/shida',
-    id: 3
-  },{
-    name: '短视频解析',
+    id: 3,
+    text: '免费'
+  }, {
+    name: '短视频搜索',
     path: '/shorts',
-    id: 4
+    id: 4,
+    text: '免费'
+  }, {
+    name: '站内商店',
+    path: '/shop',
+    id: 5,
+    text: '推荐'
   }]
 })
 const visible = ref(false);
@@ -47,15 +58,20 @@ const loginCode = ref('');
 const openLogin = () => {
   visible.value = true;
 }
+
+// 获取用户积分数量
+const getUserNum = () => {
+  userStore.getUserNum()
+}
+getUserNum()
 const login = async () => {
-  console.log(loginCode.value, '111');
-  if(!loginCode.value) {
+  if (!loginCode.value) {
     Message.warning('请输入验证码！')
     return
   }
-  const res = await userStore.login({ code: loginCode.value})
-    Message.success('登录成功')
-    window.location.reload()
+  const res = await userStore.login({ code: loginCode.value })
+  Message.success('登录成功')
+  window.location.reload()
 }
 const close = () => {
   loginCode.value = ''
@@ -65,43 +81,44 @@ const close = () => {
 <template>
   <header class="antialiased bg-white Male text-slate-500 dark:text-slate-400 dark:bg-slate-900">
     <div
-      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent"
-    >
+      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent">
       <div class="mx-auto max-w-8xl">
-        <div
-          class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10"
-        >
+        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10">
           <div class="relative flex items-center text-2xl sm:text-2xl font-blimone">
             <!-- <router-link
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
             > -->
-            <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo"/></a>
+            <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
             <!-- </router-link> -->
             <div class="relative items-center hidden flex justify-between lg:flex w-full">
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-14">
                   <template v-for="it in paths.list" :key="it.id">
-                  <li class="ml-16" :class="curPath === it.path ? 'border-b-4 rounded-sm border-blue-400 text-blue-500' : ''">
-                    <router-link
-                      :to="it.path"
-                      class="hover:text-blue-500 dark:hover:text-blue-400"
-                    >{{it.name}}</router-link>
-                  </li>
+                    <li class="ml-16"
+                      :class="curPath === it.path ? 'border-b-4 rounded-sm border-blue-400 text-blue-500' : ''">
+                      <a-badge v-if="it.text" :text="it.text"
+                        :dotStyle="{ height: '16px', fontSize: '12px', lineHeight: '16px' }" :offset="[12, -4]">
+                        <router-link :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{ it.name }}
+                        </router-link>
+                      </a-badge>
+                      <router-link v-else :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{
+                          it.name
+                      }}
+                      </router-link>
+                    </li>
                   </template>
                 </ul>
               </nav>
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-8">
                   <li>
-                    <span
-                    v-if="userStore.userIsLogin"
-                      @click="openLogin"
-                      class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer"
-                    >
-                    登录</span>
-                    <span v-else class="cursor-pointer hover:text-blue-500">
-                      <router-link to="/user">用户中心</router-link>
+                    <span v-if="userStore.userIsLogin" @click="openLogin"
+                      class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer">
+                      登录</span>
+                    <span v-else>
+                      <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <router-link to="/user" class="hover:text-blue-500 cursor-pointer">用户中心</router-link>
                     </span>
                   </li>
                 </ul>
@@ -114,8 +131,9 @@ const close = () => {
   </header>
   <s-dialog v-model:visible="visible" width="300px" @close="close">
     <div>
-      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login"></a-input-search>
-      <QR tip="验证码" v-if="visible" style="margin-top: 12px"/>
+      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login">
+      </a-input-search>
+      <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
     </div>
   </s-dialog>
 </template>
@@ -125,19 +143,24 @@ const close = () => {
   color: #334155;
   font-size: 0.875em;
   font-variant-ligatures: none;
+
   code {
     color: #0f172a;
     font-family: Fira Code VF, ui-monospace, SFMono-Regular, Menlo, Monaco,
       Consolas, Liberation Mono, Courier New, monospace;
+
     &::before {
       content: "`";
     }
+
     &::after {
       content: "`";
     }
   }
+
   &.dark\:prose-dark {
     color: #94a3b8;
+
     code {
       color: #e2e8f0;
     }

@@ -3,8 +3,11 @@ import Input from '@/components/Input/index.vue'
 import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
+import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
+import { useUserStore } from '@/store';
 
+const userStore = useUserStore()
 const loading = ref(false)
 const checkLoading = ref(false)
 const listLoading = ref(false)
@@ -71,6 +74,7 @@ const getCurDownUrl = async (item) => {
       option: toRaw(item)
     })
     if (res.data.result) {
+      await userStore.getUserNum()
       window.open(res.data.psd)
     }
     console.log(res);
@@ -80,13 +84,13 @@ const getCurDownUrl = async (item) => {
     loading.value = false
   }
 }
-const checkCode = async (downCode) => {
-  const { data } = await checkInfo({ code: downCode })
-  if (data.result) {
-    Message.success('校验成功！请重新点击搜索进行下载！')
-    visible.value = false
-  }
-}
+// const checkCode = async (downCode) => {
+//   const { data } = await checkInfo({ code: downCode })
+//   if (data.result) {
+//     Message.success('校验成功！请重新点击搜索进行下载！')
+//     visible.value = false
+//   }
+// }
 const websitCheckCode = async () => {
   try {
     if (!webSiteCheckInfo.webSiteCheckCode.trim()) {
@@ -95,6 +99,7 @@ const websitCheckCode = async () => {
     }
     const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
+      await userStore.getUserNum()
       window.open(res.data.psd)
     }
   } catch (error) {
@@ -133,20 +138,23 @@ const close = () => {
       <div class="app-web-list" v-loading="listLoading">
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
-            <a :href="it.webUrl" target="_blank">
-              <div class="app-weblist-item shou">
-                <div class="item-logo"><img :src="it.webLogo"></div>
-                <div class="item-info">
-                  <div class="title">{{ it.webName }}</div>
-                  <div class="tips">{{ it.webTips }}</div>
+            <a :href="it.webUrl" target="_blank" title="点击跳转官网">
+              <a-tooltip :content="it.webNum + '积分一次'" mini>
+                <div class="app-weblist-item shou">
+                  <div class="item-logo"><img :src="it.webLogo"></div>
+                  <div class="item-info">
+                    <div class="title">{{ it.webName }}</div>
+                    <div class="tips">{{ it.webTips }}</div>
+                  </div>
                 </div>
-              </div>
+              </a-tooltip>
             </a>
           </a-col>
         </a-row>
       </div>
     </div>
-    <CheckDialog :visible="visible" @checkCode="checkCode" @close="close" />
+    <NumLack :visible="visible" @close="close" />
+
     <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button

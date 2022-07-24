@@ -4,7 +4,7 @@
       <div class="xx-dialog-overlay" @click="onClickOverlay"></div>
       <div class="xx-dialog-wrapper" :style="{width: width}">
         <div class="xx-dialog">
-          <header :class="{ 'title': title || $slots.title }">
+          <header :class="{ 'title': title || $slots.title }" v-if="$slots.title">
             <div v-if="$slots.title" class="title-slot">
               <slot name="title"></slot>
             </div>
