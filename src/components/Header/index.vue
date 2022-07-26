@@ -76,6 +76,10 @@ const login = async () => {
 const close = () => {
   loginCode.value = ''
 }
+
+const bindWxApp = () => {
+  
+}
 </script>
 
 <template>
@@ -117,7 +121,9 @@ const close = () => {
                       class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer">
                       登录</span>
                     <span v-else>
-                      <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;
+                      <a-button type="outline" size="mini" shape="round" status="success" @click="bindWxApp">免费获取</a-button>
+                      <a-divider direction="vertical"></a-divider>&nbsp;&nbsp;
                       <router-link to="/user" class="hover:text-blue-500 cursor-pointer">用户中心</router-link>
                     </span>
                   </li>

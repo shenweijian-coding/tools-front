@@ -85,6 +85,7 @@ const spon = async () => {
 
 const close = () => {
   visible.value = false
+  clearInterval(timer.value)
 }
 getList()
 </script>

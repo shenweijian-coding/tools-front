@@ -1,6 +1,14 @@
 <template>
   <div class="slide-box">
     <ul class="slide-list">
+      <li title="小程序">
+        <a-popover position="left">
+          <icon-qrcode class="icon" />
+          <template #content>
+            <img src="@/assets/images/wxapp.jpg" alt="二维码" style="width:200px;height:200px">
+          </template>
+        </a-popover>
+      </li>
       <li title="微信群">
         <a-popover position="left">
           <icon-scan class="icon" />
@@ -22,7 +30,21 @@
 </template>
 
 <script setup lang="ts">
-import { IconScan, IconUser } from '@arco-design/web-vue/es/icon';
+import { IconScan, IconUser, IconQrcode } from '@arco-design/web-vue/es/icon';
+import QRcode from 'qrcode';
+
+const shengcheng = () => {
+  QRcode.toCanvas(
+    document.getElementById('qrcodeCanvas'),
+    localStorage.getItem('token'),
+    {},
+    function (err: any) {
+      console.log(err);
+
+    }
+  );
+}
+shengcheng()
 </script>
 <style lang="less" scoped>
 .slide-box {
