@@ -36,8 +36,9 @@
 <script setup lang="ts">
 import { getGoodList } from '@api/home';
 import sponDialog from './sponDialog.vue'
-import { createInvoice } from '@api/home'
+import { createInvoice, checkInvoice } from '@api/home'
 import { useUserStore } from '@/store';
+import { Message } from '@arco-design/web-vue';
 const userStore = useUserStore()
 
 const goodList = ref([])
@@ -45,6 +46,7 @@ const loading = ref(false)
 const checkedValue = ref({})
 const visible = ref(false)
 const orderInfo = ref({})
+const timer = ref(0)
 
 const getList = async () => {
   if(!userStore._id){
@@ -57,6 +59,17 @@ const getList = async () => {
   loading.value = false
 }
 
+const pollOrderStatus = (tradeNo: any) => {
+  checkInvoice({ tradeNo:tradeNo  }).then(res => {
+    console.log(res);
+    if(res.data) {
+      clearInterval(timer.value)
+      Message.success('赞助成功，感谢您的支持')
+      close()
+    }
+  })
+}
+
 const spon = async () => {
   loading.value = true
   const id = checkedValue.value.id
@@ -65,6 +78,9 @@ const spon = async () => {
   orderInfo.value = res.data
   loading.value = false
   visible.value = true
+  timer.value = window.setInterval(() => {
+    pollOrderStatus(res.data.tradeNo)
+  }, 6000)
 }
 
 const close = () => {
