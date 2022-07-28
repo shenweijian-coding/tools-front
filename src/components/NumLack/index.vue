@@ -1,21 +1,20 @@
 <template>
-  <s-dialog v-model:visible="visible" width="600px" title="小提示" @close="close">
-    <p>本站已免费提供下载5个月，感谢大家的支持。但是免费的东西不长久。<br>
-      由于官方风控、服务器成本增加以及为提供稳定的下载服务，我需要不断的购买官方VIP账号来维持。所以决定对下载做一定限制。</p>
-    <p>本着能不花钱就不花钱的原则，特意开发了完任务送积分小程序，继续免费使用本站。</p>
-    <p>或者以赞助的方式获取积分，感谢大家的体谅！</p>
-    <br><br>
+  <s-dialog v-model:visible="visible" width="600px" title="【提示】您的账号积分不足" @close="close">
+    <p style="line-height: 24px;">本站已免费提供素材下载数月<br>
+      由于官方风控、封号严重、服务器运营成本等问题<br>需要不断的购买官方VIP账号来维持，被迫无法给大家继续提供免费服务<br>决定对下载做一定限制。感谢您的理解和支持</p>
+    <br>
+    <p style="font-weight: bold">不需要您一分钱;通过完成每日任务免费获取积分;即可继续使用本站下载服务</p>
+    <!-- <br> -->
     <div style="display:flex;">
-      <div>
-        <p>1. 微信小程序-完任务送积分[免费]</p>
+      <!-- <div>
+        <p>点我完任务免费获取积分！</p>
         <br>
-        <img src="@/assets/images/wxapp.jpg" alt="小程序二维码" style="width:120px;height:120px;margin: auto;">
-      </div>
-      <div style="margin-left: 30px;text-align: center;">
+      </div> -->
+      <!-- <div style="margin-left: 30px;text-align: center;">
         <p>2. 直接赞助本站获取积分</p>
         <a-button status="success" style="margin-top:12px;">立即赞助</a-button>
-        <!-- <canvas id="qrcodeCanvas"> </canvas> -->
-      </div>
+        <canvas id="qrcodeCanvas"> </canvas>
+      </div> -->
     </div>
     <br>
   </s-dialog>
@@ -23,25 +22,8 @@
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue';
-import QRcode from 'qrcode';
 
 const emit = defineEmits(['close'])
-
-const shengcheng = () => {
-  QRcode.toCanvas(
-    document.getElementById('qrcodeCanvas'),
-    localStorage.getItem('token'),
-    {},
-    function (err: any) {
-      console.log(err);
-
-    }
-  );
-}
-const spon = () => {
-  shengcheng()
-}
-
 const props = defineProps({
   visible: Boolean
 })

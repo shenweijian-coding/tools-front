@@ -16,6 +16,8 @@ declare module '@vue/runtime-core' {
     ARadioGroup: typeof import('@arco-design/web-vue')['RadioGroup']
     ARow: typeof import('@arco-design/web-vue')['Row']
     ASpace: typeof import('@arco-design/web-vue')['Space']
+    AStep: typeof import('@arco-design/web-vue')['Step']
+    ASteps: typeof import('@arco-design/web-vue')['Steps']
     ATable: typeof import('@arco-design/web-vue')['Table']
     ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
     ATabPane: typeof import('@arco-design/web-vue')['TabPane']
@@ -27,6 +29,8 @@ declare module '@vue/runtime-core' {
     Dialog: typeof import('./components/dialog/index.vue')['default']
     Floor: typeof import('./components/floor/index.vue')['default']
     Header: typeof import('./components/Header/index.vue')['default']
+    IconLeft: typeof import('~icons/ic/on-left')['default']
+    IconRight: typeof import('~icons/ic/on-right')['default']
     Input: typeof import('./components/Input/index.vue')['default']
     NumLack: typeof import('./components/NumLack/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -34,6 +38,7 @@ declare module '@vue/runtime-core' {
     SDialog: typeof import('./components/s-dialog/index.vue')['default']
     Slide: typeof import('./components/slide/index.vue')['default']
     SvgIcon: typeof import('./components/SvgIcon/index.vue')['default']
+    Wxapp: typeof import('./components/wxapp/index.vue')['default']
   }
 }
 

@@ -7,6 +7,7 @@ import { Modal } from '@arco-design/web-vue';
 import sDialog from '../s-dialog/index.vue'
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
+import Wxapp from '@/components/wxapp/index.vue'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -54,7 +55,9 @@ const paths = reactive({
   }]
 })
 const visible = ref(false);
+const stepsVisible = ref(false)
 const loginCode = ref('');
+
 const openLogin = () => {
   visible.value = true;
 }
@@ -78,7 +81,7 @@ const close = () => {
 }
 
 const bindWxApp = () => {
-  
+  stepsVisible.value = true
 }
 </script>
 
@@ -95,7 +98,7 @@ const bindWxApp = () => {
             > -->
             <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
             <!-- </router-link> -->
-            <div class="relative items-center hidden flex justify-between lg:flex w-full">
+            <div class="relative flex items-center justify-between hidden w-full lg:flex">
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-14">
                   <template v-for="it in paths.list" :key="it.id">
@@ -118,13 +121,14 @@ const bindWxApp = () => {
                 <ul class="flex space-x-8">
                   <li>
                     <span v-if="userStore.userIsLogin" @click="openLogin"
-                      class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer">
+                      class="cursor-pointer hover:text-blue-500 dark:hover:text-blue-400">
                       登录</span>
                     <span v-else>
                       <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;
-                      <a-button type="outline" size="mini" shape="round" status="success" @click="bindWxApp">免费获取</a-button>
+                      <a-button type="outline" size="mini" shape="round" status="success" @click="bindWxApp">免费获取
+                      </a-button>
                       <a-divider direction="vertical"></a-divider>&nbsp;&nbsp;
-                      <router-link to="/user" class="hover:text-blue-500 cursor-pointer">用户中心</router-link>
+                      <router-link to="/user" class="cursor-pointer hover:text-blue-500">用户中心</router-link>
                     </span>
                   </li>
                 </ul>
@@ -141,6 +145,9 @@ const bindWxApp = () => {
       </a-input-search>
       <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
     </div>
+  </s-dialog>
+  <s-dialog v-model:visible="stepsVisible" @close="close" title="教你如何免费获取积分，下载全站素材？">
+    <Wxapp></Wxapp>
   </s-dialog>
 </template>
 
