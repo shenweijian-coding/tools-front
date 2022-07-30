@@ -3,7 +3,8 @@ import {
     login as userLogin,
     logout as userLogout,
     getUserProfile,
-    LoginData
+    LoginData,
+    getUserNum
 } from '@/api/user/index';
 import { setToken, clearToken } from '@/utils/auth';
 import { UserState } from './types'
@@ -15,7 +16,8 @@ export const useUserStore = defineStore('user', {
         down_log: [],
         create_time: undefined,
         is_fans: false,
-        email: ''
+        email: '',
+        num: 0
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -25,6 +27,9 @@ export const useUserStore = defineStore('user', {
         },
         userIsLogin(state: UserState): boolean {
             return !state._id
+        },
+        userNum(state: UserState): Number{
+            return state.num
         }
     },
     actions: {
@@ -47,6 +52,12 @@ export const useUserStore = defineStore('user', {
             const { data } = await getUserProfile();
             return data
             // this.setInfo(data);
+        },
+        async getUserNum() {
+            const { data } = await getUserNum();
+            console.log(data);
+            this.num = data
+            
         },
         // 异步登录并存储token
         async login(loginForm: LoginData) {

@@ -1,35 +1,54 @@
 <template>
   <div class="slide-box">
     <ul class="slide-list">
+      <li title="小程序">
+        <a-popover position="left">
+          <span>
+            <icon-qrcode class="icon" />
+            <span class="icon-tip">小程序</span>
+          </span>
+          <template #content>
+            <img src="@/assets/images/wxapp.jpg" alt="二维码" style="width:200px;height:200px">
+          </template>
+        </a-popover>
+      </li>
       <li title="微信群">
         <a-popover position="left">
-          <icon-scan class="icon" />
+          <span>
+            <icon-scan class="icon" />
+            <span class="icon-tip">微信群</span>
+          </span>
+
           <template #content>
             <img src="https://tools1998.top/image/wx-qun.jpg" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
       </li>
-      <li title="微信号">
+      <!-- <li title="微信号">
         <a-popover position="left">
-          <icon-user class="icon" />
+          <span>
+            <icon-user class="icon" />
+            <span class="icon-tip">微信</span>
+
+          </span>
           <template #content>
             <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconScan, IconUser } from '@arco-design/web-vue/es/icon';
+import { IconScan, IconUser, IconQrcode } from '@arco-design/web-vue/es/icon';
 </script>
 <style lang="less" scoped>
 .slide-box {
-  width: 38px;
-  height: 200px;
+  width: 48px;
+  height: 186px;
   padding: 12px 0;
-  top: 40%;
+  top: 38%;
   right: 0;
   position: absolute;
   background: #fff;
@@ -46,13 +65,20 @@ import { IconScan, IconUser } from '@arco-design/web-vue/es/icon';
 
     li {
       cursor: pointer;
+      text-align: center;
     }
 
     li:hover {
-      .icon {
+      .icon, .icon-tip{
         color: #165dff;
       }
     }
+  }
+
+  .icon-tip {
+    font-size: 12px;
+    display: inline-block;
+    color: #919499;
   }
 
   .icon {

@@ -25,7 +25,12 @@ const routes = [{
     {
       path: '/shorts',
       component: () => import('@/pages/shorts/index.vue')
-    },]
+    },
+    {
+      path: '/shop',
+      component: () => import('@/pages/store/index.vue')
+    }
+  ]
 }, {
   path: '/server-admin',
   component: () => import('@/pages/server-admin/index.vue')

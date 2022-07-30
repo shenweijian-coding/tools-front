@@ -18,4 +18,8 @@ const login = async (data: LoginData) => post<any>({ url: 'user/login', data });
 
 const logout = async () => post<LoginRes>({ url: 'user/logout' });
 
-export { getUserProfile, login, logout };
+const getUserNum = async () => get<any>({ url: 'user/getUserNum' });
+
+const getBindWxapp = async () => get<any>({ url: 'user/getBindWxapp' });
+
+export { getUserProfile, login, logout, getUserNum, getBindWxapp };

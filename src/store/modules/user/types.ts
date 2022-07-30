@@ -6,5 +6,6 @@ export interface UserState {
     create_time: any;
     is_fans: Boolean,
     email: string;
-    isAdmin?: Boolean
+    isAdmin?: Boolean;
+    num: Number;
 }
