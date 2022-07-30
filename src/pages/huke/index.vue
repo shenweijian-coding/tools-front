@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getHuKeUrl } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
-import CheckDialog from '@/components/check-dialog/index.vue'
+import NumLack from '@/components/NumLack/index.vue'
 import { checkInfo } from '@api/sucai/index'
 import sDialog from '@/components/s-dialog/index.vue'
 
@@ -93,7 +93,7 @@ const checkCode = async (downCode) => {
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
-        <h1 class="app-heade-title">虎课教程资源搜索</h1>
+        <h1 class="app-heade-title">虎课教程资源搜索[100积分/1次]</h1>
         <div class="app-header-input">
           <Input @getPlay="getPlay" :loading="loading" />
         </div>
@@ -120,7 +120,8 @@ const checkCode = async (downCode) => {
     </div> -->
     </div>
   </div>
-  <CheckDialog :visible="checkVisible" @checkCode="checkCode" @close="close" />
+  <NumLack :visible="checkVisible" @close="close" />
+
 </template>
 <style lang="less">
 .app-page {

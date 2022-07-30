@@ -1,7 +1,7 @@
 <template>
   <Header></Header>
   <s-dialog v-model:visible="visible" width="600px" title="站内公告" @close="close">
-    <p v-html="notice">
+    <p v-html="notice" style="line-height:22px">
     </p>
     <div slot="footer" class="footer">
       <!-- <a-checkbox v-model="noTip">不再提示</a-checkbox> -->

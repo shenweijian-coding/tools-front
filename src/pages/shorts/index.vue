@@ -28,8 +28,8 @@
       </video>
     </div>
     <div v-else class="qr-code">
-      <img src="@/assets/images/QR.jpg" style="width: 260px;display: inline;" />
-      <div class="tips">微信扫码关注，防止丢失</div>
+      <img src="@/assets/images/wxapp.jpg" style="width: 260px;display: inline;" />
+      <div class="tips">体验小程序下载</div>
     </div>
   </div>
 </template>

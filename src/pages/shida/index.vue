@@ -54,7 +54,7 @@ import sDialog from '@/components/s-dialog/index.vue'
     loading.value = true
     reset()
     if(!url.value) {
-      Message.warning('Url不能为空！')
+      Message.warning('链接不能为空！')
       return
     }
     try {

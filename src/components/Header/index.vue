@@ -146,7 +146,7 @@ const bindWxApp = () => {
       <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
     </div>
   </s-dialog>
-  <s-dialog v-model:visible="stepsVisible" @close="close" title="教你如何免费获取积分，下载全站素材？">
+  <s-dialog v-model:visible="stepsVisible" @close="close" title="教你如何免费获取积分，下载全站素材">
     <Wxapp></Wxapp>
   </s-dialog>
 </template>

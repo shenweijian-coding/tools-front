@@ -14,6 +14,7 @@ const listLoading = ref(false)
 const href = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
+const zhongtuUrl = ref('')
 const webSiteCheckInfo = reactive({
   imgUrl: '',
   webSiteCheckCode: ''
@@ -33,6 +34,7 @@ getInfo().then(res => {
 })
 const getDownUrl = async (url) => {
   try {
+    zhongtuUrl.value = ''
     loading.value = true
     href.value = ''
     options.list = []
@@ -55,7 +57,13 @@ const getDownUrl = async (url) => {
         options.list = res.data.options
         console.log(res.data.options);
       } else {
-        href.value = res.data.psd
+        if (res.data.id === 17) {
+          zhongtuUrl.value = res.data.psd
+          Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
+          href.value = '<a href="#" thunderHref="' + ThunderEncode(res.data.psd) + '" thunderPid="57029" thunderResTitle="" onClick="return OnDownloadClick_Simple(this,2,4)" οncοntextmenu="ThunderNetwork_SetHref(this)">已安装迅雷，点我即可下载</a> '
+        } else {
+          href.value = res.data.psd
+        }
       }
     }
 
@@ -114,6 +122,17 @@ const close = () => {
   webSiteCheckVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
 }
+const copyUrl = () => {
+
+  var textareaC = document.createElement('textarea');
+  textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+  textareaC.value = zhongtuUrl.value;
+  document.body.appendChild(textareaC); //将textarea添加为body子元素
+  textareaC.select();
+  var res = document.execCommand('copy');
+  document.body.removeChild(textareaC);//移除DOM元素
+  Message.success('复制成功，请粘贴到迅雷进行下载');
+}
 </script>
 
 <template>
@@ -124,7 +143,11 @@ const close = () => {
         <h3 class="app-header-tips"></h3>
         <div class="app-header-input">
           <Input @getPlay="getDownUrl" :loading="loading" />
-          <a :href="href" v-if="href" target="_blank" referrerpolicy="no-referrer">
+          <div v-if="zhongtuUrl && href" class="mt-4">
+            <a-button @click="copyUrl" type="primary">复制众图下载链接</a-button>
+            <span class="zhongtu" v-html="href"></span>
+          </div>
+          <a :href="href" v-else-if="href" target="_blank" referrerpolicy="no-referrer">
             <a-button class="mt-4" type="primary">立即下载</a-button>
           </a>
           <span v-if="options.list.length">
@@ -273,5 +296,13 @@ const close = () => {
 
 .shou {
   cursor: pointer;
+}
+
+.zhongtu {
+  color: #fff;
+  background: #165dff;
+  padding: 8px 14px;
+  display: inline-block;
+  margin-left: 12px;
 }
 </style>

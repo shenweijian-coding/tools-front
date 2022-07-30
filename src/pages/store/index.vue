@@ -1,6 +1,6 @@
 <template>
   <div class="shop-img">
-    <h1 class="app-heade-title">站内商店,推荐使用小程序观看广告</h1>
+    <h1 class="app-heade-title">赞助\小程序观看广告都可获取积分</h1>
   </div>
   <div class="shop-box" v-loading="loading">
   <template  v-if="userStore._id">
@@ -23,8 +23,9 @@
       </template>
     </a-radio-group>
     <div class="shop-action">
-      <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>&nbsp;&nbsp;&nbsp;
-      <a-button type="primary" style="width: 200px;" @click="spon">立即赞助</a-button>
+      <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
+      <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a-button type="primary" style="width: 200px;" @click="spon">立即赞助[实时到账]</a-button>
     </div>
   </template>
   <div v-else style="margin: auto;">
@@ -64,7 +65,7 @@ const pollOrderStatus = (tradeNo: any) => {
     console.log(res);
     if(res.data) {
       clearInterval(timer.value)
-      Message.success('赞助成功，感谢您的支持')
+      Message.success('【赞助成功-感谢您的支持】')
       close()
     }
   })

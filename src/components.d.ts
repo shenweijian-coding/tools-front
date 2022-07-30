@@ -5,11 +5,15 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AAlert: typeof import('@arco-design/web-vue')['Alert']
     ABadge: typeof import('@arco-design/web-vue')['Badge']
     AButton: typeof import('@arco-design/web-vue')['Button']
     ACol: typeof import('@arco-design/web-vue')['Col']
     ADivider: typeof import('@arco-design/web-vue')['Divider']
     AEmpty: typeof import('@arco-design/web-vue')['Empty']
+    AForm: typeof import('@arco-design/web-vue')['Form']
+    AFormItem: typeof import('@arco-design/web-vue')['FormItem']
+    AInput: typeof import('@arco-design/web-vue')['Input']
     AInputSearch: typeof import('@arco-design/web-vue')['InputSearch']
     APopover: typeof import('@arco-design/web-vue')['Popover']
     ARadio: typeof import('@arco-design/web-vue')['Radio']
@@ -18,6 +22,11 @@ declare module '@vue/runtime-core' {
     ASpace: typeof import('@arco-design/web-vue')['Space']
     AStep: typeof import('@arco-design/web-vue')['Step']
     ASteps: typeof import('@arco-design/web-vue')['Steps']
+    ATable: typeof import('@arco-design/web-vue')['Table']
+    ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
+    ATabPane: typeof import('@arco-design/web-vue')['TabPane']
+    ATabs: typeof import('@arco-design/web-vue')['Tabs']
+    ATag: typeof import('@arco-design/web-vue')['Tag']
     ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     ATypographyText: typeof import('@arco-design/web-vue')['TypographyText']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
