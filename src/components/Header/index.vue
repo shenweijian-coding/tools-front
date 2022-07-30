@@ -51,7 +51,7 @@ const paths = reactive({
     name: '站内商店',
     path: '/shop',
     id: 5,
-    text: '推荐'
+    text: ''
   }]
 })
 const visible = ref(false);

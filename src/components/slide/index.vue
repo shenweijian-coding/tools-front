@@ -24,7 +24,7 @@
           </template>
         </a-popover>
       </li>
-      <li title="微信号">
+      <!-- <li title="微信号">
         <a-popover position="left">
           <span>
             <icon-user class="icon" />
@@ -35,7 +35,7 @@
             <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
@@ -46,9 +46,9 @@ import { IconScan, IconUser, IconQrcode } from '@arco-design/web-vue/es/icon';
 <style lang="less" scoped>
 .slide-box {
   width: 48px;
-  height: 256px;
+  height: 186px;
   padding: 12px 0;
-  top: 34%;
+  top: 38%;
   right: 0;
   position: absolute;
   background: #fff;
