@@ -95,7 +95,7 @@ getList()
   margin-bottom: 12px;
 }
 .shop-img {
-  background-image: url(https://w.wallhaven.cc/full/4y/wallhaven-4yo23d.jpg);
+  background-image: url(https://pic4.zhimg.com/v2-ab400c5e44000df0658c6500e2e20d0f_r.jpg?source=1940ef5c);
   width: 80%;
   height: 280px;
   margin: 24px auto 0;

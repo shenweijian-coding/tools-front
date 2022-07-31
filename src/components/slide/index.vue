@@ -1,7 +1,7 @@
 <template>
   <div class="slide-box">
     <ul class="slide-list">
-      <li title="小程序">
+      <li title="小程序送积分">
         <a-popover position="left">
           <span>
             <icon-qrcode class="icon" />
@@ -12,7 +12,7 @@
           </template>
         </a-popover>
       </li>
-      <li title="微信群">
+      <li title="拉进微信群">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
@@ -20,7 +20,7 @@
           </span>
 
           <template #content>
-            <img src="https://tools1998.top/image/wx-qun.jpg" alt="二维码" style="width:200px;height:200px">
+            <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
       </li>

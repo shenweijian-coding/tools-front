@@ -162,7 +162,7 @@ const copyUrl = () => {
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
-              <a-tooltip :content="it.webNum + '积分一次'" mini>
+              <a-tooltip :content="userStore.userIsLogin ? '正常使用' : it.webNum + '积分一次'" mini>
                 <div class="app-weblist-item shou">
                   <div class="item-logo"><img :src="it.webLogo"></div>
                   <div class="item-info">
