@@ -60,7 +60,6 @@ const getDownUrl = async (url) => {
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
-          href.value = '<a href="#" thunderHref="' + ThunderEncode(res.data.psd) + '" thunderPid="57029" thunderResTitle="" onClick="return OnDownloadClick_Simple(this,2,4)" οncοntextmenu="ThunderNetwork_SetHref(this)">已安装迅雷，点我即可下载</a> '
         } else {
           href.value = res.data.psd
         }
@@ -143,9 +142,8 @@ const copyUrl = () => {
         <h3 class="app-header-tips"></h3>
         <div class="app-header-input">
           <Input @getPlay="getDownUrl" :loading="loading" />
-          <div v-if="zhongtuUrl && href" class="mt-4">
+          <div v-if="zhongtuUrl" class="mt-4">
             <a-button @click="copyUrl" type="primary">复制众图下载链接</a-button>
-            <span class="zhongtu" v-html="href"></span>
           </div>
           <a :href="href" v-else-if="href" target="_blank" referrerpolicy="no-referrer">
             <a-button class="mt-4" type="primary">立即下载</a-button>
