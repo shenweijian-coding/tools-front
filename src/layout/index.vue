@@ -30,7 +30,10 @@ import sDialog from '@/components/s-dialog/index.vue'
 
 const notice = ref('')
 const noTip = ref(false)
-const visible = ref(true)
+const visible = ref(false)
+if (localStorage.getItem('token')) {
+  visible.value = true
+}
 getNoticeInfo().then(res => {
   notice.value = res.data
 })
