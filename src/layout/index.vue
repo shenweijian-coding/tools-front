@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <s-dialog v-model:visible="visible" width="600px" title="站内公告" @close="close">
+  <s-dialog v-if="notice" v-model:visible="visible" width="600px" title="站内公告" @close="close">
     <p v-html="notice" style="line-height:22px">
     </p>
     <div slot="footer" class="footer">
@@ -29,7 +29,6 @@ import { getNoticeInfo } from '@/api/home/index'
 import sDialog from '@/components/s-dialog/index.vue'
 
 const notice = ref('')
-const noTip = ref(false)
 const visible = ref(false)
 if (localStorage.getItem('token')) {
   visible.value = true

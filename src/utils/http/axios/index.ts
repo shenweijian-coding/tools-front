@@ -76,7 +76,7 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
         const { data } = res
         // console.log(data);
         if(data.code === 0) {
-          Message.error({
+          Message.info({
             content: data.msg,
             duration: 4000
           })

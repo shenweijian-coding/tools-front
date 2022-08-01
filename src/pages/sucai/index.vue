@@ -164,7 +164,9 @@ const copyUrl = () => {
                 <div class="app-weblist-item shou">
                   <div class="item-logo"><img :src="it.webLogo"></div>
                   <div class="item-info">
-                    <div class="title">{{ it.webName }}</div>
+                    <div class="title">
+                      {{ it.webName }}
+                    </div>
                     <div class="tips">{{ it.webTips }}</div>
                   </div>
                 </div>

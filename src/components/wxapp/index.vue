@@ -3,9 +3,9 @@
     <div class="frame-body">
       <div class="frame-aside">
         <a-steps changeable :current="current" direction="vertical" @change="change" small>
-          <a-step>步骤1:微信扫码小程序</a-step>
-          <a-step>步骤2:小程序扫码绑定</a-step>
-          <a-step>步骤3:完任务送积分</a-step>
+          <a-step>微信扫码小程序</a-step>
+          <a-step>小程序扫码绑定【点我】</a-step>
+          <a-step>完任务送积分</a-step>
         </a-steps>
       </div>
       <div class="frame-main">
@@ -22,7 +22,7 @@
             <p style="line-height: 24px;margin-top: 24px;font-weight: bold;">每日完成任务<br>即可免费获取积分<br>免费下载全站的素材。</p>
             <br>
             <p style="line-height: 24px;">您也可以通过赞助本站获取积分<br>资费用于对接新素材网站<br>以及服务器运营开销<br>
-            感谢您的支持</p>
+              感谢您的支持</p>
           </div>
         </div>
       </div>
@@ -84,15 +84,6 @@ const shengcheng = () => {
       display: inline-block;
       margin-bottom: 12px;
     }
-  }
-}
-
-.main-bottom {
-  display: flex;
-  justify-content: space-between;
-
-  button {
-    margin: 0 20px;
   }
 }
 </style>
