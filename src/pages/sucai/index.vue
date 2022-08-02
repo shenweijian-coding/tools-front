@@ -57,6 +57,7 @@ const getDownUrl = async (url) => {
         options.list = res.data.options
         console.log(res.data.options);
       } else {
+        await userStore.getUserNum()
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
