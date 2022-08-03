@@ -2,7 +2,7 @@
   <s-dialog v-model:visible="visible" width="500px" title="积分不足提醒" @close="close">
     <p style="line-height: 30px;">您可以选择如下方式获取积分<br>
     1. 【免费】完任务送积分，点击右上角免费获取按钮了解详情<br>
-    2. 【赞助】赞助本站送积分，<a-button size="mini" type="text" status="success" href="#/shop">点我跳转</a-button>
+    2. 【赞助】赞助本站送积分<a-button size="mini" type="text" status="success" href="#/shop">点我跳转</a-button>
     </p>
   </s-dialog>
 </template>
