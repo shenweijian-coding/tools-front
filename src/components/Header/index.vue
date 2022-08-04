@@ -160,11 +160,11 @@ const bindWxApp = () => {
     <Wxapp></Wxapp>
   </s-dialog>
   <s-dialog v-model:visible="undoneTaskVisible" @close="close" title="提示:您今日还未领取免费积分" width="380px">
-    <span>1. 小程序观看广告领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;" :color="userStore.isSign ? '#86909c' : '#7816ff'"
+    <span>1. 小程序每日签到领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;" :color="userStore.isSign ? '#86909c' : '#7816ff'"
       @click="task">{{ userStore.isSign ? '已完成' : '未完成' }}</a-tag>
     <br>
     <br>
-    <span>2. 小程序每日签到领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;" :color="userStore.adNum ? '#86909c' : '#7816ff'"
+    <span>2. 小程序观看广告领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;" :color="userStore.adNum ? '#86909c' : '#7816ff'"
       @click="task">{{ userStore.adNum ? '已完成' : '未完成' }}</a-tag>
     <a-divider></a-divider>
     <p style="font-size:12px;">积分可用于全站素材下载服务,赶快来免费领取吧！</p>
