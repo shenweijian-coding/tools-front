@@ -77,7 +77,7 @@ const login = async () => {
   window.location.reload()
 }
 // 用户没有签到和观看广告
-if (!userStore.adNum || !userStore.isSign) {
+if (!userStore.userIsLogin && (!userStore.adNum || !userStore.isSign)) {
   undoneTaskVisible.value = true
 }
 
