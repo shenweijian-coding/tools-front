@@ -54,4 +54,28 @@ if (import.meta.env.MODE !== 'development') {
   /* height: 100vh;
   width: 100vw; */
 }
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 7px;
+  background-color: #f1f1f1;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1); */
+  background-color: #c8c8c8;
+}
+
+
 </style>

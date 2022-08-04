@@ -8,4 +8,6 @@ export interface UserState {
     email: string;
     isAdmin?: Boolean;
     num: Number;
+    isSign: Boolean;
+    adNum: Number;
 }

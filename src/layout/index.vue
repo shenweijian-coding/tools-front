@@ -36,17 +36,7 @@ if (localStorage.getItem('token')) {
 getNoticeInfo().then(res => {
   notice.value = res.data
 })
-const getNotice = async () => {
-  const res = await getNoticeInfo()
-  notice.value = res.data
-}
-// if (localStorage.getItem('noTip') !== '1') {
-getNotice()
-// }
 const handleRead = () => {
-  // if (noTip.value) { // 勾选了
-  //   localStorage.setItem('noTip', '1')
-  // }
   visible.value = false
 }
 const close = () => {

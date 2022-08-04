@@ -17,7 +17,9 @@ export const useUserStore = defineStore('user', {
         create_time: undefined,
         is_fans: false,
         email: '',
-        num: 0
+        num: 0,
+        isSign: false,
+        adNum: 0
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -55,9 +57,7 @@ export const useUserStore = defineStore('user', {
         },
         async getUserNum() {
             const { data } = await getUserNum();
-            console.log(data);
-            this.num = data
-            
+            this.setInfo(data)
         },
         // 异步登录并存储token
         async login(loginForm: LoginData) {
