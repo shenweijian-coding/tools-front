@@ -13,9 +13,9 @@
                 <div className="custom-radio-card-title">
                   {{ item.title }}
                 </div>
-                <a-typography-text type="secondary">
+                <!-- <a-typography-text type="secondary">
                   {{ item.desc }}
-                </a-typography-text>
+                </a-typography-text> -->
               </div>
             </a-space>
           </template>
@@ -23,9 +23,12 @@
       </template>
     </a-radio-group>
     <div class="shop-action">
-      <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
-      <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a-button type="primary" style="width: 200px;" @click="spon">立即赞助[实时到账]</a-button>
+      <span> 详情：{{ checkedValue.desc }}</span>
+      <span>
+        <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
+        <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a-button type="primary" style="width: 200px;" @click="spon">立即赞助</a-button>
+      </span>
     </div>
   </template>
   <div v-else style="margin: auto;">
@@ -120,7 +123,7 @@ getList()
   min-height: 300px;
   width: 74%;
   box-sizing: border-box;
-  padding: 20px 40px 0 40px;
+  padding: 20px 40px 20px 40px;
   background-color: #fff;
   position: relative;
   margin: -120px auto 0;
@@ -130,11 +133,12 @@ getList()
   border-radius: 10px;
   -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
   box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-
+  flex-direction: column;
+  justify-content: space-between;
   .shop-action {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
   }
 
   .good-item {
@@ -170,7 +174,6 @@ getList()
     color: var(--color-text-1);
     font-size: 14px;
     font-weight: bold;
-    margin-bottom: 8px;
   }
 
   .custom-radio-card {
