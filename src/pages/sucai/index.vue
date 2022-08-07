@@ -14,6 +14,7 @@ const listLoading = ref(false)
 const href = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
+const sheji90CheckVisible = ref(false)
 const zhongtuUrl = ref('')
 const webSiteCheckInfo = reactive({
   imgUrl: '',
@@ -46,8 +47,16 @@ const getDownUrl = async (url) => {
         visible.value = true
         return
       } else if (res.data.status === 1002) { // 网站自己的校验
-        webSiteCheckVisible.value = true
-        webSiteCheckInfo.imgUrl = res.data.handle
+        if (res.data.id === 8) { // 90设计验证
+          sheji90CheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+          setTimeout(() => {
+            sheji90check()
+          });
+        } else { // 风云办公验证       
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        }
         return
       }
     }
@@ -116,7 +125,60 @@ const websitCheckCode = async () => {
     close()
   }
 }
+// 90设计的校验
+const sheji90check = async () => {
+  var cat = document.getElementById('dragbox');
+  var canvas3 = document.getElementById("c3")
+  var canvas4 = document.getElementById("c4")
+  canvas3.height = 150;
+  canvas3.width = 240;
+  canvas4.width = 240;
+  var cxt3 = canvas3.getContext("2d")
+  var cxt4 = canvas4.getContext("2d")
+  const { x: srcX, y } = cat.getBoundingClientRect()
+  var t = 0
+  cat.ondragstart = function (e) {
+    console.log('开始');
+  };
+  cat.ondrag = function (e) {
+    var x = e.pageX;
+    if (x === 0 || (x < srcX + 28) || x > srcX + 216) {//不处理最后一刻x,y都为0 的情景
+      return
+    };
+    t = x - srcX
+    canvas4.style.left = x - 28 - srcX + 'px';
+    cat.style.left = x - 28 - srcX + 'px';
+    e.preventDefault();
 
+  }
+  cat.ondragend = async function (e) {
+    try {
+      checkLoading.value = true
+      console.log(cat.style.left);
+      const res = await webCheck({ url: link, code: parseFloat(cat.style.left) })
+      console.log(res);
+      if (res.data.result) {
+        href.value = res.data.psd
+      }
+      Message.success('验证成功了,请点击立即下载按钮哈')
+    } catch (error) {
+      console.log(error);
+      sheji90CheckVisible.value = false
+    } finally {
+      sheji90CheckVisible.value = false
+      checkLoading.value = false
+    }
+
+    // 拖动完成 用数据校验
+  }
+
+  var img = new Image();
+  img.src = webSiteCheckInfo.imgUrl
+  img.onload = function () {
+    cxt3.drawImage(img, 0, 0, canvas3.width, canvas3.height, 0, 0, 240, 150);
+    cxt4.drawImage(img, 0, 150, canvas3.width, canvas3.height, 0, 0, 240, 150);
+  }
+}
 const close = () => {
   visible.value = false
   webSiteCheckVisible.value = false
@@ -133,6 +195,7 @@ const copyUrl = () => {
   document.body.removeChild(textareaC);//移除DOM元素
   Message.success('复制成功，请粘贴到迅雷进行下载');
 }
+
 </script>
 
 <template>
@@ -183,6 +246,18 @@ const copyUrl = () => {
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
+    </s-dialog>
+    <!-- // 90设计的滑动验证码 -->
+    <s-dialog v-model:visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
+      <div style="width: 100%"  v-loading="checkLoading">
+        <div class="canvas-box">
+          <canvas id="c3"></canvas>
+          <canvas id="c4"></canvas>
+        </div>
+        <div class="geetest_slider geetest_ready">
+          <div id="dragbox" class="geetest_slider_button" draggable="true" style="left: 0"></div>
+        </div>
+      </div>
     </s-dialog>
   </div>
 </template>
@@ -305,5 +380,71 @@ const copyUrl = () => {
   padding: 8px 14px;
   display: inline-block;
   margin-left: 12px;
+}
+
+.canvas-box {
+  margin: 0 auto;
+  position: relative;
+  height: 150px;
+  width: 240px;
+  background-color: #000;
+  overflow: hidden;
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.geetest_slider {
+  position: relative;
+  margin: 5.39% 0;
+  // width: 93.52%;
+  padding: 0 0 15.67% 0;
+  height: 0;
+  overflow: visible;
+  background-color: white;
+  background-size: 100%;
+  background-position: 0 0;
+}
+
+.geetest_slider_track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 38px;
+  margin: -19px 0 0 0;
+  padding: 0 0 0 25%;
+}
+
+.geetest_slider_tip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  line-height: 38px;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+  color: #88949d;
+}
+
+.geetest_slider_button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: -4.62% 0 0 -2.31%;
+  width: 25.38%;
+  padding: 0 0 25.38% 0;
+  height: 0;
+  cursor: move;
+  font-size: 0;
+  // background-size: 393.93939%;
+  background-position: 0 10.8642%;
+}
+
+.geetest_slider,
+.geetest_slider_button {
+  background-image: url(https://static.geetest.com/static/ant/sprite.1.2.6.png)
 }
 </style>
