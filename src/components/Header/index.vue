@@ -8,6 +8,7 @@ import sDialog from '../s-dialog/index.vue'
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
+import { dateFormate } from '@/utils/index'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -136,7 +137,15 @@ const bindWxApp = () => {
                       class="cursor-pointer hover:text-blue-500 dark:hover:text-blue-400">
                       登录</span>
                     <span v-else>
-                      <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;
+                      <a-popover>
+                        <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;
+                        <template #content>
+                          <p>剩余积分[永久]：{{ userStore.userNum }}</p>
+                          <p>今日剩余积分：{{ userStore.eNum }}</p>
+                          <p>到期时间：{{ dateFormate(userStore.expireDate, false) }}</p>
+                        </template>
+                      </a-popover>
+                      
                       <a-button type="outline" size="mini" shape="round" status="success" @click="bindWxApp">免费获取
                       </a-button>
                       <a-divider direction="vertical"></a-divider>&nbsp;&nbsp;
@@ -161,16 +170,6 @@ const bindWxApp = () => {
   <s-dialog v-model:visible="stepsVisible" @close="close" title="教你如何免费获取积分，下载全站素材" width="460px">
     <Wxapp></Wxapp>
   </s-dialog>
-  <!-- <s-dialog v-model:visible="undoneTaskVisible" @close="close" title="每日任务提示" width="380px">
-    <span>1. 小程序每日签到领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;"
-      :color="userStore.isSign ? '#86909c' : '#7816ff'" @click="task">{{ userStore.isSign ? '已完成' : '未完成' }}</a-tag>
-    <br>
-    <br>
-    <span>2. 小程序观看广告领取积分</span>&nbsp;&nbsp;&nbsp;&nbsp;<a-tag style="cursor: pointer;"
-      :color="userStore.adNum ? '#86909c' : '#7816ff'" @click="task">{{ userStore.adNum ? '已完成' : '未完成' }}</a-tag>
-    <a-divider></a-divider>
-    <p style="font-size:12px;">积分可用于全站素材下载服务,赶快来免费领取吧！</p>
-  </s-dialog> -->
 </template>
 
 <style lang="less">

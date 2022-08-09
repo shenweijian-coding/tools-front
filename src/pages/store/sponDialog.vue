@@ -5,7 +5,7 @@
       <p class="order_title">{{ orderInfo.title }}</p>
       <div class="qr_code">
         <img
-          :src="'/pay/createQRCode?text=' + encodeURIComponent(orderInfo.qrCode) + '&_=' + new Date().getTime()"
+          :src="'http://127.0.0.1:3001/pay/createQRCode?text=' + encodeURIComponent(orderInfo.qrCode) + '&_=' + new Date().getTime()"
           style="display: inline-block;">
       </div>
       <p class="order-amount">

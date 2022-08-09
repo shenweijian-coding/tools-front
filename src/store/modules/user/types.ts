@@ -10,4 +10,6 @@ export interface UserState {
     num: Number;
     isSign: Boolean;
     adNum: Number;
+    eNum: Number;
+    expireDate: any
 }

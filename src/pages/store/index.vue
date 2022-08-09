@@ -13,9 +13,6 @@
                 <div className="custom-radio-card-title">
                   {{ item.title }}
                 </div>
-                <!-- <a-typography-text type="secondary">
-                  {{ item.desc }}
-                </a-typography-text> -->
               </div>
             </a-space>
           </template>

@@ -19,7 +19,9 @@ export const useUserStore = defineStore('user', {
         email: '',
         num: 0,
         isSign: false,
-        adNum: 0
+        adNum: 0,
+        eNum: 0,
+        expireDate: 0
     }),
     getters: {
         userProfile(state: UserState): UserState {
