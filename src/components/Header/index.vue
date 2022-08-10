@@ -49,7 +49,7 @@ const paths = reactive({
     id: 4,
     text: '免费'
   }, {
-    name: '站内商店',
+    name: '赞助送积分',
     path: '/shop',
     id: 5,
     text: ''
@@ -138,11 +138,11 @@ const bindWxApp = () => {
                       登录</span>
                     <span v-else>
                       <a-popover>
-                        <span>剩余积分：{{ userStore.userNum }}</span>&nbsp;
+                        <span>积分[查看详情]：{{ userStore.userNum }}</span>&nbsp;
                         <template #content>
-                          <p>剩余积分[永久]：{{ userStore.userNum }}</p>
-                          <p>今日剩余积分：{{ userStore.eNum }}</p>
-                          <p>到期时间：{{ dateFormate(userStore.expireDate, false) }}</p>
+                          <p>永久积分：{{ userStore.userNum }}</p>
+                          <p>今日有效积分：{{ userStore.eNum || '未赞助或已用完' }}</p>
+                          <p>到期时间：{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '未赞助' }}</p>
                         </template>
                       </a-popover>
                       
