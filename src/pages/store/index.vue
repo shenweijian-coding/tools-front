@@ -1,41 +1,38 @@
 <template>
   <div class="shop-img">
-    <h1 class="app-heade-title">赞助\小程序观看广告都可获取积分</h1>
+    <h1 class="app-heade-title">赞助/小程序观看广告都可获取积分</h1>
   </div>
   <div class="shop-box" v-loading="loading">
-  <template  v-if="userStore._id">
-    <a-radio-group v-model="checkedValue">
-      <template v-for="item in goodList" :key="item">
-        <a-radio :value="item">
-          <template #radio="{ checked }">
-            <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
-              <div>
-                <div className="custom-radio-card-title">
-                  {{ item.title }}
+    <template v-if="userStore._id">
+      <a-radio-group v-model="checkedValue">
+        <template v-for="item in goodList" :key="item">
+          <a-radio :value="item">
+            <template #radio="{ checked }">
+              <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
+                <div>
+                  <div className="custom-radio-card-title">
+                    {{ item.title }}
+                  </div>
                 </div>
-                <!-- <a-typography-text type="secondary">
-                  {{ item.desc }}
-                </a-typography-text> -->
-              </div>
-            </a-space>
-          </template>
-        </a-radio>
-      </template>
-    </a-radio-group>
-    <div class="shop-action">
-      <span> 详情：{{ checkedValue.desc }}</span>
-      <span>
-        <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
-        <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a-button type="primary" style="width: 200px;" @click="spon">立即赞助</a-button>
-      </span>
+              </a-space>
+            </template>
+          </a-radio>
+        </template>
+      </a-radio-group>
+      <div class="shop-action">
+          <a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert></span>
+          <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
+          <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-button type="primary" style="width: 200px;" @click="spon">立即赞助</a-button>
+        </span>
+      </div>
+    </template>
+    <div v-else style="margin: auto;">
+      <a-empty description="请先登录哈" />
     </div>
-  </template>
-  <div v-else style="margin: auto;">
-    <a-empty description="请先登录哈"/>
+    <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
   </div>
-    <sponDialog :orderInfo="orderInfo" :visible="visible" @close="close"></sponDialog>
-  </div>
+  <tips v-if="userStore._id"></tips>
 </template>
 <script setup lang="ts">
 import { getGoodList } from '@api/home';
@@ -43,6 +40,7 @@ import sponDialog from './sponDialog.vue'
 import { createInvoice, checkInvoice } from '@api/home'
 import { useUserStore } from '@/store';
 import { Message } from '@arco-design/web-vue';
+import tips from './tips.vue'
 const userStore = useUserStore()
 
 const goodList = ref([])
@@ -51,9 +49,10 @@ const checkedValue = ref({})
 const visible = ref(false)
 const orderInfo = ref({})
 const timer = ref(0)
+const payStatus = ref('待扫码')
 
 const getList = async () => {
-  if(!userStore._id){
+  if (!userStore._id) {
     return
   }
   loading.value = true
@@ -64,12 +63,15 @@ const getList = async () => {
 }
 
 const pollOrderStatus = (tradeNo: any) => {
-  checkInvoice({ tradeNo:tradeNo  }).then(res => {
+  checkInvoice({ tradeNo: tradeNo }).then(res => {
     console.log(res);
-    if(res.data) {
+    if (res.data === 1) {
       clearInterval(timer.value)
-      Message.success('【赞助成功-感谢您的支持】')
+      Message.success('赞助成功,感谢您的支持')
       close()
+    } else if (res.data === -1) {
+      Message.success('已扫码,等待支付···')
+      payStatus.value = '待支付'
     }
   })
 }
@@ -94,9 +96,10 @@ const close = () => {
 getList()
 </script>
 <style lang="less" scoped>
-.arco-radio{
+.arco-radio {
   margin-bottom: 12px;
 }
+
 .shop-img {
   background-image: url(https://pic4.zhimg.com/v2-ab400c5e44000df0658c6500e2e20d0f_r.jpg?source=1940ef5c);
   width: 80%;
@@ -111,6 +114,7 @@ getList()
   background-position: 50%;
   background-size: cover;
   text-align: center;
+
   .app-heade-title {
     color: #f0f1f5;
     font-size: 28px;
@@ -126,7 +130,7 @@ getList()
   padding: 20px 40px 20px 40px;
   background-color: #fff;
   position: relative;
-  margin: -120px auto 0;
+  margin: -136px auto 0;
   background-color: hsla(0, 0%, 100%, .78);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -135,10 +139,11 @@ getList()
   box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
   flex-direction: column;
   justify-content: space-between;
+
   .shop-action {
     display: flex;
     align-items: center;
-    justify-content:space-between;
+    justify-content: space-between;
   }
 
   .good-item {
@@ -173,7 +178,7 @@ getList()
   .custom-radio-card-title {
     color: var(--color-text-1);
     font-size: 14px;
-    font-weight: bold;
+    // font-weight: bold;
   }
 
   .custom-radio-card {

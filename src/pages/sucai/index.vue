@@ -66,6 +66,7 @@ const getDownUrl = async (url) => {
         options.list = res.data.options
         console.log(res.data.options);
       } else {
+        Message.success('解析成功了，请点击立即下载按钮😊')
         await userStore.getUserNum()
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd

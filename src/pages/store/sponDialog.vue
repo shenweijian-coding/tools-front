@@ -1,5 +1,7 @@
 <template>
   <s-dialog v-model:visible="visible" width="346px" @close="close">
+    <div style="text-align: center;">支付状态：<a-tag color="purple">{{ payStatus }}...</a-tag>
+    </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" />
       <p class="order_title">{{ orderInfo.title }}</p>
@@ -10,6 +12,7 @@
       </div>
       <p class="order-amount">
         ￥{{ orderInfo.price }}</p>
+      <p style="margin-bottom: 78px">订单号：{{ orderInfo.tradeNo }}</p>
       <div class="hidden-xs-only tips-pc">
         请使用支付宝APP 扫一扫
         <br>
@@ -24,6 +27,7 @@ const emit = defineEmits(['close'])
 const props = defineProps({
   visible: Boolean,
   orderInfo: Object,
+  payStatus: String
 })
 const close = () => {
   emit('close')
@@ -49,7 +53,7 @@ const close = () => {
   }
 
   .order_title {
-    margin: 16px 0 24px;
+    margin: 10px 0 12px;
     font-size: 16px;
   }
 
@@ -66,7 +70,7 @@ const close = () => {
     font-size: 20px;
     color: #d64244;
     font-weight: 500;
-    margin-bottom: 78px;
+    margin-bottom: 14px;
   }
 
   .tips-pc {
