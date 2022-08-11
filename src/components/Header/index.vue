@@ -160,7 +160,7 @@ const bindWxApp = () => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="visible" width="300px" @close="close">
+  <s-dialog v-model:visible="visible" width="300px" @close="close" title="登录免费下载">
     <div>
       <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login">
       </a-input-search>
