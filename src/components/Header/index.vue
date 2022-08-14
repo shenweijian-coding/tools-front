@@ -15,7 +15,7 @@ const userStore = useUserStore()
 const theme = computed(() => {
   return appStore.theme
 })
-
+const loading = ref(false)
 const isDark = useDark({
   selector: 'body',
   attribute: 'arco-theme',
@@ -67,15 +67,28 @@ const openLogin = () => {
 const getUserNum = () => {
   userStore.getUserNum()
 }
-getUserNum()
+if (!userStore.userIsLogin) {
+  getUserNum()
+}
 const login = async () => {
+  loading.value = true
   if (!loginCode.value) {
     Message.warning('请输入验证码！')
     return
   }
-  const res = await userStore.login({ code: loginCode.value })
+  const params = {
+    code: loginCode.value
+  }
+  const inviteCode = localStorage.getItem('code')
+  if (inviteCode) {
+    params.inviteCode = inviteCode
+    localStorage.removeItem('code')
+  }
+  const res = await userStore.login(params)
   Message.success('登录成功')
-  window.location.reload()
+  visible.value = false;
+  loading.value = false
+  // window.location.reload()
 }
 // 用户没有签到和观看广告
 // setTimeout(() => {
@@ -167,7 +180,7 @@ const bindWxApp = () => {
       <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
     </div>
   </s-dialog>
-  <s-dialog v-model:visible="stepsVisible" @close="close" title="教你如何免费获取积分，下载全站素材" width="460px">
+  <s-dialog v-model:visible="stepsVisible" v-loading="loading" @close="close" title="教你如何免费获取积分，下载全站素材" width="460px">
     <Wxapp></Wxapp>
   </s-dialog>
 </template>

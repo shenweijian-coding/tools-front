@@ -6,8 +6,10 @@ import CheckDialog from '@/components/check-dialog/index.vue'
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
 import { useUserStore } from '@/store';
+import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
+const route = useRoute()
 const loading = ref(false)
 const checkLoading = ref(false)
 const listLoading = ref(false)
@@ -33,6 +35,13 @@ getInfo().then(res => {
   webList.list = res.data.webList
   listLoading.value = false
 })
+// 被邀请的逻辑
+setTimeout(() => {
+  const { query } = toRaw(route)
+  if (query.value.code) {
+    localStorage.setItem('code', query.value.code)    
+  }
+});
 const getDownUrl = async (url) => {
   try {
     zhongtuUrl.value = ''
