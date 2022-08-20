@@ -29,6 +29,10 @@ const routes = [{
     {
       path: '/shop',
       component: () => import('@/pages/store/index.vue')
+    },
+    {
+      path: '/help',
+      component: () => import('@/pages/help/index.vue')
     }
   ]
 }, {

@@ -53,6 +53,11 @@ const paths = reactive({
     path: '/shop',
     id: 5,
     text: ''
+  },{
+    name: '视频教程',
+    path: '/help',
+    id: 6,
+    text: ''
   }]
 })
 const visible = ref(false);
