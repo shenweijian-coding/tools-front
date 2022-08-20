@@ -28,7 +28,7 @@
       </video>
     </div>
     <div v-else class="qr-code">
-      <img src="@/assets/images/wxapp.jpg" style="width: 260px;display: inline;" />
+      <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" style="width: 260px;display: inline;" />
       <div class="tips">体验小程序下载</div>
     </div>
   </div>

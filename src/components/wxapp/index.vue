@@ -2,7 +2,7 @@
   <div>
     <div class="qr-code">
       <div class="qr-center">
-        <img src="@/assets/images/wxapp.jpg" alt="二维码" style="width:140px;" />
+        <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" alt="二维码" style="width:140px;" />
         <span>图1：微信小程序码</span>
       </div>
       <div class="qr-center">

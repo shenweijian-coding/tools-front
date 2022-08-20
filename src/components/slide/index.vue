@@ -8,7 +8,7 @@
             <span class="icon-tip">小程序</span>
           </span>
           <template #content>
-            <img src="@/assets/images/wxapp.jpg" alt="二维码" style="width:200px;height:200px">
+            <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
       </li>
@@ -20,22 +20,10 @@
           </span>
 
           <template #content>
-            <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
+            <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2d1.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
       </li>
-      <!-- <li title="微信号">
-        <a-popover position="left">
-          <span>
-            <icon-user class="icon" />
-            <span class="icon-tip">微信</span>
-
-          </span>
-          <template #content>
-            <img src="@/assets/images/wx.png" alt="二维码" style="width:200px;height:200px">
-          </template>
-        </a-popover>
-      </li> -->
     </ul>
   </div>
 </template>

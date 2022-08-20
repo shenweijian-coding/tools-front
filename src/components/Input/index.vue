@@ -21,7 +21,7 @@ const emit = defineEmits(['getPlay'])
 const url = ref('')
 const getPlay = () => {
   if(!url.value) {{
-    Message.warning('url不能为空')
+    Message.warning('输入框不能为空')
     return
   }}
   emit('getPlay', url)

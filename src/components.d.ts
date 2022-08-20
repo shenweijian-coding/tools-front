@@ -5,14 +5,22 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AAlert: typeof import('@arco-design/web-vue')['Alert']
     ABadge: typeof import('@arco-design/web-vue')['Badge']
     AButton: typeof import('@arco-design/web-vue')['Button']
     ACol: typeof import('@arco-design/web-vue')['Col']
+    ACollapse: typeof import('@arco-design/web-vue')['Collapse']
+    ACollapseItem: typeof import('@arco-design/web-vue')['CollapseItem']
     ADivider: typeof import('@arco-design/web-vue')['Divider']
+    AEmpty: typeof import('@arco-design/web-vue')['Empty']
     AInputSearch: typeof import('@arco-design/web-vue')['InputSearch']
     APopover: typeof import('@arco-design/web-vue')['Popover']
+    ARadio: typeof import('@arco-design/web-vue')['Radio']
+    ARadioGroup: typeof import('@arco-design/web-vue')['RadioGroup']
     ARow: typeof import('@arco-design/web-vue')['Row']
     ASpace: typeof import('@arco-design/web-vue')['Space']
+    ATag: typeof import('@arco-design/web-vue')['Tag']
+    ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
     Dialog: typeof import('./components/dialog/index.vue')['default']
     Floor: typeof import('./components/floor/index.vue')['default']

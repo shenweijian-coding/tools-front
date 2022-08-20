@@ -1,7 +1,7 @@
 <template>
 <div class="window-qr-code">
   <div style="display: flex;justify-content: center;">
-    <img src="@/assets/images/QR.jpg" style="width: 200px;">
+    <img src="https://pic.imgdb.cn/item/6300a80616f2c2beb1ccf790.jpg" style="width: 200px;">
   </div>
   <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
     <!-- <i class="iconfont icon-weixin1" style="color: rgb(0, 170, 127); font-size: 20px;"></i> -->
