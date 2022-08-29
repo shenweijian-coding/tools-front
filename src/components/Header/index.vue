@@ -29,27 +29,27 @@ const isDark = useDark({
 const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [{
-    name: '素材搜索',
+    name: '素材下载',
     path: '/sucai',
     id: 1,
     text: ''
   }, {
-    name: '虎课网',
+    name: '虎课教程',
     path: '/huke',
     id: 2,
     text: ''
   }, {
-    name: '视达网',
+    name: '视达教程',
     path: '/shida',
     id: 3,
     text: '免费'
   }, {
-    name: '短视频搜索',
+    name: '短视频',
     path: '/shorts',
     id: 4,
     text: '免费'
   }, {
-    name: '赞助送积分',
+    name: '赞助本站',
     path: '/shop',
     id: 5,
     text: ''

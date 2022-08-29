@@ -309,7 +309,7 @@ const copyUrl = () => {
     .app-header-input {
       width: 96%;
       margin: auto;
-      max-width: 650px;
+      max-width: 580px;
     }
   }
 
@@ -380,7 +380,7 @@ const copyUrl = () => {
 }
 
 .app-header-box {
-  background-image: url(https://pic1.zhimg.com/v2-f86bcbe20a5d485df169c6bbb402e030_r.jpg);
+  background-image: url(https://picx.zhimg.com/v2-55f9e36b2250342606bdc1d1f14d1604_r.jpg?source=1940ef5c);
 }
 
 .shou {

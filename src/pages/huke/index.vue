@@ -93,7 +93,7 @@ const checkCode = async (downCode) => {
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
-        <h1 class="app-heade-title">虎课教程资源搜索[100积分/1次]</h1>
+        <h1 class="app-heade-title">虎课教程资源搜索</h1>
         <div class="app-header-input">
           <Input @getPlay="getPlay" :loading="loading" />
         </div>
@@ -185,7 +185,7 @@ const checkCode = async (downCode) => {
 }
 
 .app-header-box {
-  background-image: url(https://pic1.zhimg.com/v2-8b9226cb502a89da2c4464d611a8ba9c_r.jpg);
+  background-image: url(https://pic2.zhimg.com/v2-3ec2031a0d2e26ed592f44151e58378a_r.jpg?source=1940ef5c);
 }
 
 .elli {
