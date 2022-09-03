@@ -1,9 +1,12 @@
 <template>
   <s-dialog v-model:visible="visible" width="600px" title="积分不足提醒" @close="close">
     <p style="line-height: 30px;">您可以选择如下方式获取积分<br>
-    1. 【免费】完任务送积分,点击右上角免费获取按钮了解详情（适合临时下载）<br>
-    2. 【赞助】赞助本站送积分（低至每日0.2元）<a-button size="mini" type="text" status="success" href="#/shop">点我跳转</a-button>
+    1. 每日完任务送积分,点击右上方 免费得积分 了解详情<br>
+    2. 赞助本站送积分（低至每日0.10元）<a-button size="mini" type="text" status="success" href="#/shop">点我跳转</a-button><br>
+    3. 更多免费获取方式正在开发中
     </p>
+    <a-divider></a-divider>
+    <p style="font-size:12px;color: #919499">赞助费用将用于对接新素材网站及网站运营成本，感谢您的支持和谅解；添加右侧微信拉你进微信群</p>
   </s-dialog>
 </template>
 <script setup lang="ts">

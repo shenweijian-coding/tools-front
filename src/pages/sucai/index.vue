@@ -7,6 +7,8 @@ import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
 import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router'
+import { dateFormate } from '@/utils/index'
+import SvgIcon from "@components/SvgIcon/index.vue"
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -39,7 +41,7 @@ getInfo().then(res => {
 setTimeout(() => {
   const { query } = toRaw(route)
   if (query.value.code) {
-    localStorage.setItem('code', query.value.code)    
+    localStorage.setItem('code', query.value.code)
   }
 });
 const getDownUrl = async (url) => {
@@ -234,19 +236,38 @@ const copyUrl = () => {
         </div>
       </div>
       <div class="app-web-list" v-loading="listLoading">
+        <div class="pl-4 pr-4 flex justify-around hidden lg:flex mb-3 text-sm" v-if="!userStore.userIsLogin">
+          <span class="flex justify-center items-center">
+            <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
+            <span>永久积分：</span><span>{{ userStore.userNum }}</span>
+          </span>
+          <span class="flex justify-center items-center">
+            <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
+            <span>今日有效积分：</span><span>{{ userStore.eNum || '未赞助或已用完' }}</span>
+          </span>
+          <span class="flex justify-center items-center">
+            <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
+            <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '未赞助' }}</span>
+          </span>
+          <span class="flex justify-center items-center">
+            <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
+            <div>小程序{{ userStore.isSign ? '已签到' : '未签到(每日可领积分)' }}</div>
+          </span>
+        </div>
+        <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
               <!-- <a-tooltip :content="userStore.userIsLogin ? '正常使用' : it.webNum + '积分一次'" mini> -->
-                <div class="app-weblist-item shou">
-                  <div class="item-logo"><img :src="it.webLogo"></div>
-                  <div class="item-info">
-                    <div class="title">
-                      {{ it.webName }} [{{userStore.userIsLogin ? '正常使用' : (it.webNum + '积分/次')}}]
-                    </div>
-                    <div class="tips">{{ it.webTips }}</div>
+              <div class="app-weblist-item shou">
+                <div class="item-logo sm:flex hidden"><img :src="it.webLogo" :alt="it.webName"></div>
+                <div class="item-info">
+                  <div class="title">
+                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分/次') }}]
                   </div>
+                  <div class="tips">{{ it.webTips }}</div>
                 </div>
+              </div>
               <!-- </a-tooltip> -->
             </a>
           </a-col>
@@ -262,7 +283,7 @@ const copyUrl = () => {
     </s-dialog>
     <!-- // 90设计的滑动验证码 -->
     <s-dialog v-model:visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
-      <div style="width: 100%"  v-loading="checkLoading">
+      <div style="width: 100%" v-loading="checkLoading">
         <div class="canvas-box">
           <canvas id="c3"></canvas>
           <canvas id="c4"></canvas>
@@ -351,8 +372,8 @@ const copyUrl = () => {
       justify-content: center;
 
       img {
-        width: 100%;
-        height: 100%;
+        width: 48px;
+        height: 48px;
         padding: 4px;
         border-radius: 50%;
         border-color: rgba(76 175 80/15%);
@@ -365,11 +386,12 @@ const copyUrl = () => {
 
     .item-info {
       padding: 0 16px;
+      white-space: nowrap;
 
       .tips {
         font-size: 12px;
+        margin-top: 6px;
         color: #9c9c9c;
-        white-space: nowrap;
       }
     }
   }

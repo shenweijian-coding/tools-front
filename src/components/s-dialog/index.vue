@@ -108,7 +108,7 @@ export default {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -50%);
     z-index: 54;
   }
   > header {

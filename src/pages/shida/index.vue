@@ -158,7 +158,7 @@ import sDialog from '@/components/s-dialog/index.vue'
             <div class="content_new">
                <ul class="list-2">
                  <div v-for="(it, i) in classList.list" :key="i" target="_blank">
-                    <li class="video_item" @click="playCurVideo(it)">
+                    <li class="video_item mt-4 xl:mt-0" @click="playCurVideo(it)">
                       <div class="c_img">
                           <img :src="it.img" class="lazy">
                           <div class="overlay">

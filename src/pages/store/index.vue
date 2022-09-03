@@ -2,7 +2,7 @@
   <div class="shop-img">
     <h1 class="app-heade-title">赞助/小程序观看广告都可获取积分</h1>
   </div>
-  <div class="shop-box" v-loading="loading">
+  <div class="shop-box text-center" v-loading="loading">
     <template v-if="userStore._id">
       <a-radio-group v-model="checkedValue">
         <template v-for="item in goodList" :key="item">
@@ -20,7 +20,7 @@
         </template>
       </a-radio-group>
       <div class="shop-action">
-        <span><a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert></span>
+        <span class="lg:flex hidden"><a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert></span>
         <span>
           <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
           <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
