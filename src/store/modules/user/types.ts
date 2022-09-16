@@ -9,6 +9,7 @@ export interface UserState {
     isAdmin?: Boolean;
     num: Number;
     isSign: Boolean;
+    isLoginAgain: Boolean;
     adNum: Number;
     eNum: Number;
     expireDate: any

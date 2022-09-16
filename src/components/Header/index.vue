@@ -60,8 +60,15 @@ const openLogin = () => {
 }
 
 // 获取用户积分数量
-const getUserNum = () => {
-  userStore.getUserNum()
+const getUserNum = async () => {
+  await userStore.getUserNum()
+  console.log(userStore.isLoginAgain, 'isLoginAgain');
+  setTimeout(() => {
+    if (userStore.isLoginAgain) {
+      alert('当前登录IP与上一次登录IP不一致，请重新登录！')
+      userStore.logout()
+    }
+  }, 200);
 }
 if (!userStore.userIsLogin) {
   getUserNum()

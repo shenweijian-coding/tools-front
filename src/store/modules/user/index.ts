@@ -21,7 +21,8 @@ export const useUserStore = defineStore('user', {
         isSign: false,
         adNum: 0,
         eNum: 0,
-        expireDate: 0
+        expireDate: 0,
+        isLoginAgain: false
     }),
     getters: {
         userProfile(state: UserState): UserState {

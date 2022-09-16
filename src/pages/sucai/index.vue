@@ -243,7 +243,7 @@ const copyUrl = () => {
           </span>
           <span class="flex justify-center items-center">
             <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
-            <span>今日有效积分：</span><span>{{ userStore.eNum || '未赞助或已用完' }}</span>
+            <span>今日有效积分：</span><span>{{ userStore.eNum >= 0 ? userStore.eNum : '未赞助或已用完' }}</span>
           </span>
           <span class="flex justify-center items-center">
             <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
@@ -251,7 +251,7 @@ const copyUrl = () => {
           </span>
           <span class="flex justify-center items-center">
             <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
-            <div>小程序{{ userStore.isSign ? '已签到' : '未签到(每日可领积分)' }}</div>
+            <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
           </span>
         </div>
         <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
@@ -402,7 +402,7 @@ const copyUrl = () => {
 }
 
 .app-header-box {
-  background-image: url(https://picx.zhimg.com/v2-55f9e36b2250342606bdc1d1f14d1604_r.jpg?source=1940ef5c);
+  background-image: url(https://pic1.zhimg.com/v2-6944d3ea53c084bad6931a56d5158a48_r.jpg);
 }
 
 .shou {
