@@ -21,4 +21,6 @@ export const getClassList = async () => get<any>({url: 'play/list'})
 
 export const getDownFile = async (data: params) => post<any>({ url: 'play/2', data })
 
+export const getHukeFile = async (data: params) => post<any>({ url: 'play/4', data })
+
 export const getShortsUrl = async(data: shorts) => post<any>({ url: 'wxapp/analyze', data })

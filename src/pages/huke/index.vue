@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getHuKeUrl } from '@/api/play'
+import { getHuKeUrl, getHukeFile } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
 import NumLack from '@/components/NumLack/index.vue'
 import { checkInfo } from '@api/sucai/index'
@@ -7,6 +7,7 @@ import sDialog from '@/components/s-dialog/index.vue'
 
 const loading = ref(false)
 const visible = ref(false)
+const hukeId = ref('')
 const videoInfo = reactive({
   url: '',
   title: ''
@@ -26,6 +27,7 @@ const getPlay = async (url: any) => {
       visible.value = true
       videoInfo.url = data.data.videoUrl
       videoInfo.title = data.data.title
+      hukeId.value = data.data.hukeId
     } else {
       Message.error('当前资源搜索失败，请咨询管理员！')
     }
@@ -54,6 +56,14 @@ const checkCode = async (downCode) => {
     checkVisible.value = false
   }
 }
+const handleHukeFile = async (type) => {
+  const res = await getHukeFile({ id: hukeId.value, type: type })
+  if (res.data) {
+    window.open(res.data)
+  } else {
+    Message.error('出现错误,请联系管理员！')
+  }
+}
 </script>
 
 <template>
@@ -74,17 +84,15 @@ const checkCode = async (downCode) => {
       </div>
       <div class="item">
         <span>源文件：</span>
-        <a-button type="primary" status="success" size="mini" disabled>
+        <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
           源文件
         </a-button>
-        正在开发中
       </div>
       <div class="item">
         <span>本课素材：</span>
-        <a-button type="primary" status="warning" size="mini" disabled>
+        <a-button type="primary" status="warning" size="mini" @click="handleHukeFile(2)">
           本课素材
         </a-button>
-        正在开发中
       </div>
     </div>
     <div style="background-color: rgb(235, 235, 235); height: 1px; margin: 10px auto 10px;"></div>
