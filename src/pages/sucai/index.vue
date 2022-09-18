@@ -19,6 +19,7 @@ const href = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
 const sheji90CheckVisible = ref(false)
+const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const webSiteCheckInfo = reactive({
   imgUrl: '',
@@ -69,6 +70,8 @@ const getDownUrl = async (url) => {
           webSiteCheckInfo.imgUrl = res.data.handle
         }
         return
+      } else if (res.data.status === 1000) { // 爬虫校验
+        checkVisible.value = true
       }
     }
 
@@ -116,13 +119,13 @@ const getCurDownUrl = async (item) => {
     loading.value = false
   }
 }
-// const checkCode = async (downCode) => {
-//   const { data } = await checkInfo({ code: downCode })
-//   if (data.result) {
-//     Message.success('校验成功！请重新点击搜索进行下载！')
-//     visible.value = false
-//   }
-// }
+const checkCode = async (downCode) => {
+  const { data } = await checkInfo({ code: downCode })
+  if (data.result) {
+    Message.success('校验成功！请重新点击搜索进行下载！')
+    checkVisible.value = false
+  }
+}
 const websitCheckCode = async () => {
   try {
     if (!webSiteCheckInfo.webSiteCheckCode.trim()) {
@@ -196,6 +199,7 @@ const sheji90check = async () => {
 }
 const close = () => {
   visible.value = false
+  checkVisible.value = false
   webSiteCheckVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
 }
@@ -275,6 +279,7 @@ const copyUrl = () => {
       </div>
     </div>
     <NumLack :visible="visible" @close="close" />
+    <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode"/>
 
     <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm">
