@@ -54,11 +54,14 @@ const paths = reactive({
 const visible = ref(false);
 const stepsVisible = ref(false)
 const loginCode = ref('');
+const accode = ref('');
 // const undoneTaskVisible = ref(false);
 const openLogin = () => {
   visible.value = true;
 }
-
+if(localStorage.getItem('accode')) {
+  accode.value = localStorage.getItem('accode') || ''
+}
 // 获取用户积分数量
 const getUserNum = async () => {
   await userStore.getUserNum()
@@ -72,15 +75,23 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
+}else {
+  visible.value = true;
 }
-const login = async () => {
+const login = async (type) => {
   loading.value = true
-  if (!loginCode.value) {
+  if (type===1 && !loginCode.value) {
     Message.warning('请输入验证码！')
     return
   }
+  if (type===2 && !accode.value) {
+    Message.warning('请输入卡密！')
+    return
+  }
   const params = {
-    code: loginCode.value
+    code: loginCode.value,
+    acCode: accode.value,
+    type: type
   }
   const inviteCode = localStorage.getItem('code')
   if (inviteCode) {
@@ -89,6 +100,7 @@ const login = async () => {
   }
   const res = await userStore.login(params)
   Message.success('登录成功')
+  localStorage.setItem('accode', accode.value)
   visible.value = false;
   loading.value = false
   // window.location.reload()
@@ -120,7 +132,7 @@ const bindWxApp = () => {
       class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent">
       <div class="mx-auto max-w-8xl">
         <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10">
-          <div class="relative flex items-center text-2xl sm:text-2xl font-blimone justify-between">
+          <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
             <!-- <router-link
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
@@ -128,7 +140,7 @@ const bindWxApp = () => {
             <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
             <!-- </router-link> -->
             <div class="relative flex items-center justify-between lg:w-full">
-              <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200 lg:flex hidden">
+              <nav class="hidden text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200 lg:flex">
                 <ul class="flex space-x-14">
                   <template v-for="it in paths.list" :key="it.id">
                     <li class="ml-14"
@@ -139,7 +151,7 @@ const bindWxApp = () => {
                         </router-link>
                       </a-badge>
                       <router-link v-else :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{
-                          it.name
+                      it.name
                       }}
                       </router-link>
                     </li>
@@ -185,11 +197,20 @@ const bindWxApp = () => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="visible" width="300px" @close="close" title="登录免费下载">
+  <s-dialog v-model:visible="visible" width="300px" @close="close" title="请选择登录方式">
     <div>
-      <a-input-search placeholder="请输入5位验证码" button-text="登录" v-model="loginCode" search-button @search="login">
-      </a-input-search>
-      <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
+      <a-tabs default-active-key="2">
+        <a-tab-pane key="1" title="微信登录">
+          <a-input-search placeholder="请输入5位验证码" button-text="验证码登录" v-model="loginCode" search-button @search="login(1)">
+          </a-input-search>
+          <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
+        </a-tab-pane>
+        <a-tab-pane key="2" title="卡密登录">
+          <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="卡密登录" v-model="accode" search-button @search="login(2)">
+          </a-input-search>
+          <!-- <span>卡密登录，自动激活卡密对应权限，格式为yyy-xxxxxx-jjj；也可微信登录后去用户中心直接兑换</span> -->
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </s-dialog>
   <s-dialog v-model:visible="stepsVisible" v-loading="loading" @close="close" title="教你如何免费获取积分，下载全站素材" width="460px">
