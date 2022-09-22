@@ -203,11 +203,11 @@ const close = () => {
   webSiteCheckVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
 }
-const copyUrl = () => {
+const copyUrl = (copyText) => {
 
   var textareaC = document.createElement('textarea');
   textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
-  textareaC.value = zhongtuUrl.value;
+  textareaC.value = copyText;
   document.body.appendChild(textareaC); //将textarea添加为body子元素
   textareaC.select();
   var res = document.execCommand('copy');
@@ -226,11 +226,14 @@ const copyUrl = () => {
         <div class="app-header-input">
           <Input @getPlay="getDownUrl" :loading="loading" />
           <div v-if="zhongtuUrl" class="mt-4">
-            <a-button @click="copyUrl" type="primary">复制众图下载链接</a-button>
+            <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
           </div>
-          <a :href="href" v-else-if="href" target="_blank" referrerpolicy="no-referrer">
-            <a-button class="mt-4" type="primary">立即下载</a-button>
-          </a>
+          <template v-else-if="href">
+            <a-button @click="copyUrl(href)" class="mr-4">复制下载地址</a-button>
+            <a :href="href" target="_blank" referrerpolicy="no-referrer">
+              <a-button class="mt-4" type="primary">立即下载</a-button>
+            </a>
+          </template>
           <span v-if="options.list.length">
             <a-space class="mt-4">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -240,20 +243,20 @@ const copyUrl = () => {
         </div>
       </div>
       <div class="app-web-list" v-loading="listLoading">
-        <div class="pl-4 pr-4 flex justify-around hidden lg:flex mb-3 text-sm" v-if="!userStore.userIsLogin">
-          <span class="flex justify-center items-center">
+        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
+          <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
             <span>永久积分：</span><span>{{ userStore.userNum }}</span>
           </span>
-          <span class="flex justify-center items-center">
+          <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
             <span>今日有效积分：</span><span>{{ userStore.eNum >= 0 ? userStore.eNum : '未赞助或已用完' }}</span>
           </span>
-          <span class="flex justify-center items-center">
+          <span class="flex items-center justify-center">
             <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
             <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '未赞助' }}</span>
           </span>
-          <span class="flex justify-center items-center">
+          <span class="flex items-center justify-center">
             <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
             <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
           </span>
@@ -264,7 +267,7 @@ const copyUrl = () => {
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
               <!-- <a-tooltip :content="userStore.userIsLogin ? '正常使用' : it.webNum + '积分一次'" mini> -->
               <div class="app-weblist-item shou">
-                <div class="item-logo sm:flex hidden"><img :src="it.webLogo" :alt="it.webName"></div>
+                <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
                     {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分/次') }}]
