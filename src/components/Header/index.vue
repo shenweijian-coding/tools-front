@@ -43,7 +43,7 @@ const paths = reactive({
     name: '视达教程',
     path: '/shida',
     id: 3,
-    text: '免费'
+    text: ''
   }, {
     name: '短视频',
     path: '/shorts',

@@ -105,6 +105,7 @@ const getCurDownUrl = async (item) => {
       url: link,
       option: toRaw(item)
     })
+    
     if (res.data.result) {
       options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
@@ -212,7 +213,7 @@ const copyUrl = (copyText) => {
   textareaC.select();
   var res = document.execCommand('copy');
   document.body.removeChild(textareaC);//移除DOM元素
-  Message.success('复制成功，请粘贴到迅雷进行下载');
+  Message.success('复制成功！');
 }
 
 </script>
@@ -282,7 +283,7 @@ const copyUrl = (copyText) => {
       </div>
     </div>
     <NumLack :visible="visible" @close="close" />
-    <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode"/>
+    <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
     <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm">
