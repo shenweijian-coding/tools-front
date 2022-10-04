@@ -15,7 +15,7 @@ export default defineComponent({
     return <div class="hay-loading-mask">
       <div class="hay-loading-spinner">
         <i class="hay-icon-loading"></i>
-        <p class="hay-loading-text">拼命加载中！</p>
+        <p class="hay-loading-text">资源搜索中，请耐心等待！</p>
       </div>
     </div>;
   },
