@@ -19,11 +19,16 @@ const href = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
 const sheji90CheckVisible = ref(false)
+const baotuCheckVisible = ref(false)
 const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const webSiteCheckInfo = reactive({
   imgUrl: '',
   webSiteCheckCode: ''
+})
+const baotuCheckInfo = reactive({
+  content: '',
+  params: ''
 })
 const webList = reactive({
   list: []
@@ -65,6 +70,11 @@ const getDownUrl = async (url) => {
           setTimeout(() => {
             sheji90check()
           });
+        } else if (res.data.id === 5) { // 包图验证
+          console.log('baotu');
+          baotuCheckVisible.value = true
+          baotuCheckInfo.content = res.data.handle
+          baotuCheckInfo.params = res.data.otherInfo
         } else { // 风云办公验证       
           webSiteCheckVisible.value = true
           webSiteCheckInfo.imgUrl = res.data.handle
@@ -105,7 +115,7 @@ const getCurDownUrl = async (item) => {
       url: link,
       option: toRaw(item)
     })
-    
+
     if (res.data.result) {
       options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
@@ -215,7 +225,11 @@ const copyUrl = (copyText) => {
   document.body.removeChild(textareaC);//移除DOM元素
   Message.success('复制成功！');
 }
+const baotuCheckClick = async e => {
+  console.log(e.target.getAttribute('data-key'));
+  const res = await webCheck({ url: link, code: `${baotuCheckInfo.params}&answer_key=${e.target.getAttribute('data-key')}` })
 
+}
 </script>
 
 <template>
@@ -300,6 +314,11 @@ const copyUrl = (copyText) => {
         <div class="geetest_slider geetest_ready">
           <div id="dragbox" class="geetest_slider_button" draggable="true" style="left: 0"></div>
         </div>
+      </div>
+    </s-dialog>
+    <!-- 包图验证码 -->
+    <s-dialog v-model:visible="baotuCheckVisible" @close="close" title="包图验证">
+      <div style="width: 100%" class="yanzheng-wrap" v-html="baotuCheckInfo.content" @click="baotuCheckClick">
       </div>
     </s-dialog>
   </div>
@@ -490,5 +509,47 @@ const copyUrl = (copyText) => {
 .geetest_slider,
 .geetest_slider_button {
   background-image: url(https://static.geetest.com/static/ant/sprite.1.2.6.png)
+}
+
+.yanzheng-wrap {
+  text-align: center;
+  color: #666;
+  letter-spacing: 1px;
+
+  /deep/ h3 {
+    height: 24px;
+    line-height: 24px;
+    font-size: 24px;
+    font-weight: 400;
+    display: none;
+  }
+
+  /deep/ .tips {
+    height: 18px;
+    line-height: 18px;
+    margin: 25px 0 20px;
+    span{
+      color: red;
+    }
+  }
+
+  /deep/.imgs-wrap {
+    overflow: hidden;
+    width: 532px;
+    margin: 0 auto;
+    letter-spacing: 0;
+    display: flex;
+    flex-wrap: wrap;
+    img {
+      width: 162px;
+      height: 82px;
+      margin: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      &:hover{
+        border: 1px solid red;
+      }
+    }
+  }
 }
 </style>
