@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;">
+  <div style="width: 80%;margin: 20px auto;">
     <iframe
     :height="height"
     width="100%"

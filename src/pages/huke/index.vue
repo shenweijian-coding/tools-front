@@ -2,7 +2,6 @@
 import { getHuKeUrl, getHukeFile } from '@/api/play'
 import { Message } from '@arco-design/web-vue';
 import NumLack from '@/components/NumLack/index.vue'
-import { checkInfo } from '@api/sucai/index'
 import sDialog from '@/components/s-dialog/index.vue'
 
 const loading = ref(false)
@@ -25,9 +24,21 @@ const getPlay = async (url: any) => {
     }
     if (data.data && data.data.can_play) {
       visible.value = true
-      videoInfo.url = data.data.videoUrl
+      // videoInfo.url = data.data.videoUrl
       videoInfo.title = data.data.title
       hukeId.value = data.data.hukeId
+      setTimeout(() => {
+        new window.HlsJsPlayer({
+          id: 'mse',
+          url: '/api/play/getM3u8?url=' + escape(data.data.videoUrl),
+          autoplay: true,
+          playsinline: true,
+          pip: true,
+          playbackRate: [0.5, 0.75, 1, 1.5, 2],
+          // height: '300px',
+          width: '100%'
+        });
+      });
     } else {
       Message.error('当前资源搜索失败，请咨询管理员！')
     }
@@ -37,25 +48,19 @@ const getPlay = async (url: any) => {
     loading.value = false
   }
 }
-const copyUrl = () => {
-  const aux = document.createElement("input")
-  aux.setAttribute("value", videoInfo.url)
-  document.body.appendChild(aux)
-  aux.select()
-  document.execCommand("copy")
-  document.body.removeChild(aux)
-  Message.success('链接复制成功，请前往播放器使用！')
-}
+// const copyUrl = () => {
+//   const aux = document.createElement("input")
+//   aux.setAttribute("value", videoInfo.url)
+//   document.body.appendChild(aux)
+//   aux.select()
+//   document.execCommand("copy")
+//   document.body.removeChild(aux)
+//   Message.success('链接复制成功，请前往播放器使用！')
+// }
 const close = () => {
   checkVisible.value = false
 }
-const checkCode = async (downCode) => {
-  const { data } = await checkInfo({ code: downCode })
-  if (data.result) {
-    Message.success('校验成功！请重新点击搜索进行下载！')
-    checkVisible.value = false
-  }
-}
+
 const handleHukeFile = async (type) => {
   const res = await getHukeFile({ id: hukeId.value, type: type })
   if (res.data) {
@@ -67,36 +72,18 @@ const handleHukeFile = async (type) => {
 </script>
 
 <template>
-  <s-dialog v-model:visible="visible" width="44%" title="虎课资源搜索成功">
+  <s-dialog v-model:visible="visible" width="50%" :title="videoInfo.title">
     <div>
+      <div id="mse"></div>
       <div class="item">
-        <span>标题：</span>
-        <span>{{ videoInfo.title }}</span>
-      </div>
-      <div class="flex item">
-        <span>视频链接：</span>
-        <a-tooltip :content="videoInfo.url">
-          <p class="elli">{{ videoInfo.url }}</p>
-        </a-tooltip>
-        <a-button type="primary" @click="copyUrl" size="mini">
-          一键复制
-        </a-button>
-      </div>
-      <div class="item">
-        <span>源文件：</span>
         <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
-          源文件
-        </a-button>
-      </div>
-      <div class="item">
-        <span>本课素材：</span>
+          源文件下载
+        </a-button>&nbsp;&nbsp;&nbsp;&nbsp;
         <a-button type="primary" status="warning" size="mini" @click="handleHukeFile(2)">
-          本课素材
+          本课素材下载
         </a-button>
       </div>
     </div>
-    <div style="background-color: rgb(235, 235, 235); height: 1px; margin: 10px auto 10px;"></div>
-    <span class="item-tips">请复制以上视频链接至m3u8播放器软件或者使用浏览器插件播放，具体可查看页面下方说明</span>
   </s-dialog>
   <div class="page-design app-page appView">
     <div v-loading="loading">
@@ -106,26 +93,6 @@ const handleHukeFile = async (type) => {
           <Input @getPlay="getPlay" :loading="loading" />
         </div>
       </div>
-    </div>
-    <div class="app-page-doc">
-      <h1 class="doc-title">使用虎课必读</h1>
-      <div class="doc-item">
-        <p class="item-title"><span>方式一(推荐)：</span>安装播放器软件
-          可以使用<a href="https://www.stellarplayer.com/" target="_blank" style="color:blue"> 恒星播放器 </a> 您也可以自行查找
-          只要是支持m3u8文件的播放器都可以使用
-        </p>
-        <div style="background-color: rgb(235, 235, 235); height: 1px; margin: 16px auto 0px;"></div>
-      </div>
-      <div class="doc-item">
-        <p class="item-title"><span>方式二：</span>安装浏览器插件
-          <a href="https://wwt.lanzouj.com/b011p1qid" target="_blank" style="color: blue;">点我下载</a> 密码:he9j
-        </p>
-      </div>
-      <!-- <div class="doc-item">
-      <p class="item-title">
-        视频教程：<a href="" target="_blank" style="color: blue;">点我直达(B站)</a>  快速了解两种播放方式及使用教程 选择你自己喜欢的即可
-      </p>
-    </div> -->
     </div>
   </div>
   <NumLack :visible="checkVisible" @close="close" />
@@ -209,6 +176,7 @@ const handleHukeFile = async (type) => {
 }
 
 .item {
-  margin: 10px 0;
+  margin-top: 20px;
+  text-align: right;
 }
 </style>

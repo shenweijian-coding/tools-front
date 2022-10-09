@@ -8,14 +8,7 @@ const routes = [{
   path: '/',
   redirect: 'sucai',
   component: () => import('@/layout/index.vue'),
-  children: [
-    {
-      path: '/shida',
-      component: () => import('@/pages/shida/index.vue')
-    }, {
-      path: '/huke',
-      component: () => import('@/pages/huke/index.vue')
-    }, {
+  children: [{
       path: '/sucai',
       component: () => import('@/pages/sucai/index.vue')
     }, {

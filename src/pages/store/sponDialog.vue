@@ -1,6 +1,6 @@
 <template>
   <s-dialog v-model:visible="visible" width="346px" @close="close">
-    <div style="text-align: center;">支付状态：<a-tag color="purple">{{ payStatus }}...</a-tag>
+    <div style="text-align: center;">提示：<a-tag color="purple">支付时请不要关闭本弹窗[{{ payStatus }}...]</a-tag>
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" />

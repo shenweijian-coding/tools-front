@@ -1,7 +1,7 @@
 <template>
-  <div class="shop-img">
+  <!-- <div class="shop-img">
     <h1 class="app-heade-title">赞助/小程序观看广告都可获取积分</h1>
-  </div>
+  </div> -->
   <div class="shop-box" v-loading="loading">
     <template v-if="userStore._id">
       <a-radio-group v-model="checkedValue">
@@ -131,13 +131,13 @@ getList()
   padding: 1.25rem 2.5rem 1.25rem 2.5rem;
   background-color: #fff;
   position: relative;
-  margin: -8.5rem auto 0;
-  background-color: hsla(0, 0%, 100%, .78);
+  margin: 20px auto 0;
+  // background-color: hsla(0, 0%, 100%, .78);
   -webkit-backdrop-filter: blur(.625rem);
   backdrop-filter: blur(.625rem);
   border-radius: .625rem;
   -webkit-box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 6%);
-  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 6%);
+  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 2%);
   flex-direction: column;
   justify-content: space-between;
 

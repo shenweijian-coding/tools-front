@@ -1,5 +1,7 @@
 <script setup>
 import Input from '@/components/Input/index.vue'
+import { getDownFile, getHukeFile } from '@api/play'
+
 import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
@@ -22,6 +24,15 @@ const sheji90CheckVisible = ref(false)
 const baotuCheckVisible = ref(false)
 const checkVisible = ref(false)
 const zhongtuUrl = ref('')
+
+// 视达虎课播放
+const shidahukeInfo = reactive({
+  visible: false,
+  id: '',
+  playUrl: '',
+  params: ''
+})
+
 const webSiteCheckInfo = reactive({
   imgUrl: '',
   webSiteCheckCode: ''
@@ -88,13 +99,28 @@ const getDownUrl = async (url) => {
     if (res.data.result) {
       if (res.data.options) {
         options.list = res.data.options
-        console.log(res.data.options);
       } else {
         Message.success('解析成功了，请点击立即下载按钮')
         await userStore.getUserNum()
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
+        } else if ([1, 2].includes(res.data.id)) {
+          shidahukeInfo.id = res.data.id
+          shidahukeInfo.visible = true
+          shidahukeInfo.params = res.data
+          setTimeout(() => {
+            new window.HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              autoplay: true,
+              playsinline: true,
+              pip: true,
+              playbackRate: [0.5, 0.75, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
+          });
         } else {
           href.value = res.data.psd
         }
@@ -230,6 +256,21 @@ const baotuCheckClick = async e => {
   const res = await webCheck({ url: link, code: `${baotuCheckInfo.params}&answer_key=${e.target.getAttribute('data-key')}` })
 
 }
+// 下载视达素材
+const downFile = async () => {
+  const { data } = await getDownFile(shidahukeInfo.params)
+  console.log(data);
+  window.open(data)
+}
+// 下载虎课素材
+const handleHukeFile = async (type) => {
+  const res = await getHukeFile({ id: shidahukeInfo.params.hukeId, type: type })
+  if (res.data) {
+    window.open(res.data)
+  } else {
+    Message.error('出现错误,请联系管理员！')
+  }
+}
 </script>
 
 <template>
@@ -280,17 +321,15 @@ const baotuCheckClick = async e => {
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
-              <!-- <a-tooltip :content="userStore.userIsLogin ? '正常使用' : it.webNum + '积分一次'" mini> -->
               <div class="app-weblist-item shou">
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分/次') }}]
+                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分') }}]
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
               </div>
-              <!-- </a-tooltip> -->
             </a>
           </a-col>
         </a-row>
@@ -319,6 +358,24 @@ const baotuCheckClick = async e => {
     <!-- 包图验证码 -->
     <s-dialog v-model:visible="baotuCheckVisible" @close="close" title="包图验证">
       <div style="width: 100%" class="yanzheng-wrap" v-html="baotuCheckInfo.content" @click="baotuCheckClick">
+      </div>
+    </s-dialog>
+    <!-- 视达虎课播放弹窗 -->
+    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" title="视频教程">
+      <div>
+        <div id="mse"></div>
+        <div style="margin-top: 20px;text-align: right;">
+          <a-button v-if="shidahukeInfo.id === 1 && shidahukeInfo.params.isDown" type="primary" @click="downFile">
+            下载素材+课堂源文件</a-button>
+          <template v-else-if="shidahukeInfo.id === 2">
+            <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
+              源文件下载
+            </a-button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a-button type="primary" status="warning" size="mini" @click="handleHukeFile(2)">
+              本课素材下载
+            </a-button>
+          </template>
+        </div>
       </div>
     </s-dialog>
   </div>
@@ -528,7 +585,8 @@ const baotuCheckClick = async e => {
     height: 18px;
     line-height: 18px;
     margin: 25px 0 20px;
-    span{
+
+    span {
       color: red;
     }
   }
@@ -540,13 +598,15 @@ const baotuCheckClick = async e => {
     letter-spacing: 0;
     display: flex;
     flex-wrap: wrap;
+
     img {
       width: 162px;
       height: 82px;
       margin: 6px;
       border: 1px solid transparent;
       cursor: pointer;
-      &:hover{
+
+      &:hover {
         border: 1px solid red;
       }
     }
