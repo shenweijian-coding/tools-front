@@ -11,6 +11,8 @@ import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
+import 'xgplayer';
+import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -24,7 +26,7 @@ const sheji90CheckVisible = ref(false)
 const baotuCheckVisible = ref(false)
 const checkVisible = ref(false)
 const zhongtuUrl = ref('')
-
+const playInstance = ref('')
 // 视达虎课播放
 const shidahukeInfo = reactive({
   visible: false,
@@ -110,13 +112,12 @@ const getDownUrl = async (url) => {
           shidahukeInfo.visible = true
           shidahukeInfo.params = res.data
           setTimeout(() => {
-            new window.HlsJsPlayer({
+            playInstance.value = new HlsJsPlayer({
               id: 'mse',
               url: res.data.psd,
+              lang: "zh-cn",
               autoplay: true,
-              playsinline: true,
-              pip: true,
-              playbackRate: [0.5, 0.75, 1, 1.5, 2],
+              playbackRate: [0.5, 1, 1.5, 2],
               // height: '300px',
               width: '100%'
             });
@@ -239,6 +240,7 @@ const close = () => {
   checkVisible.value = false
   webSiteCheckVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
+  playInstance.value = ''
 }
 const copyUrl = (copyText) => {
 
@@ -361,7 +363,7 @@ const handleHukeFile = async (type) => {
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" title="视频教程">
+    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
       <div>
         <div id="mse"></div>
         <div style="margin-top: 20px;text-align: right;">
@@ -375,6 +377,7 @@ const handleHukeFile = async (type) => {
               本课素材下载
             </a-button>
           </template>
+          <a-button type="primary" disabled size="mini">该教程无课堂文件</a-button>
         </div>
       </div>
     </s-dialog>
