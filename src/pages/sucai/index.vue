@@ -279,21 +279,26 @@ const handleHukeFile = async (type) => {
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
-        <h1 class="app-heade-title">设计资源搜索</h1>
-        <h3 class="app-header-tips"></h3>
+        <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
+          <div class="app-header-func" v-if="!userStore.userIsLogin">
+            常用功能：
+            <span><router-link to="/shop">积分充值</router-link></span>&nbsp;&nbsp;
+            <span><router-link to="/user?key=5">卡密激活</router-link></span>&nbsp;&nbsp;
+            <span><router-link to="/user?key=2">下载记录</router-link></span>
+          </div>
           <Input @getPlay="getDownUrl" :loading="loading" />
-          <div v-if="zhongtuUrl" class="mt-4">
+          <div v-if="zhongtuUrl" class="mt-2">
             <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
           </div>
           <template v-else-if="href">
-            <a-button @click="copyUrl(href)" class="mr-4">复制下载地址</a-button>
+            <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
             <a :href="href" target="_blank" referrerpolicy="no-referrer">
-              <a-button class="mt-4" type="primary">立即下载</a-button>
+              <a-button class="mt-2" type="primary">立即下载</a-button>
             </a>
           </template>
           <span v-if="options.list.length">
-            <a-space class="mt-4">
+            <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
                 @click="getCurDownUrl(item)">{{ item.text }}</a-button>
             </a-space>
@@ -312,7 +317,7 @@ const handleHukeFile = async (type) => {
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
-            <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '未赞助' }}</span>
+            <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '-' }}</span>
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
@@ -403,6 +408,27 @@ const handleHukeFile = async (type) => {
     background-size: cover;
     text-align: center;
 
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    /* 背景尺寸 - 原理3 */
+    background-size: 600% 600%;
+    /* 循环动画 - 原理4 */
+    animation: gradientBG 10s ease infinite;
+
+    /* 动画，控制背景 background-position */
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
     .app-heade-title {
       color: #f0f1f5;
       font-size: 28px;
@@ -419,6 +445,17 @@ const handleHukeFile = async (type) => {
       width: 96%;
       margin: auto;
       max-width: 580px;
+
+      .app-header-func {
+        color: #eee;
+        text-align: left;
+        line-height: 24px;
+        font-size: 12px;
+        cursor: pointer;
+        span{
+          text-decoration:underline
+        }
+      }
     }
   }
 
@@ -486,11 +523,7 @@ const handleHukeFile = async (type) => {
 }
 
 .page-design .app-web-list {
-  margin-top: -130px;
-}
-
-.app-header-box {
-  background-image: url(https://pic1.zhimg.com/v2-6944d3ea53c084bad6931a56d5158a48_r.jpg);
+  margin-top: -144px;
 }
 
 .shou {

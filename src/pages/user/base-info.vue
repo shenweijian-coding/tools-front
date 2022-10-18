@@ -4,7 +4,7 @@
       <div class="scrollContent">
         <div class="personal-info">
           <div class="info-row">
-            登录账号唯一标识
+            用户ID
             <div class="spec">{{ data._id }}</div>
             <a-divider />
           </div>
@@ -14,7 +14,7 @@
             <a-divider />
           </div>
           <div class="info-row">
-            关注时间
+            加入时间
             <div class="spec">{{timeConvert(+data.create_time)}}</div>
             <a-divider />
           </div>
@@ -25,7 +25,7 @@
           </div>
           <div class="info-row">
             登录IP
-            <div class="spec">{{data.ip}}</div>
+            <div class="spec">{{data.ip || '-'}}</div>
             <a-divider />
           </div>
           <div class="float-right mt-2">

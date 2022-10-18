@@ -60,7 +60,16 @@ export const useUserStore = defineStore('user', {
         },
         async getUserNum() {
             const { data } = await getUserNum();
+            if (!data) {
+                this.logout()
+            }
             this.setInfo(data)
+        },
+        // 扫码登录
+        async newLogin(data: Partial<UserState>) {
+            this.setInfo(data);
+            setToken(data?._id)
+            return data;
         },
         // 异步登录并存储token
         async login(loginForm: LoginData) {

@@ -3,20 +3,11 @@
     <div class="qr-code">
       <div class="qr-center">
         <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" alt="二维码" style="width:140px;" />
-        <span>图1：微信小程序码</span>
       </div>
-      <div class="qr-center">
-        <canvas id="qrcodeCanvas"></canvas>
-        <span>图2：小程序端绑定码</span>
-      </div>
+      <p style="line-height: 30px;">
+      微信扫码小程序;<br />点击个人中心<br >完成每日任务即送永久积分；<br>
+      </p>
     </div>
-    <a-divider></a-divider>
-    <p style="line-height: 30px;">
-    1. 微信扫码图1,进入小程序;<br>
-    2. 点击个人中心,点击扫码绑定扫码图2;<br>
-    3. PC与小程序即可绑定;之后可获取积分用于网站下载;<br>
-    4. 本站稳定解析极速下载,右侧有微信;欢迎咨询哈;
-    </p>
   </div>
 </template>
 
@@ -45,8 +36,6 @@ setTimeout(() => {
 }
 
 .qr-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-right: 20px;
 }
 </style>

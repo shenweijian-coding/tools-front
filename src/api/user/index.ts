@@ -26,8 +26,13 @@ const getUserPayInfo = async () => get<any>({ url: 'user/getUserPayInfo' });
 
 const codeConvert = async (data) => post<any>({ url: 'user/codeConvert', data });
 
+//权限转移
+export const pwd2Wxapp = async (data) => post<any>({ url: 'user/pwd2Wxapp', data });
+
 export const getInviteInfo = async () => get<any>({ url: 'user/getInviteInfo' })
 
-export const  createInviteCode = async () => get<any>({ url: 'user/createInviteCode' })
+export const createInviteCode = async () => get<any>({ url: 'user/createInviteCode' })
+
+export const getLoginStatus = async (data) => get<any>({url: 'wxappv1/wxApploginStatus?loginCode=' + data})
 
 export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert };

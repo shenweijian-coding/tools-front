@@ -48,7 +48,7 @@ import { IconScan, IconUser, IconQrcode } from '@arco-design/web-vue/es/icon';
   width: 48px;
   height: 220px;
   padding: 12px 0;
-  top: 38%;
+  top: 50%;
   right: 0;
   position: absolute;
   background: #fff;

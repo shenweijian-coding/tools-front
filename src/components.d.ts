@@ -12,6 +12,8 @@ declare module '@vue/runtime-core' {
     ACollapse: typeof import('@arco-design/web-vue')['Collapse']
     ACollapseItem: typeof import('@arco-design/web-vue')['CollapseItem']
     ADivider: typeof import('@arco-design/web-vue')['Divider']
+    ADoption: typeof import('@arco-design/web-vue')['Doption']
+    ADropdown: typeof import('@arco-design/web-vue')['Dropdown']
     AEmpty: typeof import('@arco-design/web-vue')['Empty']
     AForm: typeof import('@arco-design/web-vue')['Form']
     AFormItem: typeof import('@arco-design/web-vue')['FormItem']
@@ -39,6 +41,7 @@ declare module '@vue/runtime-core' {
     Slide: typeof import('./components/slide/index.vue')['default']
     SvgIcon: typeof import('./components/SvgIcon/index.vue')['default']
     Wxapp: typeof import('./components/wxapp/index.vue')['default']
+    WxappLogin: typeof import('./components/wxapp-login/index.vue')['default']
   }
 }
 

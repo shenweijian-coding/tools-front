@@ -1,6 +1,6 @@
 <template>
   <div class="w-9/12 mt-2 m-auto bg-white p-2" style="min-height: 500px" v-loading="loading">
-    <a-tabs default-active-key="1" position="left" size="large" type="line" style="height: 560px" @change="tabChange">
+    <a-tabs default-active-key="1" :active-key="activeKey" position="left" size="large" type="line" style="height: 560px" @change="tabChange">
       <a-tab-pane key="1" title="基本信息">
         <BaseInfo :data="data.info" v-if="Object.keys(data.info).length" />
       </a-tab-pane>
@@ -16,7 +16,7 @@
         <!-- 邀请活动 -->
         <Invite :inviteInfo="inviteInfo.info" @createInviteInfo="createInviteInfo"></Invite>
       </a-tab-pane>
-      <a-tab-pane key="5" title="卡密兑现">
+      <a-tab-pane key="5" title="卡密激活">
         <!-- 卡密兑现 -->
         <CodeCash></CodeCash>
       </a-tab-pane>
@@ -32,12 +32,20 @@ import CodeCash from './code-cash.vue'
 import Invite from './invite.vue'
 import { useUserStore } from '@/store/modules/user/index'
 import { getUserPayInfo, getInviteInfo } from '@api/user'
+import { useRouter } from 'vue-router';
+let router = useRouter()
+
 const userStore = useUserStore();
 const loading = ref(false);
 
 let data = reactive({ info: {} });
 let payInfo = reactive({ info: [] });
 let inviteInfo = reactive({ info: {} });
+const activeKey = ref('1');
+
+if (toRaw(router).currentRoute.value.query.key) {
+  activeKey.value = toRaw(router).currentRoute.value.query.key || '1'
+}
 
 (async () => {
   loading.value = true
@@ -47,6 +55,7 @@ let inviteInfo = reactive({ info: {} });
 })()
 
 const tabChange = async (type) => {
+  activeKey.value = type
   loading.value = true
   if (type == 3) {
     if (!payInfo.info.length) {

@@ -3,14 +3,13 @@ import { ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
-import { Modal } from '@arco-design/web-vue';
 import sDialog from '../s-dialog/index.vue'
 import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
-import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
-
+import wxappLogin from '../wxapp-login/index.vue'
+import { pwd2Wxapp } from '@api/user/index'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const theme = computed(() => {
@@ -31,32 +30,33 @@ const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
     {
-    name: '素材教程搜索',
-    path: '/sucai',
-    id: 1,
-    text: ''
-  },
+      name: '素材教程搜索',
+      path: '/sucai',
+      id: 1,
+      text: ''
+    },
     {
-    name: '热门短视频',
-    path: '/shorts',
-    id: 2,
-    text: '免费'
-  },{
-    name: '使用教程',
-    path: '/help',
-    id: 3,
-    text: ''
-  }]
+      name: '热门短视频',
+      path: '/shorts',
+      id: 2,
+      text: '免费'
+    }, {
+      name: '视频使用教程',
+      path: '/help',
+      id: 4,
+      text: ''
+    }]
 })
 const visible = ref(false);
 const stepsVisible = ref(false)
 const loginCode = ref('');
 const accode = ref('');
+const pwd2WxappVisible = ref(false) // 卡密转移小程序权限
 // const undoneTaskVisible = ref(false);
 const openLogin = () => {
   visible.value = true;
 }
-if(localStorage.getItem('accode')) {
+if (localStorage.getItem('accode')) {
   accode.value = localStorage.getItem('accode') || ''
 }
 // 获取用户积分数量
@@ -72,16 +72,22 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-}else {
+  paths.list.splice(2, 0, {
+    name: '积分充值',
+    path: '/shop',
+    id: 3,
+    text: ''
+  })
+} else {
   visible.value = true;
 }
 const login = async (type) => {
   loading.value = true
-  if (type===1 && !loginCode.value) {
+  if (type === 1 && !loginCode.value) {
     Message.warning('请输入验证码！')
     return
   }
-  if (type===2 && !accode.value) {
+  if (type === 2 && !accode.value) {
     Message.warning('请输入卡密！')
     return
   }
@@ -121,6 +127,27 @@ const close = () => {
 const bindWxApp = () => {
   stepsVisible.value = true
 }
+const logout = () => {
+  userStore.logout()
+  Message.success('退出成功')
+}
+
+// 卡密关联小程序
+const bindPwd2Wxapp = () => {
+  pwd2WxappVisible.value = true
+}
+// 卡密权限登录查询
+const pwd2WxappConfirm = async (pwd) => {
+  if (!pwd) {
+    Message.warning('请输入卡密')
+    return
+  }
+  const res = await pwd2Wxapp({ code: pwd })
+  if (res.data) {
+    Message.success(res.data)
+    location.reload()
+  }
+}
 </script>
 
 <template>
@@ -156,7 +183,7 @@ const bindWxApp = () => {
                 </ul>
               </nav>
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
-                <ul class="flex space-x-8">
+                <ul class="flex space-x-10">
                   <li>
                     <span v-if="userStore.userIsLogin" @click="openLogin"
                       class="cursor-pointer hover:text-blue-500 dark:hover:text-blue-400">
@@ -167,23 +194,21 @@ const bindWxApp = () => {
                         <span style="color:#caa36e">免费得积分</span>
                       </span>
                       <a-divider direction="vertical"></a-divider>
-                      <router-link to="/shop">
-                        <span class="flex items-center mr-8 cursor-pointer hover:bg-gray-50">
-                          <SvgIcon name="svg-huiyuan" style="width: 20px;" class="mr-1" />
-                          <span style="color:#ff623e">赞助得积分</span>
-                        </span>
-                      </router-link>
-                      <!-- <a-popover>
-                        <span>积分[查看详情]：{{ userStore.userNum }}</span>&nbsp;
+                      <a-dropdown trigger="hover">
+                        <span class="cursor-pointer hover:text-blue-500">用户中心</span>
                         <template #content>
-                          <p>永久积分：{{ userStore.userNum }}</p>
-                          <p>今日有效积分：{{ userStore.eNum || '未赞助或已用完' }}</p>
-                          <p>到期时间：{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '未赞助' }}</p>
+                          <a-doption>
+                            <router-link to="/user">个人中心</router-link>
+                          </a-doption>
+                          <a-doption>
+                            <router-link to="/shop">积分购买</router-link>
+                          </a-doption>
+                          <a-doption @click="bindPwd2Wxapp">
+                            关联卡密
+                          </a-doption>
+                          <a-doption @click="logout">退出账号</a-doption>
                         </template>
-                      </a-popover> -->
-
-                      <!-- <a-divider direction="vertical"></a-divider> -->
-                      <router-link to="/user" class="cursor-pointer hover:text-blue-500">用户中心</router-link>
+                      </a-dropdown>
                     </span>
                   </li>
                 </ul>
@@ -194,24 +219,30 @@ const bindWxApp = () => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="visible" width="300px" @close="close" title="请选择登录方式">
+  <s-dialog v-model:visible="visible" width="300px" @close="close" title="微信扫码登录">
     <div>
-      <a-tabs default-active-key="2">
-        <a-tab-pane key="1" title="微信登录">
-          <a-input-search placeholder="请输入5位验证码" button-text="验证码登录" v-model="loginCode" search-button @search="login(1)">
+      <!-- <a-tabs default-active-key="2"> -->
+      <wxappLogin @login="visible = false"></wxappLogin>
+      <!-- <a-tab-pane key="1" title="微信登录"> -->
+      <!-- <a-input-search placeholder="请输入5位验证码" button-text="验证码登录" v-model="loginCode" search-button @search="login(1)">
           </a-input-search>
-          <QR tip="验证码" v-if="visible" style="margin-top: 12px" />
-        </a-tab-pane>
+          <QR tip="验证码" v-if="visible" style="margin-top: 12px" /> -->
+      <!-- </a-tab-pane>
         <a-tab-pane key="2" title="卡密登录">
           <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="卡密登录" v-model="accode" search-button @search="login(2)">
           </a-input-search>
-          <!-- <span>卡密登录，自动激活卡密对应权限，格式为yyy-xxxxxx-jjj；也可微信登录后去用户中心直接兑换</span> -->
-        </a-tab-pane>
-      </a-tabs>
+        </a-tab-pane> -->
+      <!-- </a-tabs> -->
     </div>
   </s-dialog>
-  <s-dialog v-model:visible="stepsVisible" v-loading="loading" @close="close" title="教你如何免费获取积分，下载全站素材" width="460px">
+  <s-dialog v-model:visible="stepsVisible" title="免费获取积分" width="400px">
     <Wxapp></Wxapp>
+  </s-dialog>
+  <s-dialog v-model:visible="pwd2WxappVisible" title="账号权限转移" width="400px">
+    <span>为统一登录方式，之前卡密登录的用户，将卡密输入下方提交，卡密账号权限即可转移至当前账号，之后直接使用微信扫码即可自动登录</span>
+    <a-divider></a-divider>
+    <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="提交" v-model="accode" search-button @search="pwd2WxappConfirm">
+    </a-input-search>
   </s-dialog>
 </template>
 
