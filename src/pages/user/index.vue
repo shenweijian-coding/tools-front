@@ -12,10 +12,10 @@
         <!-- 赞助记录 -->
         <Spon :payInfo="payInfo.info"></Spon>
       </a-tab-pane>
-      <a-tab-pane key="4" title="邀请活动">
-        <!-- 邀请活动 -->
+      <!-- <a-tab-pane key="4" title="邀请活动">
+        邀请活动
         <Invite :inviteInfo="inviteInfo.info" @createInviteInfo="createInviteInfo"></Invite>
-      </a-tab-pane>
+      </a-tab-pane> -->
       <a-tab-pane key="5" title="卡密激活">
         <!-- 卡密兑现 -->
         <CodeCash></CodeCash>

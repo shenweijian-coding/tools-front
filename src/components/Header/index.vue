@@ -41,7 +41,7 @@ const paths = reactive({
       id: 2,
       text: '免费'
     }, {
-      name: '积分充值',
+      name: '在线充值',
       path: '/shop',
       id: 3,
       text: ''

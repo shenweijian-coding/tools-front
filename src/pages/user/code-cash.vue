@@ -2,7 +2,7 @@
   <div style="margin-top: 20px;">
     <div>
       请输入卡密：
-      <a-input placeholder="请输入卡密点击激活" style="max-width: 400px" v-model="code"></a-input>
+      <a-input placeholder="XXXX-XXXX-XXXX" style="max-width: 400px" v-model="code"></a-input>
       <a-button type="primary" @click="active">激活</a-button>
     </div>
   </div>

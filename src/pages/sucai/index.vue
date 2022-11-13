@@ -304,7 +304,7 @@ const handleHukeFile = async (type) => {
           <div class="app-header-func" v-if="!userStore.userIsLogin">
             常用功能：
             <span>
-              <router-link to="/shop">积分充值</router-link>
+              <router-link to="/shop">在线充值</router-link>
             </span>&nbsp;&nbsp;
             <span>
               <router-link to="/user?key=5">卡密激活</router-link>
