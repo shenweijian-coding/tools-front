@@ -24,11 +24,11 @@
           </template>
         </a-popover>
       </li>
-      <li title="微信公众号">
+      <li title="微信公众号送卡密">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
-            <span class="icon-tip">公众号</span>
+            <span class="icon-tip">送卡密</span>
           </span>
 
           <template #content>

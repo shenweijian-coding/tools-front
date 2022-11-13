@@ -87,7 +87,8 @@ const getDownUrl = async (url) => {
           console.log('baotu');
           baotuCheckVisible.value = true
           baotuCheckInfo.content = res.data.handle
-          baotuCheckInfo.params = res.data.otherInfo
+          baotuCheckInfo.params = res.data.batch
+          baotuCheckInfo.setCookies = res.data.setCookies
         } else { // 风云办公验证       
           webSiteCheckVisible.value = true
           webSiteCheckInfo.imgUrl = res.data.handle
@@ -254,8 +255,27 @@ const copyUrl = (copyText) => {
   Message.success('复制成功！');
 }
 const baotuCheckClick = async e => {
-  console.log(e.target.getAttribute('data-key'));
-  const res = await webCheck({ url: link, code: `${baotuCheckInfo.params}&answer_key=${e.target.getAttribute('data-key')}` })
+  try {
+    console.log(e.target.getAttribute('data-key'));
+    const res = await webCheck({
+      url: link, code: {
+        setCookies: baotuCheckInfo.setCookies,
+        params: `answer_key=${e.target.getAttribute('data-key')}${baotuCheckInfo.params}`
+      }
+    })
+    baotuCheckVisible.value = false
+    if (res.data && res.data.psd) {
+      options.list = []
+      Message.success('解析成功了，请点击立即下载按钮')
+      userStore.getUserNum()
+      href.value = res.data.psd
+      // window.open(res.data.psd)
+    }
+  } catch (error) {
+
+  } finally {
+    baotuCheckVisible.value = false
+  }
 
 }
 // 下载视达素材
@@ -283,9 +303,15 @@ const handleHukeFile = async (type) => {
         <div class="app-header-input">
           <div class="app-header-func" v-if="!userStore.userIsLogin">
             常用功能：
-            <span><router-link to="/shop">积分充值</router-link></span>&nbsp;&nbsp;
-            <span><router-link to="/user?key=5">卡密激活</router-link></span>&nbsp;&nbsp;
-            <span><router-link to="/user?key=2">下载记录</router-link></span>
+            <span>
+              <router-link to="/shop">积分充值</router-link>
+            </span>&nbsp;&nbsp;
+            <span>
+              <router-link to="/user?key=5">卡密激活</router-link>
+            </span>&nbsp;&nbsp;
+            <span>
+              <router-link to="/user?key=2">下载记录</router-link>
+            </span>
           </div>
           <Input @getPlay="getDownUrl" :loading="loading" />
           <div v-if="zhongtuUrl" class="mt-2">
@@ -452,8 +478,9 @@ const handleHukeFile = async (type) => {
         line-height: 24px;
         font-size: 12px;
         cursor: pointer;
-        span{
-          text-decoration:underline
+
+        span {
+          text-decoration: underline
         }
       }
     }

@@ -41,8 +41,13 @@ const paths = reactive({
       id: 2,
       text: '免费'
     }, {
-      name: '视频使用教程',
-      path: '/help',
+      name: '积分充值',
+      path: '/shop',
+      id: 3,
+      text: ''
+    }, {
+      name: '更多功能登录后查看',
+      path: '',
       id: 4,
       text: ''
     }]
@@ -72,10 +77,16 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-  paths.list.splice(2, 0, {
-    name: '积分充值',
-    path: '/shop',
-    id: 3,
+  // paths.list.splice(2, 0, {
+  //   name: '积分充值',
+  //   path: '/shop',
+  //   id: 3,
+  //   text: ''
+  // })
+  paths.list.splice(3, 1, {
+    name: '视频使用教程',
+    path: '/help',
+    id: 4,
     text: ''
   })
 } else {
@@ -125,6 +136,10 @@ const close = () => {
 //   }
 // }
 const bindWxApp = () => {
+  if (userStore.userIsLogin) {
+    Message.warning('请先登录')
+    return
+  }
   stepsVisible.value = true
 }
 const logout = () => {
@@ -175,7 +190,7 @@ const pwd2WxappConfirm = async (pwd) => {
                         </router-link>
                       </a-badge>
                       <router-link v-else :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{
-                      it.name
+                          it.name
                       }}
                       </router-link>
                     </li>
@@ -184,16 +199,17 @@ const pwd2WxappConfirm = async (pwd) => {
               </nav>
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
                 <ul class="flex space-x-10">
-                  <li>
+                  <li class="flex items-center">
+                    <span class="flex items-center mr-2 cursor-pointer hover:bg-gray-50" @click="bindWxApp">
+                      <SvgIcon name="svg-jifen" style="width: 20px;" class="mr-1" />
+                      <span style="color:#caa36e">免费得积分</span>
+                    </span>
+                    <a-divider direction="vertical"></a-divider>
                     <span v-if="userStore.userIsLogin" @click="openLogin"
                       class="cursor-pointer hover:text-blue-500 dark:hover:text-blue-400">
                       登录</span>
                     <span v-else class="flex items-center">
-                      <span class="flex items-center mr-2 cursor-pointer hover:bg-gray-50" @click="bindWxApp">
-                        <SvgIcon name="svg-jifen" style="width: 20px;" class="mr-1" />
-                        <span style="color:#caa36e">免费得积分</span>
-                      </span>
-                      <a-divider direction="vertical"></a-divider>
+
                       <a-dropdown trigger="hover">
                         <span class="cursor-pointer hover:text-blue-500">用户中心</span>
                         <template #content>
@@ -241,7 +257,8 @@ const pwd2WxappConfirm = async (pwd) => {
   <s-dialog v-model:visible="pwd2WxappVisible" title="账号权限转移" width="400px">
     <span>为统一登录方式，之前卡密登录的用户，将卡密输入下方提交，卡密账号权限即可转移至当前账号，之后直接使用微信扫码即可自动登录</span>
     <a-divider></a-divider>
-    <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="提交" v-model="accode" search-button @search="pwd2WxappConfirm">
+    <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="提交" v-model="accode" search-button
+      @search="pwd2WxappConfirm">
     </a-input-search>
   </s-dialog>
 </template>

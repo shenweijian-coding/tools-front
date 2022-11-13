@@ -3,37 +3,39 @@
     <h1 class="app-heade-title">赞助/小程序观看广告都可获取积分</h1>
   </div> -->
   <div class="shop-box" v-loading="loading">
-    <template v-if="userStore._id">
-      <a-radio-group v-model="checkedValue">
-        <template v-for="item in goodList" :key="item">
-          <a-radio :value="item">
-            <template #radio="{ checked }">
-              <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
-                <div>
-                  <div className="custom-radio-card-title">
-                    {{ item.title }}
-                  </div>
+    <!-- <template v-if="userStore._id"> -->
+    <a-radio-group v-model="checkedValue">
+      <template v-for="item in goodList" :key="item">
+        <a-radio :value="item">
+          <template #radio="{ checked }">
+            <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
+              <div>
+                <div className="custom-radio-card-title">
+                  {{ item.title }}
                 </div>
-              </a-space>
-            </template>
-          </a-radio>
-        </template>
-      </a-radio-group>
-      <div class="shop-action">
-        <span class="lg:flex hidden"><a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert></span>
-        <span>
-          <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
-          <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <a-button type="primary" style="width: 12.5rem;" @click="spon">立即赞助</a-button>
-        </span>
-      </div>
-    </template>
-    <div v-else style="margin: auto;">
-      <a-empty description="请先登录哈" />
+              </div>
+            </a-space>
+          </template>
+        </a-radio>
+      </template>
+    </a-radio-group>
+    <div class="shop-action">
+      <span class="lg:flex hidden">
+        <a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert>
+      </span>
+      <span>
+        <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
+        <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a-button type="primary" style="width: 12.5rem;" @click="spon">立即赞助</a-button>
+      </span>
     </div>
+    <!-- </template> -->
+    <!-- <div v-else style="margin: auto;">
+      <a-empty description="请先登录哈" />
+    </div> -->
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
   </div>
-  <tips v-if="userStore._id"></tips>
+  <tips></tips>
 </template>
 <script setup lang="ts">
 import { getGoodList } from '@api/home';
@@ -53,9 +55,9 @@ const timer = ref(0)
 const payStatus = ref('待扫码')
 
 const getList = async () => {
-  if (!userStore._id) {
-    return
-  }
+  // if (!userStore._id) {
+  //   return
+  // }
   loading.value = true
   const res = await getGoodList()
   goodList.value = res.data
@@ -78,6 +80,10 @@ const pollOrderStatus = (tradeNo: any) => {
 }
 
 const spon = async () => {
+  if (!userStore._id) {
+    Message.warning('请先进行登录')
+    return
+  }
   loading.value = true
   const id = checkedValue.value.id
   if (!id) { return }

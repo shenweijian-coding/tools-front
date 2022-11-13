@@ -21,7 +21,7 @@ const countNum = ref(120)
 
 let timer = window.setInterval(() => {
   getStatus()
-}, 10000)
+}, 5000)
 let countTimer = setInterval(() => {
   if (countNum.value < 1) {
     qrUrl.value = 'https://pic1.imgdb.cn/item/6343dc3716f2c2beb1f5a4ed.png'

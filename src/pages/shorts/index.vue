@@ -28,7 +28,7 @@
       </video>
     </div>
     <div v-else class="qr-code">
-      <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" style="width: 260px;display: inline;" />
+      <img src="https://pic1.imgdb.cn/item/635688d116f2c2beb13a60d7.jpg" style="width: 260px;display: inline;" />
       <div class="tips">体验小程序下载</div>
     </div>
   </div>
@@ -74,7 +74,7 @@ const getPlay = async (url) => {
   // margin: 12px auto 0;
   padding: 20px 20%;
   background-color: #fff;
-  min-height: 500px;
+  height: calc(100vh - 64px);
 
   .shorts-desc {
     line-height: 20px;
@@ -95,7 +95,7 @@ const getPlay = async (url) => {
   }
 
   .qr-code {
-    margin: 12px 0;
+    margin: 8% 0;
     text-align: center;
     .tips{
       line-height: 40px;

@@ -13,7 +13,7 @@
   </div>
   <div class="row">
     你可以将邀请链接配上文字分享到自己的社交群或者添加以下QQ设计群进行分享，即可坐等奖励到账。
-    <div>
+    <div v-if="inviteInfo.list.length">
       <ul style="display: flex;flex-wrap: wrap;">
         <li class="qqqun" v-for="item in inviteInfo.list" :key="item">群号：{{ item }} <a-button @click="copy(item)"
             type="outline" size="mini">
