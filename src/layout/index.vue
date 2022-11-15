@@ -41,7 +41,7 @@ if (localStorage.getItem('token')) {
           content: it,
           closable: true,
           duration: 60000,
-          // position: 'topLeft'
+          position: 'topLeft'
         })
       });
     }

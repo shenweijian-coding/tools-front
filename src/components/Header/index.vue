@@ -56,7 +56,6 @@ const visible = ref(false);
 const stepsVisible = ref(false)
 const loginCode = ref('');
 const accode = ref('');
-const pwd2WxappVisible = ref(false) // 卡密转移小程序权限
 // const undoneTaskVisible = ref(false);
 const openLogin = () => {
   visible.value = true;
@@ -147,10 +146,6 @@ const logout = () => {
   Message.success('退出成功')
 }
 
-// 卡密关联小程序
-const bindPwd2Wxapp = () => {
-  pwd2WxappVisible.value = true
-}
 // 卡密权限登录查询
 const pwd2WxappConfirm = async (pwd) => {
   if (!pwd) {
@@ -217,10 +212,7 @@ const pwd2WxappConfirm = async (pwd) => {
                             <router-link to="/user">个人中心</router-link>
                           </a-doption>
                           <a-doption>
-                            <router-link to="/shop">积分购买</router-link>
-                          </a-doption>
-                          <a-doption @click="bindPwd2Wxapp">
-                            关联卡密
+                            <router-link to="/shop">在线充值</router-link>
                           </a-doption>
                           <a-doption @click="logout">退出账号</a-doption>
                         </template>
@@ -253,13 +245,6 @@ const pwd2WxappConfirm = async (pwd) => {
   </s-dialog>
   <s-dialog v-model:visible="stepsVisible" title="免费获取积分" width="400px">
     <Wxapp></Wxapp>
-  </s-dialog>
-  <s-dialog v-model:visible="pwd2WxappVisible" title="账号权限转移" width="400px">
-    <span>为统一登录方式，之前卡密登录的用户，将卡密输入下方提交，卡密账号权限即可转移至当前账号，之后直接使用微信扫码即可自动登录</span>
-    <a-divider></a-divider>
-    <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="提交" v-model="accode" search-button
-      @search="pwd2WxappConfirm">
-    </a-input-search>
   </s-dialog>
 </template>
 

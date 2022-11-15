@@ -27,6 +27,7 @@ const baotuCheckVisible = ref(false)
 const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
+const downVisible = ref(false)
 // 视达虎课播放
 const shidahukeInfo = reactive({
   visible: false,
@@ -124,6 +125,7 @@ const getDownUrl = async (url) => {
             });
           });
         } else {
+          downVisible.value = true
           href.value = res.data.psd
         }
       }
@@ -148,6 +150,7 @@ const getCurDownUrl = async (item) => {
       options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
       userStore.getUserNum()
+      downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
     }
@@ -215,6 +218,7 @@ const sheji90check = async () => {
       const res = await webCheck({ url: link, code: parseFloat(cat.style.left) })
       console.log(res);
       if (res.data.result) {
+        downVisible.value = true
         href.value = res.data.psd
       }
       Message.success('验证成功了,请点击立即下载按钮哈')
@@ -268,6 +272,7 @@ const baotuCheckClick = async e => {
       options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
       userStore.getUserNum()
+      downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
     }
@@ -314,15 +319,6 @@ const handleHukeFile = async (type) => {
             </span>
           </div>
           <Input @getPlay="getDownUrl" :loading="loading" />
-          <div v-if="zhongtuUrl" class="mt-2">
-            <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
-          </div>
-          <template v-else-if="href">
-            <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
-            <a :href="href" target="_blank" referrerpolicy="no-referrer">
-              <a-button class="mt-2" type="primary">立即下载</a-button>
-            </a>
-          </template>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -411,6 +407,23 @@ const handleHukeFile = async (type) => {
           <a-button type="primary" disabled size="mini">该教程无课堂文件</a-button>
         </div>
       </div>
+    </s-dialog>
+
+    <!-- 下载弹窗 -->
+    <s-dialog v-model:visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
+      <div v-if="zhongtuUrl" class="mt-2">
+        <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
+      </div>
+      <template v-else-if="href">
+        <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
+        <a-divider></a-divider>
+        <span style="display: flex;justify-content:right;align-items: center;">
+          <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
+          <a :href="href" target="_blank" referrerpolicy="no-referrer">
+            <a-button class="mt-2" type="primary" style="margin:0">立即下载</a-button>
+          </a>
+        </span>
+      </template>
     </s-dialog>
   </div>
 </template>
