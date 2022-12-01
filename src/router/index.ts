@@ -53,9 +53,7 @@ router.beforeEach((to, from, next) => {
       router.replace({
         path: '/'
       })
-      return
     }
-    next()
   }
   next()
 })

@@ -33,6 +33,8 @@ export const getInviteInfo = async () => get<any>({ url: 'user/getInviteInfo' })
 
 export const createInviteCode = async () => get<any>({ url: 'user/createInviteCode' })
 
+export const getDownLog = async (data) => post<any>({ url: 'user/getUserDownLog', data })
+
 export const getLoginStatus = async (data) => get<any>({url: 'wxappv1/wxApploginStatus?loginCode=' + data})
 
 export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert };

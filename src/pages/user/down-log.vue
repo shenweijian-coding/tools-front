@@ -1,6 +1,6 @@
 <template>
   <div class="p-2">
-    <a-table :data="data" style="max-height:530px">
+    <a-table :data="data.list" style="max-height:530px" :pagination="pagination" @page-change="pageChange">
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site" :width="100">
           <template #cell="{ record }">
@@ -36,8 +36,17 @@ const props = defineProps({
     type: Object
   }
 })
-console.log(toRaw(props.data.down_log));
-const data = computed(() => (toRaw(props.data.down_log)).reverse());
+const emit = defineEmits(['pageChange'])
+const pageChange = (page) => {
+  emit('pageChange', page)
+}
+
+const pagination = computed(() => ({
+  total: props.data.total,
+  current: props.data.current,
+  'show-total': true,
+  'page-size': 10
+}))
 </script>
 
 <style>

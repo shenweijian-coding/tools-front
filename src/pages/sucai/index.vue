@@ -108,6 +108,7 @@ const getDownUrl = async (url) => {
         await userStore.getUserNum()
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
+          downVisible.value = true
           Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
         } else if ([1, 2].includes(res.data.id)) {
           shidahukeInfo.id = res.data.id
@@ -313,9 +314,6 @@ const handleHukeFile = async (type) => {
             </span>&nbsp;&nbsp;
             <span>
               <router-link to="/user?key=5">卡密激活</router-link>
-            </span>&nbsp;&nbsp;
-            <span>
-              <router-link to="/user?key=2">下载记录</router-link>
             </span>
           </div>
           <Input @getPlay="getDownUrl" :loading="loading" />

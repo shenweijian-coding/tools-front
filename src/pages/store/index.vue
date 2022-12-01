@@ -5,7 +5,7 @@
   <div class="shop-box" v-loading="loading">
     <!-- <template v-if="userStore._id"> -->
     <a-radio-group v-model="checkedValue">
-      <template v-for="item in goodList" :key="item">
+      <template v-for="item in goodList" :key="item.id">
         <a-radio :value="item">
           <template #radio="{ checked }">
             <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
