@@ -402,7 +402,7 @@ const handleHukeFile = async (type) => {
               本课素材下载
             </a-button>
           </template>
-          <a-button type="primary" disabled size="mini">该教程无课堂文件</a-button>
+          <a-button type="primary" disabled size="mini" v-else>该教程无课堂文件</a-button>
         </div>
       </div>
     </s-dialog>
