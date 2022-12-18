@@ -60,8 +60,8 @@ getInfo().then(res => {
 // 被邀请的逻辑
 setTimeout(() => {
   const { query } = toRaw(route)
-  if (query.value.code) {
-    localStorage.setItem('code', query.value.code)
+  if (query.value.f) {
+    localStorage.setItem('fr', query.value.f)
   }
 });
 const getDownUrl = async (url) => {

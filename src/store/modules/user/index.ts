@@ -27,13 +27,13 @@ export const useUserStore = defineStore('user', {
     getters: {
         userProfile(state: UserState): UserState {
             console.log(state);
-            
+
             return { ...state };
         },
         userIsLogin(state: UserState): boolean {
             return !state._id
         },
-        userNum(state: UserState): Number{
+        userNum(state: UserState): Number {
             return state.num
         }
     },
@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', {
         //     })
         // },
         // 设置用户的信息
-        setInfo(partial: Partial<UserState>) {            
+        setInfo(partial: Partial<UserState>) {
             this.$patch(partial);
         },
         // 重置用户信息
@@ -73,7 +73,7 @@ export const useUserStore = defineStore('user', {
         },
         // 异步登录并存储token
         async login(loginForm: LoginData) {
-            const {data} = await userLogin(loginForm);
+            const { data } = await userLogin(loginForm);
             this.setInfo(data);
             setToken(data?._id)
             return data;

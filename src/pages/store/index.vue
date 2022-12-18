@@ -1,9 +1,5 @@
 <template>
-  <!-- <div class="shop-img">
-    <h1 class="app-heade-title">赞助/小程序观看广告都可获取积分</h1>
-  </div> -->
   <div class="shop-box" v-loading="loading">
-    <!-- <template v-if="userStore._id"> -->
     <a-radio-group v-model="checkedValue">
       <template v-for="item in goodList" :key="item.id">
         <a-radio :value="item">
@@ -29,10 +25,6 @@
         <a-button type="primary" style="width: 12.5rem;" @click="spon">立即赞助</a-button>
       </span>
     </div>
-    <!-- </template> -->
-    <!-- <div v-else style="margin: auto;">
-      <a-empty description="请先登录哈" />
-    </div> -->
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
   </div>
   <tips></tips>
@@ -138,7 +130,7 @@ getList()
   background-color: #fff;
   position: relative;
   margin: 20px auto 0;
-  // background-color: hsla(0, 0%, 100%, .78);
+  background-color: hsla(0, 0%, 100%, .78);
   -webkit-backdrop-filter: blur(.625rem);
   backdrop-filter: blur(.625rem);
   border-radius: .625rem;

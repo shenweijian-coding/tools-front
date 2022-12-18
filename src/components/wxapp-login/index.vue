@@ -10,13 +10,17 @@
 import { getLoginStatus } from '@api/user'
 import { useUserStore } from '@/store';
 import { Message } from '@arco-design/web-vue';
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const userStore = useUserStore()
 
 const emits = defineEmits(['login'])
+const inviteCode = localStorage.getItem('fr') // 邀请人id
 
 let loginCode = new Date().getTime()
-const qrUrl = ref('/wxappv1/createWxappQR?code=' + loginCode)
+const qrUrl = ref('/wxappv1/createWxappQR?code=' + loginCode + '&f=' + inviteCode)
+
 const countNum = ref(120)
 
 let timer = window.setInterval(() => {
@@ -40,8 +44,11 @@ const getStatus = async () => {
   } else if (res.data) {
     clearInterval(timer)
     userStore.newLogin(res.data)
+    localStorage.removeItem('fr')
     Message.success('登录成功')
-    location.reload()
+    router.replace({
+      path: '/'
+    })
     emits('login')
   }
 }

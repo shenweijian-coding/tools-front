@@ -30,23 +30,22 @@ const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
     {
-      name: '素材教程搜索',
+      name: '素材搜索',
       path: '/sucai',
       id: 1,
       text: ''
-    },
-    {
-      name: '热门短视频',
-      path: '/shorts',
+    },{
+      name: '邀请送分',
+      path: '/invite',
       id: 2,
-      text: '免费'
-    }, {
+      text: ''
+    },{
       name: '在线充值',
       path: '/shop',
       id: 3,
       text: ''
     }, {
-      name: '更多功能登录后查看',
+      name: '登录后查看',
       path: '',
       id: 4,
       text: ''
@@ -76,20 +75,12 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-  // paths.list.splice(2, 0, {
-  //   name: '积分充值',
-  //   path: '/shop',
-  //   id: 3,
-  //   text: ''
-  // })
   paths.list.splice(3, 1, {
-    name: '视频使用教程',
+    name: '视频教程',
     path: '/help',
     id: 4,
     text: ''
   })
-} else {
-  visible.value = true;
 }
 const login = async (type) => {
   loading.value = true

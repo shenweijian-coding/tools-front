@@ -16,8 +16,8 @@ const routes = [{
       component: () => import('@/pages/user/index.vue')
     },
     {
-      path: '/shorts',
-      component: () => import('@/pages/shorts/index.vue')
+      path: '/invite',
+      component: () => import('@/pages/invite/index.vue')
     },
     {
       path: '/shop',

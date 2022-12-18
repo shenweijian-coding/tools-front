@@ -13,10 +13,6 @@
         <!-- 赞助记录 -->
         <Spon :payInfo="payInfo.info"></Spon>
       </a-tab-pane>
-      <!-- <a-tab-pane key="4" title="邀请活动">
-        邀请活动
-        <Invite :inviteInfo="inviteInfo.info" @createInviteInfo="createInviteInfo"></Invite>
-      </a-tab-pane> -->
       <a-tab-pane key="5" title="卡密激活">
         <!-- 卡密兑现 -->
         <CodeCash></CodeCash>
@@ -30,9 +26,8 @@ import BaseInfo from './base-info.vue'
 import DownLog from './down-log.vue'
 import Spon from './spon.vue'
 import CodeCash from './code-cash.vue'
-import Invite from './invite.vue'
 import { useUserStore } from '@/store/modules/user/index'
-import { getUserPayInfo, getInviteInfo, getDownLog } from '@api/user'
+import { getUserPayInfo, getDownLog } from '@api/user'
 import { useRouter } from 'vue-router';
 let router = useRouter()
 
@@ -41,7 +36,6 @@ const loading = ref(false);
 
 let data = reactive({ info: {} });
 let payInfo = reactive({ info: [] });
-let inviteInfo = reactive({ info: {} });
 let downLogList = reactive({ info: [] });
 
 const activeKey = ref('1');
@@ -65,11 +59,6 @@ const tabChange = async (type) => {
     if (!payInfo.info.length) {
       const res = await getUserPayInfo()
       payInfo.info = res.data || []
-    }
-  } else if (type == 4) {
-    if (!inviteInfo.info.inviteCode) {
-      const res = await getInviteInfo()
-      inviteInfo.info = res.data || {}
     }
   }
   loading.value = false
