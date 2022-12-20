@@ -7,13 +7,14 @@ const userStore = useUserStore()
 const inviteData = reactive({
   inviteNum: 0,
   inviteStr: '千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=未登录 登录就可免费下载，不花钱！',
-  loading: false
+  loading: false,
+  list: []
 })
 // 获取邀请信息
 const getInviteData = () => {
   inviteData.loading = true
   getInviteInfo().then(res => {
-    console.log(res);
+    inviteData.list = res.data.list
     if (!res.data.inviteCode) {
       createInviteData()
     } else {
@@ -50,22 +51,46 @@ if (!userStore.userIsLogin) {
 }
 </script>
 <template>
-<div class="middle" v-loading="inviteData.loading">
+  <div class="middle" v-loading="inviteData.loading">
     <div class="left"></div>
     <div class="right"></div>
     <div class="limit">
-        <div class="al-invite">您已经邀请{{inviteData.inviteNum}}人</div>
-        <div class="divone">
-            <div class="wenan">
-                复制下方文字分享到设计QQ群，QQ空间、微信群、朋友圈、微博、贴吧、等社交平台，通过您的链接每成功注册1人，您即可获得200永久积分，奖励可进行累加，无上限。
-            </div>
-            <div class="fuzhilj">
-                <input type="" disabled id="data" :value="inviteData.inviteStr">
-                <a class="fzfx" id="copy" @click="copyShare">复制分享</a>
-            </div>
+      <div class="al-invite">您已经邀请{{ inviteData.inviteNum }}人</div>
+      <div class="divone">
+        <div class="wenan">
+          复制下方文字分享到设计QQ群，QQ空间、微信群、朋友圈、微博、贴吧、等社交平台，通过您的链接每成功注册1人，您即可获得200永久积分，奖励可进行累加，无上限。
         </div>
+        <div class="fuzhilj">
+          <input type="" disabled id="data" :value="inviteData.inviteStr">
+          <a class="fzfx" id="copy" @click="copyShare">复制分享</a>
+        </div>
+      </div>
     </div>
-</div>
+    <a-table class="invite-table" :data="inviteData.list" :pagination="false">
+      <template #columns>
+        <a-table-column title="邀请排名" data-index="is_ok" align="center">
+          <template #cell="{ record, rowIndex }">
+            第 {{ rowIndex + 1 }} 名
+          </template>
+        </a-table-column>
+        <a-table-column title="用户ID" data-index="is_ok" align="center">
+          <template #cell="{ record }">
+            {{ record._id }}
+          </template>
+        </a-table-column>
+        <a-table-column title="邀请人数" data-index="is_ok" align="center">
+          <template #cell="{ record }">
+            已邀请 <span style="color: #ff4451;">{{ record.inviteNum }}</span> 人
+          </template>
+        </a-table-column>
+        <a-table-column title="获得奖励" data-index="is_ok" align="center">
+          <template #cell="{ record }">
+            {{ record.inviteNum * 200 }} 积分
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
+  </div>
 </template>
 <style lang="less" scoped>
 .middle {
@@ -80,6 +105,8 @@ if (!userStore.userIsLogin) {
     left: 0;
     top: 194px;
     width: 354px;
+    height: 603px;
+    background: url(https://static.616pic.com/www_invite/image/img1.png) center center no-repeat;
   }
 
   .right {
@@ -88,6 +115,8 @@ if (!userStore.userIsLogin) {
     right: 0;
     top: 194px;
     width: 334px;
+    height: 717px;
+    background: url(https://static.616pic.com/www_invite/image/img2.png) center center no-repeat;
   }
 
   .al-invite {
@@ -143,7 +172,7 @@ if (!userStore.userIsLogin) {
 
   .divone {
     margin-top: 50px;
-    padding: 42px 97px 71px;
+    padding: 30px 97px 30px;
     background: #ffffff;
     -webkit-box-shadow: 0px 0px 20px #c7c7c7;
     -moz-box-shadow: 0px 0px 20px #c7c7c7;
@@ -155,6 +184,14 @@ if (!userStore.userIsLogin) {
       line-height: 30px;
     }
   }
+}
+
+.invite-table {
+  width: 1200px;
+  margin: 20px auto;
+  -webkit-box-shadow: 0px 0px 20px #c7c7c7;
+  -moz-box-shadow: 0px 0px 20px #c7c7c7;
+  box-shadow: 0px 0px 20px #c7c7c7;
 }
 
 .limit,

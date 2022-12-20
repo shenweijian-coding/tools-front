@@ -38,7 +38,7 @@ const paths = reactive({
       name: '邀请送分',
       path: '/invite',
       id: 2,
-      text: ''
+      text: '热'
     },{
       name: '在线充值',
       path: '/shop',
