@@ -3,12 +3,12 @@
     <div style="text-align: center;">提示：<a-tag color="purple">支付时请不要关闭本弹窗[{{ payStatus }}...]</a-tag>
     </div>
     <div class="pay-box">
-      <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" />
+      <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>
       <p class="order_title">{{ orderInfo.title }}</p>
       <div class="qr_code">
         <img
           :src="'/pay/createQRCode?text=' + encodeURIComponent(orderInfo.qrCode) + '&_=' + new Date().getTime()"
-          style="display: inline-block;">
+          style="display: inline-block;" alt="充值二维码">
       </div>
       <p class="order-amount">
         ￥{{ orderInfo.price }}</p>

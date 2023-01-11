@@ -366,7 +366,7 @@ const handleHukeFile = async (type) => {
     <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
     <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
-      <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm">
+      <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
     </s-dialog>
@@ -409,11 +409,14 @@ const handleHukeFile = async (type) => {
 
     <!-- 下载弹窗 -->
     <s-dialog v-model:visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
-      <div v-if="zhongtuUrl" class="mt-2">
+      <div v-if="zhongtuUrl" class="mt-2" style="display: flex;justify-content:right;align-items: center;">
+        <p>复制众图下载链接后，粘贴到迅雷即可下载，浏览器无法直接访问！</p>
+        <a-divider></a-divider>
         <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
       </div>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
+        <p>接网站、小程序、脚本等开发，联系微信号swjznl（站长）</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>

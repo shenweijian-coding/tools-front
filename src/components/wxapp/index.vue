@@ -5,7 +5,7 @@
         <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2dd.jpg" alt="二维码" style="width:140px;" />
       </div>
       <p style="line-height: 30px;">
-      微信扫码小程序;<br />点击个人中心<br >完成每日任务即送永久积分；<br>
+      微信扫码小程序;<br />点击我的<br >完成任务即送积分；<br>
       </p>
     </div>
   </div>
