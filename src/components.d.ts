@@ -15,6 +15,8 @@ declare module '@vue/runtime-core' {
     APopover: typeof import('@arco-design/web-vue')['Popover']
     ARow: typeof import('@arco-design/web-vue')['Row']
     ASpace: typeof import('@arco-design/web-vue')['Space']
+    ATable: typeof import('@arco-design/web-vue')['Table']
+    ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
     Dialog: typeof import('./components/dialog/index.vue')['default']
     Floor: typeof import('./components/floor/index.vue')['default']

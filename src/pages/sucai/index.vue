@@ -74,7 +74,7 @@ const getDownUrl = async (url) => {
     link = url.value
     const res = await getPngUrl({ url: url.value })
     if (res.data.status) { // 校验状态
-      if (res.data.status === 1001) {
+      if (res.data.status === -1) {
         visible.value = true
         return
       } else if (res.data.status === 1002) { // 网站自己的校验
