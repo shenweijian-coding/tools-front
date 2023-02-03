@@ -7,3 +7,21 @@ body {
 .hay-loading-parent--relative {
   position: relative !important;
 }
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.text-bold {
+  font-weight: bold;
+}
+.align-center {
+  align-items: center;
+}
+.margin-auto {
+  margin: auto;
+}
+.mt-m {
+  margin-top: 12px;
+}

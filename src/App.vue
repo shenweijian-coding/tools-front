@@ -45,9 +45,6 @@ if (import.meta.env.MODE !== 'development') {
 </script>
 
 <style>
-body, .bg-custom{
-  background-image:url('https://static.616pic.com/www_invite/image/invitec.png');
-}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

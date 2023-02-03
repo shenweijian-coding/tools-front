@@ -4,12 +4,11 @@ import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
 import sDialog from '../s-dialog/index.vue'
-import QR from '../dialog/index.vue'
+// import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import wxappLogin from '../wxapp-login/index.vue'
-import { pwd2Wxapp } from '@api/user/index'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const theme = computed(() => {
@@ -45,27 +44,29 @@ const paths = reactive({
       id: 3,
       text: ''
     }, {
-      name: '登录后查看',
-      path: '',
+      name: '视频教程',
+      path: '/help',
       id: 4,
       text: ''
-    }]
+  }]
 })
-const visible = ref(false);
+const loginVisible = ref(false);
 const stepsVisible = ref(false)
-const loginCode = ref('');
-const accode = ref('');
-// const undoneTaskVisible = ref(false);
+
+const loginInfo = reactive({
+  loginType: 1, // 1 卡密登录 0 二维码登录
+  cdkey: ''
+})
+
 const openLogin = () => {
-  visible.value = true;
+  loginVisible.value = true;
 }
-if (localStorage.getItem('accode')) {
-  accode.value = localStorage.getItem('accode') || ''
+if (localStorage.getItem('cdkey')) {
+  loginInfo.cdkey = localStorage.getItem('cdkey') || ''
 }
 // 获取用户积分数量
 const getUserNum = async () => {
   await userStore.getUserNum()
-  console.log(userStore.isLoginAgain, 'isLoginAgain');
   setTimeout(() => {
     if (userStore.isLoginAgain) {
       alert('当前登录IP与上一次登录IP不一致，请重新登录！')
@@ -75,56 +76,31 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-  paths.list.splice(3, 1, {
-    name: '视频教程',
-    path: '/help',
-    id: 4,
-    text: ''
-  })
 }
-const login = async (type) => {
-  loading.value = true
-  if (type === 1 && !loginCode.value) {
-    Message.warning('请输入验证码！')
-    return
-  }
-  if (type === 2 && !accode.value) {
+
+const login = async () => {
+  if (!loginInfo.cdkey) {
     Message.warning('请输入卡密！')
     return
   }
   const params = {
-    code: loginCode.value,
-    acCode: accode.value,
-    type: type
+    cdkey: loginInfo.cdkey,
+    type: loginInfo.loginType
   }
-  const inviteCode = localStorage.getItem('code')
-  if (inviteCode) {
-    params.inviteCode = inviteCode
-    localStorage.removeItem('code')
-  }
-  const res = await userStore.login(params)
-  Message.success('登录成功')
-  localStorage.setItem('accode', accode.value)
-  visible.value = false;
+
+  loading.value = true
+  await userStore.login(params)
+  localStorage.setItem('cdkey', loginInfo.cdkey)
+  loginVisible.value = false;
   loading.value = false
-  // window.location.reload()
+  Message.success('登录成功')
 }
-// 用户没有签到和观看广告
-// setTimeout(() => {
-//   if (!userStore.userIsLogin && (!userStore.adNum || !userStore.isSign)) {
-//     undoneTaskVisible.value = true
-//   }
-// }, 6000);
 
 const close = () => {
-  loginCode.value = ''
+  loginInfo.cdkey = ''
+  loginInfo.loginType = 1
 }
-// const task = () => {
-//   if (!userStore.adNum || !userStore.isSign) {
-//     undoneTaskVisible.value = false
-//     stepsVisible.value = true
-//   }
-// }
+
 const bindWxApp = () => {
   if (userStore.userIsLogin) {
     Message.warning('请先登录')
@@ -132,23 +108,12 @@ const bindWxApp = () => {
   }
   stepsVisible.value = true
 }
+
 const logout = () => {
   userStore.logout()
   Message.success('退出成功')
 }
 
-// 卡密权限登录查询
-const pwd2WxappConfirm = async (pwd) => {
-  if (!pwd) {
-    Message.warning('请输入卡密')
-    return
-  }
-  const res = await pwd2Wxapp({ code: pwd })
-  if (res.data) {
-    Message.success(res.data)
-    location.reload()
-  }
-}
 </script>
 
 <template>
@@ -218,22 +183,14 @@ const pwd2WxappConfirm = async (pwd) => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="visible" width="300px" @close="close" title="微信扫码登录">
-    <div>
-      <!-- <a-tabs default-active-key="2"> -->
-      <wxappLogin @login="visible = false"></wxappLogin>
-      <!-- <a-tab-pane key="1" title="微信登录"> -->
-      <!-- <a-input-search placeholder="请输入5位验证码" button-text="验证码登录" v-model="loginCode" search-button @search="login(1)">
-          </a-input-search>
-          <QR tip="验证码" v-if="visible" style="margin-top: 12px" /> -->
-      <!-- </a-tab-pane>
-        <a-tab-pane key="2" title="卡密登录">
-          <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="卡密登录" v-model="accode" search-button @search="login(2)">
-          </a-input-search>
-        </a-tab-pane> -->
-      <!-- </a-tabs> -->
+  <s-dialog v-model:visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
+    <a-button class="margin-auto flex" type="text" @click="loginInfo.loginType = Number(!loginInfo.loginType)">切换 {{ loginInfo.loginType === 1 ? '微信扫码' : '卡密' }} 登录</a-button>
+    <div v-if="loginInfo.loginType == 0" class="mt-m">
+      <wxappLogin @login="loginVisible = false"></wxappLogin>
     </div>
+    <a-input-search class="mt-m" v-else placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
   </s-dialog>
+
   <s-dialog v-model:visible="stepsVisible" title="免费获取积分" width="400px">
     <Wxapp></Wxapp>
   </s-dialog>

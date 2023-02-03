@@ -54,7 +54,7 @@ const options = reactive({
 listLoading.value = true
 getInfo().then(res => {
   console.log(res)
-  webList.list = res.data.webList
+  webList.list = res.data
   listLoading.value = false
 })
 // 被邀请的逻辑
@@ -347,14 +347,14 @@ const handleHukeFile = async (type) => {
         <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
-            <a :href="it.webUrl" target="_blank" title="点击跳转官网">
+            <a :href="it.url" target="_blank" title="点击跳转官网">
               <div class="app-weblist-item shou">
-                <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
+                <div class="hidden item-logo sm:flex"><img :src="it.url + '/favicon.ico'" :alt="it.name"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分') }}]
+                    {{ it.name }} [{{ userStore.userIsLogin ? '正常使用' : (it.cost + '积分') }}]
                   </div>
-                  <div class="tips">{{ it.webTips }}</div>
+                  <div class="tips">{{ it.desc }}</div>
                 </div>
               </div>
             </a>
@@ -409,11 +409,13 @@ const handleHukeFile = async (type) => {
 
     <!-- 下载弹窗 -->
     <s-dialog v-model:visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
-      <div v-if="zhongtuUrl" class="mt-2" style="display: flex;justify-content:right;align-items: center;">
+      <template v-if="zhongtuUrl">
         <p>复制众图下载链接后，粘贴到迅雷即可下载，浏览器无法直接访问！</p>
         <a-divider></a-divider>
-        <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
-      </div>
+        <span style="display: flex;justify-content:right;align-items: center;">
+          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
+        </span>
+      </template>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
         <p>接网站、小程序、脚本等开发，联系微信号swjznl（站长）</p>

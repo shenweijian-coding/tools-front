@@ -7,6 +7,7 @@ const userStore = useUserStore(pinia)
 const routes = [{
   path: '/',
   redirect: 'sucai',
+  auth: 'all',
   component: () => import('@/layout/index.vue'),
   children: [{
       path: '/sucai',
@@ -28,10 +29,42 @@ const routes = [{
       component: () => import('@/pages/help/index.vue')
     }
   ]
-}, {
-  path: '/server-admin',
-  component: () => import('@/pages/server-admin/index.vue')
-}]
+},
+  {
+    path: '/server-admin',
+    title: '后台管理',
+    auth: 'admin',
+    redirect: '/server-admin/index',
+    component: () => import('@/layout/admin-layout.vue'),
+    children: [
+      {
+        path: '/server-admin/index',
+        title: '网站配置',
+        component: () => import('@/pages/server-admin/setting.vue')
+      },
+      {
+        path: '/server-admin/cookie',
+        title: '素材账号配置',
+        component: () => import('@/pages/server-admin/cookie.vue')
+      },
+      {
+        path: '/server-admin/user',
+        title: '用户管理',
+        component: () => import('@/pages/server-admin/user.vue')
+      },
+      {
+        path: '/server-admin/setting',
+        title: '解析管理',
+        component: () => import('@/pages/server-admin/jiexiConfig.vue')
+      },
+      {
+        path: '/server-admin/setting',
+        title: '第三方API对接',
+        component: () => import('@/pages/server-admin/cookie.vue')
+      }
+    ]
+  }
+]
 //导入生成的路由数据
 const router = createRouter({
   history: createWebHashHistory(),

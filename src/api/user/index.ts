@@ -9,8 +9,7 @@ interface LoginRes {
 }
 
 export interface LoginData {
-    code: string,
-    ip: string
+    code: string
 }
 
 const getUserProfile = async () => get<any>({ url: 'user/info' });
@@ -25,9 +24,6 @@ const getBindWxapp = async () => get<any>({ url: 'user/getBindWxapp' });
 const getUserPayInfo = async () => get<any>({ url: 'user/getUserPayInfo' });
 
 const codeConvert = async (data) => post<any>({ url: 'user/codeConvert', data });
-
-//权限转移
-export const pwd2Wxapp = async (data) => post<any>({ url: 'user/pwd2Wxapp', data });
 
 export const getInviteInfo = async () => get<any>({ url: 'user/getInviteInfo' })
 
