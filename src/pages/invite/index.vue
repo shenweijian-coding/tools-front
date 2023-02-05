@@ -94,7 +94,7 @@ if (!userStore.userIsLogin) {
 </template>
 <style lang="less" scoped>
 .middle {
-  background: url(https://static.616pic.com/www_invite/image/img3.png) top center no-repeat;
+  // background: url(https://static.616pic.com/www_invite/image/img3.png) top center no-repeat;
   position: relative;
 
   margin-bottom: 100px;
@@ -105,8 +105,8 @@ if (!userStore.userIsLogin) {
     left: 0;
     top: 194px;
     width: 354px;
-    height: 603px;
-    background: url(https://static.616pic.com/www_invite/image/img1.png) center center no-repeat;
+    // height: 603px;
+    // background: url(https://static.616pic.com/www_invite/image/img1.png) center center no-repeat;
   }
 
   .right {
@@ -115,12 +115,12 @@ if (!userStore.userIsLogin) {
     right: 0;
     top: 194px;
     width: 334px;
-    height: 717px;
-    background: url(https://static.616pic.com/www_invite/image/img2.png) center center no-repeat;
+    // height: 717px;
+    // background: url(https://static.616pic.com/www_invite/image/img2.png) center center no-repeat;
   }
 
   .al-invite {
-    padding-top: 220px;
+    padding-top: 20px;
     height: 30px;
     line-height: 30px;
     text-align: center;
@@ -174,9 +174,9 @@ if (!userStore.userIsLogin) {
     margin-top: 50px;
     padding: 30px 97px 30px;
     background: #ffffff;
-    -webkit-box-shadow: 0px 0px 20px #c7c7c7;
-    -moz-box-shadow: 0px 0px 20px #c7c7c7;
-    box-shadow: 0px 0px 20px #c7c7c7;
+    // -webkit-box-shadow: 0px 0px 20px #c7c7c7;
+    // -moz-box-shadow: 0px 0px 20px #c7c7c7;
+    // box-shadow: 0px 0px 20px #c7c7c7;
 
     .wenan {
       font-size: 16px;
@@ -189,9 +189,9 @@ if (!userStore.userIsLogin) {
 .invite-table {
   width: 1200px;
   margin: 20px auto;
-  -webkit-box-shadow: 0px 0px 20px #c7c7c7;
-  -moz-box-shadow: 0px 0px 20px #c7c7c7;
-  box-shadow: 0px 0px 20px #c7c7c7;
+  // -webkit-box-shadow: 0px 0px 20px #c7c7c7;
+  // -moz-box-shadow: 0px 0px 20px #c7c7c7;
+  // box-shadow: 0px 0px 20px #c7c7c7;
 }
 
 .limit,

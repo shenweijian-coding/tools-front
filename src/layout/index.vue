@@ -2,17 +2,14 @@
   <Header></Header>
   <router-view></router-view>
   <floor></floor>
-  <Slide></Slide>
 </template>
 
 <script setup lang="ts">
 import Header from "@components/Header/index.vue"
 import Floor from "@components/floor/index.vue"
-import Slide from '@/components/slide/index.vue'
 import { getNoticeInfo } from '@/api/home/index'
 import { Notification } from '@arco-design/web-vue';
 
-const notice = ref('')
 const visible = ref(false)
 if (localStorage.getItem('token')) {
   // visible.value = true
@@ -29,12 +26,6 @@ if (localStorage.getItem('token')) {
       });
     }
   })
-}
-const handleRead = () => {
-  visible.value = false
-}
-const close = () => {
-
 }
 </script>
 

@@ -48,19 +48,24 @@ const routes = [{
         component: () => import('@/pages/server-admin/cookie.vue')
       },
       {
+        path: '/server-admin/accode',
+        title: '卡密管理',
+        component: () => import('@/pages/server-admin/accode.vue')
+      },
+      {
         path: '/server-admin/user',
         title: '用户管理',
         component: () => import('@/pages/server-admin/user.vue')
       },
       {
-        path: '/server-admin/setting',
-        title: '解析管理',
-        component: () => import('@/pages/server-admin/jiexiConfig.vue')
+        path: '/server-admin/pay',
+        title: '站内充值',
+        component: () => import('@/pages/server-admin/pay.vue')
       },
       {
-        path: '/server-admin/setting',
+        path: '/server-admin/other',
         title: '第三方API对接',
-        component: () => import('@/pages/server-admin/cookie.vue')
+        component: () => import('@/pages/server-admin/otherInfo.vue')
       }
     ]
   }

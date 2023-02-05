@@ -4,7 +4,6 @@ import { getDownFile, getHukeFile } from '@api/play'
 
 import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
-import CheckDialog from '@/components/check-dialog/index.vue'
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
 import { useUserStore } from '@/store';
@@ -16,6 +15,7 @@ import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
 const userStore = useUserStore()
 const route = useRoute()
+
 const loading = ref(false)
 const checkLoading = ref(false)
 const listLoading = ref(false)
@@ -45,18 +45,26 @@ const baotuCheckInfo = reactive({
   params: ''
 })
 const webList = reactive({
-  list: []
+  list: [],
+  currentShowTip: {},
+  webTipVisible: false
 })
-let link = ''
 const options = reactive({
   list: []
 })
-listLoading.value = true
-getInfo().then(res => {
-  console.log(res)
-  webList.list = res.data
-  listLoading.value = false
-})
+
+let link = ''
+
+// 获取网站列表
+const getWebList = () => {
+  listLoading.value = true
+  getInfo().then(res => {
+    webList.list = res.data
+    listLoading.value = false
+  })
+}
+getWebList()
+
 // 被邀请的逻辑
 setTimeout(() => {
   const { query } = toRaw(route)
@@ -64,6 +72,7 @@ setTimeout(() => {
     localStorage.setItem('fr', query.value.f)
   }
 });
+
 const getDownUrl = async (url) => {
   try {
     zhongtuUrl.value = ''
@@ -85,7 +94,6 @@ const getDownUrl = async (url) => {
             sheji90check()
           });
         } else if (res.data.id === 5) { // 包图验证
-          console.log('baotu');
           baotuCheckVisible.value = true
           baotuCheckInfo.content = res.data.handle
           baotuCheckInfo.params = res.data.batch
@@ -104,12 +112,10 @@ const getDownUrl = async (url) => {
       if (res.data.options) {
         options.list = res.data.options
       } else {
-        Message.success('解析成功了，请点击立即下载按钮')
         await userStore.getUserNum()
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           downVisible.value = true
-          Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
         } else if ([1, 2].includes(res.data.id)) {
           shidahukeInfo.id = res.data.id
           shidahukeInfo.visible = true
@@ -139,6 +145,7 @@ const getDownUrl = async (url) => {
   }
 
 }
+
 const getCurDownUrl = async (item) => {
   try {
     loading.value = true
@@ -153,22 +160,14 @@ const getCurDownUrl = async (item) => {
       userStore.getUserNum()
       downVisible.value = true
       href.value = res.data.psd
-      // window.open(res.data.psd)
     }
-    console.log(res);
   } catch (error) {
 
   } finally {
     loading.value = false
   }
 }
-const checkCode = async (downCode) => {
-  const { data } = await checkInfo({ code: downCode })
-  if (data.result) {
-    Message.success('校验成功！请重新点击搜索进行下载！')
-    checkVisible.value = false
-  }
-}
+
 const websitCheckCode = async () => {
   try {
     if (!webSiteCheckInfo.webSiteCheckCode.trim()) {
@@ -287,7 +286,6 @@ const baotuCheckClick = async e => {
 // 下载视达素材
 const downFile = async () => {
   const { data } = await getDownFile(shidahukeInfo.params)
-  console.log(data);
   window.open(data)
 }
 // 下载虎课素材
@@ -299,24 +297,22 @@ const handleHukeFile = async (type) => {
     Message.error('出现错误,请联系管理员！')
   }
 }
+
+const showWebTip = (item) => {
+  webList.webTipVisible = true
+  webList.currentShowTip = item
+}
+// 网站列表 和 个人信息进行结合显示
+console.log(userStore.$state);
 </script>
 
 <template>
-  <div class="page-design app-page appView">
+  <div class="app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
-          <div class="app-header-func" v-if="!userStore.userIsLogin">
-            常用功能：
-            <span>
-              <router-link to="/shop">在线充值</router-link>
-            </span>&nbsp;&nbsp;
-            <span>
-              <router-link to="/user?key=5">卡密激活</router-link>
-            </span>
-          </div>
-          <Input @getPlay="getDownUrl" :loading="loading" />
+          <Input @getPlay="getDownUrl" :loading="loading" class="app-search"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -326,44 +322,63 @@ const handleHukeFile = async (type) => {
         </div>
       </div>
       <div class="app-web-list" v-loading="listLoading">
-        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
-          <span class="flex items-center justify-center">
-            <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
-            <span>永久积分：</span><span>{{ userStore.userNum }}</span>
-          </span>
-          <span class="flex items-center justify-center">
-            <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
-            <span>今日有效积分：</span><span>{{ userStore.eNum >= 0 ? userStore.eNum : '未赞助或已用完' }}</span>
-          </span>
-          <span class="flex items-center justify-center">
-            <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
-            <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '-' }}</span>
-          </span>
-          <span class="flex items-center justify-center">
-            <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
-            <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
-          </span>
-        </div>
-        <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
         <a-row>
-          <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
-            <a :href="it.url" target="_blank" title="点击跳转官网">
-              <div class="app-weblist-item shou">
-                <div class="hidden item-logo sm:flex"><img :src="it.url + '/favicon.ico'" :alt="it.name"></div>
+          <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id" @click="showWebTip(it)">
+            <a-tooltip>
+              <template  #content>
+                <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
+                <p class="text-m">权限到期时间：2022-11-11</p>
+                <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
+                <p class="text-m">站点使用说明：{{ it.desc }}</p>
+              </template >
+              <div class="app-weblist-item cursor-pointer">
+                <div class="hidden item-logo sm:flex">
+                  <img :src="it.url + '/favicon.ico'" :alt="it.name">
+                </div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.name }} [{{ userStore.userIsLogin ? '正常使用' : (it.cost + '积分') }}]
+                    <span>{{ it.name }}</span>&nbsp;
+                    <span class="text-red">{{ userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通套餐' }}</span>
                   </div>
-                  <div class="tips">{{ it.desc }}</div>
                 </div>
               </div>
-            </a>
+            </a-tooltip>
           </a-col>
         </a-row>
       </div>
     </div>
+    <!-- 轮播图 -->
+    <div class="flex mt-l">
+      <a-carousel
+        class="flex-1 carousel-item"
+        :auto-play="true"
+        indicator-type="dot"
+        show-arrow="hover">
+      <a-carousel-item>
+        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
+      </a-carousel-item>
+    </a-carousel>
+      <a-carousel
+        class="flex-1 carousel-item"
+        :auto-play="true"
+        indicator-type="dot"
+        show-arrow="hover">
+      <a-carousel-item>
+        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
+      </a-carousel-item>
+    </a-carousel>
+      <a-carousel
+        class="flex-1 carousel-item"
+        :auto-play="true"
+        indicator-type="dot"
+        show-arrow="hover">
+      <a-carousel-item>
+        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
+      </a-carousel-item>
+    </a-carousel>
+    </div>
+
     <NumLack :visible="visible" @close="close" />
-    <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
     <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
@@ -428,6 +443,21 @@ const handleHukeFile = async (type) => {
         </span>
       </template>
     </s-dialog>
+
+    <!-- 站点说明 -->
+    <s-dialog v-model:visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="false" width="40%">
+        <p>使用说明：{{ webList.currentShowTip.desc || '-' }}</p>
+        <template #footer>
+          <span class="flex align-center" style="justify-content:right;">
+            <a :href="webList.currentShowTip.url" target="_blank" referrerpolicy="no-referrer">
+              <a-button type="outline">跳转官网</a-button>
+            </a>&nbsp;
+            <a href="#/shop" referrerpolicy="no-referrer">
+              <a-button type="primary">开通权限</a-button>
+            </a>
+          </span>
+        </template>
+    </s-dialog>
   </div>
 </template>
 
@@ -435,46 +465,25 @@ const handleHukeFile = async (type) => {
 .app-page {
   width: 95%;
   max-width: 1300px;
-  margin: 24px auto auto;
-
+  margin: 16px auto auto;
+  .carousel-item{
+    height: 160px;
+    &:nth-child(2){
+      margin: 0 12px;
+    }
+  }
   .app-header-box {
     display: block;
     border-radius: 8px;
-    height: 360px;
-    background-color: #d3ddee;
-    -webkit-box-shadow: 0 0 10px 0 rgb(0 0 0 / 24%);
-    box-shadow: 0 0 10px 0 rgb(0 0 0 / 24%);
-    text-shadow: 0 0 10px rgb(0 0 82 / 0%);
+    padding: 10px 0;
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: cover;
     text-align: center;
-
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    /* 背景尺寸 - 原理3 */
     background-size: 600% 600%;
-    /* 循环动画 - 原理4 */
-    animation: gradientBG 10s ease infinite;
-
-    /* 动画，控制背景 background-position */
-    @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
     .app-heade-title {
       color: #f0f1f5;
       font-size: 28px;
-      padding: 40px 0 8px;
     }
 
     .app-header-tips {
@@ -486,8 +495,10 @@ const handleHukeFile = async (type) => {
     .app-header-input {
       width: 96%;
       margin: auto;
-      max-width: 580px;
-
+      max-width: 680px;
+      .app-search{
+        margin: 12px 0;
+      }
       .app-header-func {
         color: #eee;
         text-align: left;
@@ -503,36 +514,33 @@ const handleHukeFile = async (type) => {
   }
 
   .app-web-list {
-    padding: 16px 8px;
-    background-color: hsla(0, 0%, 100%, .78);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    width: 90%;
+    width: 100%;
     max-width: 1400px;
-    min-height: 200px;
-    margin: auto;
-    -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-    box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-    overflow: hidden;
+    margin:  20px auto 0;
 
     .app-weblist-item {
+      background-color: hsla(0, 0%, 100%, 1);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
+      box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
+      border-radius: 4px;
       display: flex;
       align-items: center;
       padding: 12px 16px;
       -webkit-transition: All .25s;
       transition: All .25s;
-
+      margin: 4px 4px;
       &:hover {
-        background-color: hsla(0, 0%, 95.3%, .6196078431372549);
-        border-radius: 8px;
+        background-color: rgba(255, 255, 255, .8);
+        border-radius: 4px;
       }
     }
 
     .item-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
       overflow: hidden;
       background-color: #fff;
       -webkit-box-pack: center;
@@ -540,10 +548,10 @@ const handleHukeFile = async (type) => {
       justify-content: center;
 
       img {
-        width: 48px;
-        height: 48px;
-        padding: 4px;
-        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        // padding: 4px;
+        border-radius: 4px;
         border-color: rgba(76 175 80/15%);
         overflow: hidden;
         // width: 48px;
@@ -553,7 +561,7 @@ const handleHukeFile = async (type) => {
     }
 
     .item-info {
-      padding: 0 16px;
+      padding: 0 8px;
       white-space: nowrap;
 
       .tips {
@@ -563,14 +571,6 @@ const handleHukeFile = async (type) => {
       }
     }
   }
-}
-
-.page-design .app-web-list {
-  margin-top: -144px;
-}
-
-.shou {
-  cursor: pointer;
 }
 
 .zhongtu {

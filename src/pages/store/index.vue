@@ -1,4 +1,14 @@
 <template>
+  <div class="shop-box">
+    <div>
+      请输入卡密：<a-input placeholder="XXXX-XXXX-XXXX" style="max-width: 400px" v-model="code"></a-input>
+      <a-button type="primary" @click="active" class="ml-m">激活</a-button>
+    </div>
+    <div class="mt-m">
+      <p class="code-tips">卡密说明：激活成功后立即失效，无法重复使用；卡密兑现的积分可以进行累加,不会重置；</p>
+    </div>
+  </div>
+
   <div class="shop-box" v-loading="loading">
     <a-radio-group v-model="checkedValue">
       <template v-for="item in goodList" :key="item.id">
@@ -15,19 +25,20 @@
         </a-radio>
       </template>
     </a-radio-group>
+
     <div class="shop-action">
-      <span class="lg:flex hidden">
+      <!-- <span class="lg:flex hidden">
         <a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert>
-      </span>
+      </span> -->
       <span>
         <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
-        <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a-button type="primary" style="width: 12.5rem;" @click="spon">立即赞助</a-button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a-button type="primary" style="width: 12.5rem;" @click="spon">充值</a-button>
       </span>
     </div>
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
   </div>
-  <tips></tips>
+  <!-- <tips></tips> -->
 </template>
 <script setup lang="ts">
 import { getGoodList } from '@api/home';
@@ -36,6 +47,7 @@ import { createInvoice, checkInvoice } from '@api/home'
 import { useUserStore } from '@/store';
 import { Message } from '@arco-design/web-vue';
 import tips from './tips.vue'
+import { codeConvert } from '@api/user'
 const userStore = useUserStore()
 
 const goodList = ref([])
@@ -45,6 +57,26 @@ const visible = ref(false)
 const orderInfo = ref({})
 const timer = ref(0)
 const payStatus = ref('待扫码')
+const code = ref('')
+
+const active = async () => {
+  try {
+    if (!code.value) {
+      Message.warning('请输入卡密')
+      return
+    }
+    const res = await codeConvert({
+      code: code.value
+    })
+    if (res.data) {
+      Message.success(res.data)
+    }
+  } catch (error) {
+
+  } finally {
+    code.value = ''
+  }
+}
 
 const getList = async () => {
   // if (!userStore._id) {
@@ -99,6 +131,10 @@ getList()
   margin-bottom: .75rem;
 }
 
+.code-tips{
+  line-height: 30px;
+  font-size: 13px;
+}
 .shop-img {
   background-image: url(https://pic4.zhimg.com/v2-ab400c5e44000df0658c6500e2e20d0f_r.jpg?source=1940ef5c);
   width: 80%;
@@ -123,19 +159,15 @@ getList()
 
 .shop-box {
   display: flex;
-  min-height: 18.75rem;
+  // min-height: 18.75rem;
   width: 74%;
   box-sizing: border-box;
   padding: 1.25rem 2.5rem 1.25rem 2.5rem;
   background-color: #fff;
   position: relative;
   margin: 20px auto 0;
-  background-color: hsla(0, 0%, 100%, .78);
-  -webkit-backdrop-filter: blur(.625rem);
   backdrop-filter: blur(.625rem);
-  border-radius: .625rem;
-  -webkit-box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 6%);
-  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 2%);
+  border-radius: .3rem;
   flex-direction: column;
   justify-content: space-between;
 
@@ -177,7 +209,6 @@ getList()
   .custom-radio-card-title {
     color: var(--color-text-1);
     font-size: .875rem;
-    // font-weight: bold;
   }
 
   .custom-radio-card {

@@ -12,22 +12,14 @@ import { UserState } from './types'
 export const useUserStore = defineStore('user', {
     state: (): UserState => ({
         _id: '',
-        ip: '',
-        down_log: [],
         create_time: undefined,
-        is_fans: false,
-        email: '',
         num: 0,
         isSign: false,
         adNum: 0,
-        eNum: 0,
-        expireDate: 0,
-        isLoginAgain: false
+        auth: []
     }),
     getters: {
         userProfile(state: UserState): UserState {
-            console.log(state);
-
             return { ...state };
         },
         userIsLogin(state: UserState): boolean {

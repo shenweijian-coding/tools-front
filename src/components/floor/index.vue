@@ -18,8 +18,7 @@ const watchHelpVideo = () =>  {
   width: 100%;
   height: 40px;
   text-align: center;
-  color: #919499;
+  color: #f5f5f5f5;
   font-size: 14px;
-  // background-color: #fff;
 }
 </style>

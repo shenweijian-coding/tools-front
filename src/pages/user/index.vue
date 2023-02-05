@@ -13,10 +13,6 @@
         <!-- 赞助记录 -->
         <Spon :payInfo="payInfo.info"></Spon>
       </a-tab-pane>
-      <a-tab-pane key="5" title="卡密激活">
-        <!-- 卡密兑现 -->
-        <CodeCash></CodeCash>
-      </a-tab-pane>
     </a-tabs>
   </div>
 </template>
@@ -25,7 +21,6 @@
 import BaseInfo from './base-info.vue'
 import DownLog from './down-log.vue'
 import Spon from './spon.vue'
-import CodeCash from './code-cash.vue'
 import { useUserStore } from '@/store/modules/user/index'
 import { getUserPayInfo, getDownLog } from '@api/user'
 import { useRouter } from 'vue-router';
