@@ -12,6 +12,7 @@
   </a-form>
   <!-- 用户信息 -->
   <div class="mt-m">
+    <div class="my-l">基本信息</div>
     <a-table :data="userInfo.tableData" size="small" bordered :pagination="false">
       <template #columns>
         <a-table-column title="用户ID" data-index="_id" align="center"></a-table-column>
@@ -63,6 +64,37 @@
       </template>
     </s-dialog>
   </div>
+  <div class="mt-m">
+    <div class="my-l">下载记录</div>
+    <a-table :data="userInfo.downLogData" :pagination="userInfo.pagination" @page-change="pageChange">
+     <template #columns>
+        <a-table-column title="网站名称" data-index="web_site">
+          <template #cell="{ record }">
+            {{ webMap[record.web_site] }}
+          </template>
+        </a-table-column>
+        <a-table-column title="下载链接" data-index="web_url" ellipsis>
+          <template #cell="{ record }">
+            <a :href="record.web_url" target="_blank">{{record.web_url}}</a>
+          </template>
+        </a-table-column>
+        <a-table-column title="下载时间">
+          <template #cell="{ record }">
+            {{ timeConvert(record.time) }}
+          </template>
+        </a-table-column>
+        <a-table-column title="结果" data-index="is_ok">
+          <template #cell="{ record }">
+          <a-tag :color="record.is_ok ? '#165dff' : '#f53f3f'">{{ record.is_ok ? '成功' : '失败' }}</a-tag>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
+  </div>
+  <div class="mt-m">
+    <div class="my-l">支付记录</div>
+     <a-table :columns="userInfo.payCols" :data="userInfo.payInfo" />
+  </div>
 </template>
 <script setup>
 import { getUserById, updateUserInfo } from '@/api/admin/index.js'
@@ -78,7 +110,31 @@ const userInfo = reactive({
     accode: ''
   },
   tableData: [],
-  editVisible: false
+  downLogData: [],
+  editVisible: false,
+  payInfo: [],
+  payCols: [{
+    title: '账单号',
+    dataIndex: 'tradeNo',
+  },
+  {
+    title: '支付宝账号',
+    dataIndex: 'name',
+  },
+  {
+    title: '时间',
+    dataIndex: 'date',
+  },
+  {
+    title: '金额',
+    dataIndex: 'price',
+  }],
+  pagination: {
+    total: 0,
+    current: 1,
+    'show-total': true,
+    'page-size': 10
+  }
 })
 
 const getUserInfo = async () => {
@@ -90,6 +146,11 @@ const getUserInfo = async () => {
 
 const edit = () => {
   userInfo.editVisible = true
+}
+
+const pageChange = async(page) => {
+  const res = await getDownLog({ page })
+  userInfo.downLogData = res.data
 }
 
 const save = async () => {

@@ -12,3 +12,6 @@ export const updateUserInfo = async (data) => post({ url: 'admin/updateUserInfo'
 export const getCodeByType = async (data) => post({ url: 'admin/getCodeByType', data })
 
 export const createAccodeApi = async (data) => post({ url: 'admin/createAccode', data})
+
+export const saveWebConfig = async (data) => post({ url: 'admin/saveWebConfig', data})
+export const getWebConfig = async () => get({ url: 'admin/getWebConfig'})

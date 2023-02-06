@@ -1,30 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useDark, useToggle } from '@vueuse/core';
-import { useAppStore, useUserStore } from '@/store';
+import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
 import sDialog from '../s-dialog/index.vue'
-// import QR from '../dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
-import Wxapp from '@/components/wxapp/index.vue'
-import SvgIcon from "@components/SvgIcon/index.vue"
-import wxappLogin from '../wxapp-login/index.vue'
-const appStore = useAppStore()
+
 const userStore = useUserStore()
-const theme = computed(() => {
-  return appStore.theme
-})
+
 const loading = ref(false)
-const isDark = useDark({
-  selector: 'body',
-  attribute: 'arco-theme',
-  valueDark: 'dark',
-  valueLight: 'light',
-  storageKey: 'arco-theme',
-  onChanged(dark) {
-    appStore.toggleTheme(dark);
-  },
-})
+
 const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
@@ -121,7 +105,6 @@ const logout = () => {
                 <ul class="flex space-x-10">
                   <li class="flex items-center">
                     <span class="flex items-center mr-2">
-                      <!-- <SvgIcon name="svg-huiyuan" style="width: 20px;" class="mr-1" /> -->
                       <span>全站积分：{{ userStore.$state.num }}</span>
                     </span>
                     <a-divider direction="vertical"></a-divider>

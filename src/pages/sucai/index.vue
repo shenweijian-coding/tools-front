@@ -6,7 +6,7 @@ import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
-import { useUserStore } from '@/store';
+import { useUserStore, useAppStore } from '@/store';
 import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
@@ -14,6 +14,7 @@ import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
 const userStore = useUserStore()
+const appStore = useAppStore()
 const route = useRoute()
 
 const loading = ref(false)
@@ -302,8 +303,6 @@ const showWebTip = (item) => {
   webList.webTipVisible = true
   webList.currentShowTip = item
 }
-// 网站列表 和 个人信息进行结合显示
-console.log(userStore.$state);
 </script>
 
 <template>
@@ -350,32 +349,17 @@ console.log(userStore.$state);
     <!-- 轮播图 -->
     <div class="flex mt-l">
       <a-carousel
+      v-for="it in appStore.$state.webConfig.banner"
         class="flex-1 carousel-item"
         :auto-play="true"
         indicator-type="dot"
         show-arrow="hover">
-      <a-carousel-item>
-        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
-      </a-carousel-item>
-    </a-carousel>
-      <a-carousel
-        class="flex-1 carousel-item"
-        :auto-play="true"
-        indicator-type="dot"
-        show-arrow="hover">
-      <a-carousel-item>
-        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
-      </a-carousel-item>
-    </a-carousel>
-      <a-carousel
-        class="flex-1 carousel-item"
-        :auto-play="true"
-        indicator-type="dot"
-        show-arrow="hover">
-      <a-carousel-item>
-        <img src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp" :style="{ width: '100%'}"/>
-      </a-carousel-item>
-    </a-carousel>
+        <a-carousel-item>
+            <a :href="it.url || '/'" target="_blank">
+            <img :src="it.img" :style="{ width: '100%'}" title="轮播图"/>
+          </a>
+          </a-carousel-item>
+      </a-carousel>
     </div>
 
     <NumLack :visible="visible" @close="close" />
@@ -470,6 +454,9 @@ console.log(userStore.$state);
     height: 160px;
     &:nth-child(2){
       margin: 0 12px;
+    }
+    img{
+      object-fit: contain;
     }
   }
   .app-header-box {

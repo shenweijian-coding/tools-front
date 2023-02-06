@@ -3,7 +3,7 @@ import { get, post } from '@utils/http/axios'
 
 export const getHomeInfo = async () => get<any>({ url: 'home' });
 
-export const getNoticeInfo = async () => get<any>({ url: 'home/notice' })
+export const getWebConfig = async () => get<any>({ url: 'home/config' })
 
 export const getGoodList = async () => get<any>({ url: 'home/getGoodList' })
 
