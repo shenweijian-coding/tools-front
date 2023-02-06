@@ -1,5 +1,5 @@
 <template>
-  <div class="floor">
+  <div class="floor" v-if="appStore.$state.webConfig?.footer">
     <p v-html="appStore.$state.webConfig.footer"></p>
   </div>
 </template>

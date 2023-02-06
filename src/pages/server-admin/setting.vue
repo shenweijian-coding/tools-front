@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="laoding">
+  <div v-loading="loading">
     <a-form :model="webConfig" auto-label-width>
       <a-form-item label="网站公告">
         <a-input v-model="webConfig.notice" placeholder="公告内容，有内容时自动展示弹窗，支持html"></a-input>
@@ -48,9 +48,10 @@ let webConfig = reactive({
 const save = async () => {
   try {
     loading.value = true
-    console.log(webConfig);
+    webConfig._id || delete webConfig._id
     const res = await saveWebConfig(webConfig)
     Message.success('保存成功')
+    getConfig()
   } catch (error) {
     
   } finally {

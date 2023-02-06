@@ -2,7 +2,7 @@
   <Header></Header>
   <router-view></router-view>
   <floor></floor>
-  <s-dialog :visible="isShowNotice" width="50%" title="公告" @close="isShowNotice = false">
+  <s-dialog :visible="isShowNotice" width="36%" title="公告" @close="isShowNotice = false">
     <p v-html="appStore.$state.webConfig.notice"></p>
   </s-dialog>
 </template>
@@ -16,7 +16,7 @@ const appStore = useAppStore()
 const isShowNotice = ref(false)
 appStore.getWebConfig()
 setTimeout(() => {
-  isShowNotice.value = !!appStore.$state.webConfig.notice
+  isShowNotice.value = !!appStore.$state.webConfig?.notice
 }, 1000);
 
 

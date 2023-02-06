@@ -59,7 +59,7 @@ let link = ''
 // 获取网站列表
 const getWebList = () => {
   listLoading.value = true
-  getInfo().then(res => {
+  webList.list.length || getInfo().then(res => {
     webList.list = res.data
     listLoading.value = false
   })
@@ -347,9 +347,10 @@ const showWebTip = (item) => {
       </div>
     </div>
     <!-- 轮播图 -->
-    <div class="flex mt-l">
+    <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner">
       <a-carousel
-      v-for="it in appStore.$state.webConfig.banner"
+        v-for="it in appStore.$state.webConfig.banner"
+        :key="it.url"
         class="flex-1 carousel-item"
         :auto-play="true"
         indicator-type="dot"

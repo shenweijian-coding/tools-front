@@ -9,7 +9,7 @@
         <!-- 下载记录 -->
         <DownLog :data="downLogList.info" @pageChange="getDownList"/>
       </a-tab-pane>
-      <a-tab-pane key="3" title="赞助记录">
+      <a-tab-pane key="3" title="支付记录">
         <!-- 赞助记录 -->
         <Spon :payInfo="payInfo.info"></Spon>
       </a-tab-pane>

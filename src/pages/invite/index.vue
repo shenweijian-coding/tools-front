@@ -51,9 +51,7 @@ if (!userStore.userIsLogin) {
 }
 </script>
 <template>
-  <div class="middle" v-loading="inviteData.loading">
-    <div class="left"></div>
-    <div class="right"></div>
+  <div class="middle">
     <div class="limit">
       <div class="al-invite">您已经邀请{{ inviteData.inviteNum }}人</div>
       <div class="divone">
@@ -66,7 +64,7 @@ if (!userStore.userIsLogin) {
         </div>
       </div>
     </div>
-    <a-table class="invite-table" :data="inviteData.list" :pagination="false">
+    <a-table class="invite-table" :data="inviteData.list" :pagination="false" v-loading="inviteData.loading">
       <template #columns>
         <a-table-column title="邀请排名" data-index="is_ok" align="center">
           <template #cell="{ record, rowIndex }">
@@ -94,30 +92,8 @@ if (!userStore.userIsLogin) {
 </template>
 <style lang="less" scoped>
 .middle {
-  // background: url(https://static.616pic.com/www_invite/image/img3.png) top center no-repeat;
   position: relative;
-
   margin-bottom: 100px;
-
-  .left {
-    z-index: -1;
-    position: absolute;
-    left: 0;
-    top: 194px;
-    width: 354px;
-    // height: 603px;
-    // background: url(https://static.616pic.com/www_invite/image/img1.png) center center no-repeat;
-  }
-
-  .right {
-    z-index: -1;
-    position: absolute;
-    right: 0;
-    top: 194px;
-    width: 334px;
-    // height: 717px;
-    // background: url(https://static.616pic.com/www_invite/image/img2.png) center center no-repeat;
-  }
 
   .al-invite {
     padding-top: 20px;
@@ -174,10 +150,6 @@ if (!userStore.userIsLogin) {
     margin-top: 50px;
     padding: 30px 97px 30px;
     background: #ffffff;
-    // -webkit-box-shadow: 0px 0px 20px #c7c7c7;
-    // -moz-box-shadow: 0px 0px 20px #c7c7c7;
-    // box-shadow: 0px 0px 20px #c7c7c7;
-
     .wenan {
       font-size: 16px;
       height: 70px;
@@ -189,9 +161,6 @@ if (!userStore.userIsLogin) {
 .invite-table {
   width: 1200px;
   margin: 20px auto;
-  // -webkit-box-shadow: 0px 0px 20px #c7c7c7;
-  // -moz-box-shadow: 0px 0px 20px #c7c7c7;
-  // box-shadow: 0px 0px 20px #c7c7c7;
 }
 
 .limit,
