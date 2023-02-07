@@ -17,11 +17,7 @@ const paths = reactive({
       path: '/sucai',
       id: 1,
       text: ''
-    },{
-      name: '邀请送分',
-      path: '/invite',
-      id: 2,
-    },{
+    }, {
       name: '在线充值',
       path: '/shop',
       id: 3,

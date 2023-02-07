@@ -326,7 +326,7 @@ const showWebTip = (item) => {
             <a-tooltip>
               <template  #content>
                 <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
-                <p class="text-m">权限到期时间：2022-11-11</p>
+                <p class="text-m">权限到期时间：{{ userStore.$state?.auth?.[it.id]?.expireDate || '-' }}</p>
                 <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
                 <p class="text-m">站点使用说明：{{ it.desc }}</p>
               </template >

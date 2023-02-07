@@ -33,6 +33,9 @@ body {
 .ml-m {
   margin-left: 12px;
 }
+.my-l {
+  margin: 20px 0;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -42,9 +45,33 @@ body {
 .flex-1 {
   flex: 1;
 }
+.flex-col {
+  flex-direction: column;
+}
 .align-center {
   align-items: center;
 }
 .text-red {
   color: red;
+}
+.text-l {
+  font-size: 18px;
+}
+.text-bold {
+  font-weight: bold;
+}
+.text-lg {
+  font-size: 24px;
+}
+.w-5 {
+  width: 50%;
+}
+.w-2 {
+  width: 20%;
+}
+.w-100 {
+  width: 100%;
+}
+.jc-between {
+  justify-content: space-between;
 }

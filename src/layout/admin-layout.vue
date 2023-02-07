@@ -9,7 +9,10 @@
       <a-menu-item v-for="item in routes" :key="item.path">{{ item.title }}</a-menu-item>
     </a-menu>
     <div class="flex flex-col main">
-      <header class="header flex align-center text-bold">{{ currentRoute }}</header>
+      <header class="header flex align-center jc-between">
+        <span class="text-bold">{{ currentRoute }}</span>
+        <a href="/" target="_blank">跳转前台地址</a>
+      </header>
       <div class="container">
         <router-view></router-view>
       </div>
