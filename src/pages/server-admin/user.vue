@@ -12,7 +12,7 @@
   </a-form>
   <!-- 用户信息 -->
   <div class="mt-m">
-    <div class="my-l">基本信息</div>
+    <div class="my-l">基本信息（目前用户总数：{{ userInfo.total }}）</div>
     <a-table :data="userInfo.tableData" size="small" bordered :pagination="false">
       <template #columns>
         <a-table-column title="用户ID" data-index="_id" align="center"></a-table-column>
@@ -110,6 +110,7 @@ const userInfo = reactive({
     accode: ''
   },
   tableData: [],
+  total: 0,
   downLogData: [],
   editVisible: false,
   payInfo: [],
@@ -140,10 +141,11 @@ const userInfo = reactive({
 const getUserInfo = async () => {
   let res = await getUserById(userInfo.form)
   if (res && res.data) {
-    userInfo.tableData = [res.data]
+    userInfo.tableData = res.data.list
+    userInfo.total = res.data.total
   }
 }
-
+getUserInfo()
 const edit = () => {
   userInfo.editVisible = true
 }

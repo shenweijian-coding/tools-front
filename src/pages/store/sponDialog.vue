@@ -4,15 +4,15 @@
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>
-      <p class="order_title">{{ orderInfo.title }}</p>
+      <p class="order_title">{{ payInfo.title }}</p>
       <div class="qr_code">
         <img
-          :src="'/pay/createQRCode?text=' + encodeURIComponent(orderInfo.qrCode) + '&_=' + new Date().getTime()"
+          :src="'http://127.0.0.1:3000/pay/createQRCode?text=' + encodeURIComponent(payInfo.qrCode) + '&_=' + new Date().getTime()"
           style="display: inline-block;" alt="充值二维码">
       </div>
       <p class="order-amount">
-        ￥{{ orderInfo.price }}</p>
-      <p style="margin-bottom: 78px">订单号：{{ orderInfo.tradeNo }}</p>
+        ￥{{ payInfo.price }}</p>
+      <p style="margin-bottom: 78px">订单号：{{ payInfo.tradeNo }}</p>
       <div class="hidden-xs-only tips-pc">
         请使用支付宝APP 扫一扫
         <br>
@@ -26,7 +26,7 @@ import sDialog from '@/components/s-dialog/index.vue';
 const emit = defineEmits(['close'])
 const props = defineProps({
   visible: Boolean,
-  orderInfo: Object,
+  payInfo: Object,
   payStatus: String
 })
 const close = () => {

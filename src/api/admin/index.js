@@ -15,3 +15,7 @@ export const createAccodeApi = async (data) => post({ url: 'admin/createAccode',
 
 export const saveWebConfig = async (data) => post({ url: 'admin/saveWebConfig', data})
 export const getWebConfig = async () => get({ url: 'admin/getWebConfig'})
+
+export const getProduct = async () => get({ url: 'admin/getProduct'})
+export const createProductApi = async (data) => post({ url: 'admin/createProduct', data})
+export const delProduct = async (data) => post({ url: 'admin/delProduct', data})
