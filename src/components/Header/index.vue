@@ -132,27 +132,20 @@ const logout = () => {
   </header>
   <s-dialog v-model:visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
     <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
+    <div class="get-code">
+      <a href="" class="">没有卡密，去获取→</a>
+    </div>
   </s-dialog>
 </template>
 
-<style lang="less">
-.prose {
-  color: #334155;
-  font-size: 0.875em;
-  font-variant-ligatures: none;
-
-  code {
-    color: #0f172a;
-    font-family: Fira Code VF, ui-monospace, SFMono-Regular, Menlo, Monaco,
-      Consolas, Liberation Mono, Courier New, monospace;
-
-    &::before {
-      content: "`";
-    }
-
-    &::after {
-      content: "`";
-    }
+<style lang="less" scoped>
+.get-code{
+  margin-top: 20px;
+  color: rgb(142, 142, 142);
+  display: flex;
+  justify-content: end;
+  &:hover{
+    color: #1653ff;
   }
 }
 </style>

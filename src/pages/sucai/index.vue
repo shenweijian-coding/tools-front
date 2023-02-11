@@ -337,7 +337,7 @@ const showWebTip = (item) => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span class="text-red">{{ userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通套餐' }}</span>
+                    <span class="text-red">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通套餐') : '未登录' }}</span>
                   </div>
                 </div>
               </div>
