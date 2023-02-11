@@ -66,7 +66,7 @@
   </div>
   <div class="mt-m">
     <div class="my-l">下载记录</div>
-    <a-table :data="userInfo.downLogData" :pagination="userInfo.pagination" @page-change="pageChange">
+    <a-table :data="userInfo.downLogData" :pagination="false">
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site">
           <template #cell="{ record }">
@@ -117,6 +117,9 @@ const userInfo = reactive({
   payCols: [{
     title: '账单号',
     dataIndex: 'tradeNo',
+  },{
+    title: '支付宝订单号',
+    dataIndex: 'aliTradeNo'
   },
   {
     title: '支付宝账号',
@@ -129,30 +132,21 @@ const userInfo = reactive({
   {
     title: '金额',
     dataIndex: 'price',
-  }],
-  pagination: {
-    total: 0,
-    current: 1,
-    'show-total': true,
-    'page-size': 10
-  }
+  }]
 })
 
 const getUserInfo = async () => {
   let res = await getUserById(userInfo.form)
   if (res && res.data) {
     userInfo.tableData = res.data.list
+    userInfo.payInfo = res.data.payInfo
+    userInfo.downLogData = res.data.downLogs
     userInfo.total = res.data.total
   }
 }
 getUserInfo()
 const edit = () => {
   userInfo.editVisible = true
-}
-
-const pageChange = async(page) => {
-  const res = await getDownLog({ page })
-  userInfo.downLogData = res.data
 }
 
 const save = async () => {
