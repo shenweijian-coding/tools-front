@@ -306,8 +306,8 @@ const showWebTip = (item) => {
 </script>
 
 <template>
-  <div class="app-page appView">
-    <div v-loading="loading">
+  <div class="app-page appView" v-loading="loading">
+    <div>
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
@@ -324,11 +324,14 @@ const showWebTip = (item) => {
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id" @click="showWebTip(it)">
             <a-tooltip>
-              <template  #content>
-                <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
-                <p class="text-m">权限到期时间：{{ userStore.$state?.auth?.[it.id]?.expireDate || '-' }}</p>
-                <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
-                <p class="text-m">站点使用说明：{{ it.desc }}</p>
+              <template #content>
+                <template v-if="!userStore.userIsLogin">
+                  <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
+                  <p class="text-m">权限到期时间：{{ userStore.$state?.auth?.[it.id]?.expireDate || '-' }}</p>
+                  <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
+                  <p class="text-m">站点使用说明：{{ it.desc }}</p>
+                </template>
+                <span v-else>请先登录</span>
               </template >
               <div class="app-weblist-item cursor-pointer">
                 <div class="hidden item-logo sm:flex">
@@ -355,11 +358,11 @@ const showWebTip = (item) => {
         :auto-play="true"
         indicator-type="dot"
         show-arrow="hover">
-        <a-carousel-item>
-            <a :href="it.url || '/'" target="_blank">
+        <a-carousel-item v-if="it.img">
+          <a :href="it.url || '/'" target="_blank">
             <img :src="it.img" :style="{ width: '100%'}" title="轮播图"/>
           </a>
-          </a-carousel-item>
+        </a-carousel-item>
       </a-carousel>
     </div>
 
@@ -391,10 +394,12 @@ const showWebTip = (item) => {
     <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
       <div>
         <div id="mse"></div>
+        <a-divider></a-divider>
         <div style="margin-top: 20px;text-align: right;">
           <a-button v-if="shidahukeInfo.id === 1 && shidahukeInfo.params.isDown" type="primary" @click="downFile">
             下载素材+课堂源文件</a-button>
           <template v-else-if="shidahukeInfo.id === 2">
+            <span>请先检查官网是否支持下载源文件和课堂素材，无法404   </span>
             <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
               源文件下载
             </a-button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -504,7 +509,7 @@ const showWebTip = (item) => {
   .app-web-list {
     width: 100%;
     max-width: 1400px;
-    margin:  20px auto 0;
+    margin:  10px auto 0;
 
     .app-weblist-item {
       background-color: hsla(0, 0%, 100%, 1);

@@ -3,15 +3,17 @@
     <div class="content">
       <div class="scrollContent">
         <div class="personal-info">
-          <div class="info-row">
-            用户ID
-            <div class="spec">{{ data._id }}</div>
-            <a-divider />
+          <div class="info-row">用户ID<div class="spec">{{ data._id }}</div>
+          <a-divider />
           </div>
-          <div class="info-row">
-            加入时间
-            <div class="spec">{{data.create_time}}</div>
-            <a-divider />
+          <div class="info-row">卡密<div class="spec">{{ data.id }}</div>
+          <a-divider />
+          </div>
+          <div class="info-row">加入时间<div class="spec">{{data.create_time}}</div>
+          <a-divider />
+          </div>
+          <div class="info-row">IP地址<div class="spec">{{data.ip}}</div>
+          <a-divider />
           </div>
           <div class="float-right mt-2">
             <a-button size="large" @click="logout">退出登陆</a-button>

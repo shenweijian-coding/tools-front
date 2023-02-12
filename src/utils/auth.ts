@@ -1,15 +1,15 @@
 const TokenKey = 'token';
 const TokenPrefix = 'Bearer '
 const isLogin = () => {
-    return !!localStorage.getItem(TokenKey);
+    return !!sessionStorage.getItem(TokenKey);
 }
 const getToken = () => {
-    return localStorage.getItem(TokenKey);
+    return sessionStorage.getItem(TokenKey);
 }
 const setToken = (token: string) => {
-    localStorage.setItem(TokenKey, token);
+    sessionStorage.setItem(TokenKey, token);
 }
 const clearToken = () => {
-    localStorage.removeItem(TokenKey);
+    sessionStorage.removeItem(TokenKey);
 }
 export { TokenPrefix, isLogin, getToken, setToken, clearToken };

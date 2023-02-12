@@ -130,10 +130,13 @@ const webMap2List = () => {
   accodeInfo.webSiteList = arr
 }
 const search = async () => {
-  const res = await getCodeByType({ ...accodeInfo.form, pageNum: accodeInfo.pagination.current })
-  accodeInfo.tableData = res.data.list || []
-  accodeInfo.pagination.total = res.data.total || 0
-
+  try {
+    const res = await getCodeByType({ ...accodeInfo.form, pageNum: accodeInfo.pagination.current })
+    accodeInfo.tableData = res.data.list || []
+    accodeInfo.pagination.total = res.data.total || 0
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const close = () => {

@@ -1,6 +1,6 @@
 <template>
-<div>
-  <a-table :data="tableData.data" size="small" bordered :pagination="false">
+<div v-loading="tableData.loading">
+  <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe>
     <template #columns>
       <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
@@ -60,15 +60,25 @@ import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue'
 
 const tableData = reactive({
+  laoding: false,
   data: [],
   visible: false,
   currentCookie: {}
 })
 
-getCookies().then(res => {
-  tableData.data = res.data
-})
-
+const getCookie = () => {
+  try {    
+    tableData.laoding = true
+    getCookies().then(res => {
+      tableData.data = res.data
+    })
+  } catch (error) {
+    console.log(error);
+  } finally {
+    tableData.laoding = false
+  }
+}
+getCookie()
 // 解析 开关
 const switchChange = (item,val) => {
   console.log(item,val);

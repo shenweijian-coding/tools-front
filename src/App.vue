@@ -5,9 +5,9 @@
 import { useUserStore } from '@/store/modules/user/index'
 const instance = useUserStore()
 instance.$subscribe((_, state) => {
-    localStorage.setItem('user', JSON.stringify({ ...state }));
+  sessionStorage.setItem('user', JSON.stringify({ ...state }));
 });
-const old = localStorage.getItem('user');
+const old = sessionStorage.getItem('user');
 if (old) {
     instance.$state = JSON.parse(old);
 }

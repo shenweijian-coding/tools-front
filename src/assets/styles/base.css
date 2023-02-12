@@ -2,7 +2,7 @@
   font-family: "PingFang SC", "苹方", "Microsoft YaHei", sans-serif;
 }
 body {
-  background-image: url(https://pic1.zhimg.com/80/v2-b678555fd1f6bb38c8bc27bda7b6c44f_720w.webp?source=1940ef5c);
+  background-color: #000 !important;
   background-size: cover;
   background-repeat: no-repeat;
 }

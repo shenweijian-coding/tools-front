@@ -77,16 +77,19 @@ router.beforeEach((to, from, next) => {
   // 2. 要合理的搭配条件语句，避免出现路由死循环。
   const token = getToken()
   
-  if (to.path.indexOf('/server-admin') !== -1  && userStore && !userStore.$state.isAdmin) {
+  console.log(userStore.$state);
+  if (to.path.indexOf('/server-admin') !== -1 && userStore && !userStore?.$state?.isAdmin) {
     router.replace({
       path: '/'
     })
+    return
   }
   if (to.path === '/user') {
     if (!token) {
       router.replace({
         path: '/'
       })
+      return
     }
   }
   next()

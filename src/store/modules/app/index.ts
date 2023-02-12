@@ -11,15 +11,24 @@ export const useAppStore = defineStore(
             webConfig: {
                 notice: '',
                 footer: '',
-                banner: []
+                banner: [],
+                bgImg: '',
+                carmiAddress: ''
             }
         }),
         getters: {},
         actions: {
             getWebConfig() {
                  getWebConfig().then(res => {
-                    this.$patch({ webConfig: res.data })
+                     this.$patch({ webConfig: res.data })
+                     this.setBgImg()
                 })
+            },
+            setBgImg() {
+                if (this.$state.webConfig?.bgImg) {
+                    document.body.style.backgroundImage = "url(" + this.$state.webConfig?.bgImg + ")"
+                    document.body.style.backgroundColor = '#000'
+                }
             }
         }
     }

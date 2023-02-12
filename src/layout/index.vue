@@ -7,7 +7,7 @@
   </s-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import Header from "@components/Header/index.vue"
 import Floor from "@components/floor/index.vue"
 import sDialog from '@/components/s-dialog/index.vue'
@@ -18,6 +18,5 @@ appStore.getWebConfig()
 setTimeout(() => {
   isShowNotice.value = !!appStore.$state.webConfig?.notice
 }, 1000);
-
 
 </script>

@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import qs from 'qs'
 import { showMessage } from './status'
 import { IResponse, ILogin, RequestOptions } from './type'
 import { API_BASE_URL } from '../../../../config/constant'
@@ -72,16 +71,16 @@ const request = <T = any>(config: AxiosRequestConfig, options?: RequestOptions):
     axiosInstance
       .request<any, AxiosResponse<IResponse>>(conf)
       .then((res: AxiosResponse<IResponse>) => {
-        // resolve(res as unknown as Promise<T>);
         const { data } = res
-        // console.log(data);
         if(data.code === 0) {
           Message.info({
             content: data.msg,
-            duration: 4000
+            duration: 5000
           })
           reject(data as unknown as Promise<T>)
-        }else {
+        } else if (data.code === -1) {
+          window.location.href = '/'
+        } else {
           resolve(data as unknown as Promise<T>)
         }
       })

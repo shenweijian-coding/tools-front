@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import BaseInfo from './base-info.vue'
 import DownLog from './down-log.vue'
 import Spon from './spon.vue'
@@ -53,7 +53,7 @@ const tabChange = async (type) => {
   } else if (type == 3) {
     if (!payInfo.info.length) {
       const res = await getUserPayInfo()
-      payInfo.info = res.data || []
+      payInfo.info = res.data.filter(o => o.type) || []
     }
   }
   loading.value = false

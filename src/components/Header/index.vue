@@ -100,10 +100,12 @@ const logout = () => {
               <nav class="text-sm font-semibold leading-6 text-white dark:text-slate-200">
                 <ul class="flex space-x-10">
                   <li class="flex items-center">
-                    <span class="flex items-center mr-2">
+                    <template v-if="!userStore.userIsLogin">
+                      <span class="flex items-center mr-2">
                       <span>全站积分：{{ userStore.$state.num }}</span>
                     </span>
                     <a-divider direction="vertical"></a-divider>
+                    </template>
                     <span v-if="userStore.userIsLogin" @click="openLogin" class="cursor-pointer text-white/80 hover:text-white">
                       登录
                     </span>
