@@ -11,23 +11,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import QRcode from 'qrcode';
-
-const shengcheng = () => {
-  QRcode.toCanvas(
-    document.getElementById('qrcodeCanvas'),
-    localStorage.getItem('token'),
-    {},
-    function (err: any) {
-      console.log(err);
-    }
-  );
-}
-setTimeout(() => {
-  shengcheng()
-})
-</script>
 
 <style scoped lang="less">
 .qr-code {
