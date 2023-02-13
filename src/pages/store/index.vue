@@ -75,6 +75,9 @@ const goodChange = (val) => {
 const getList = async () => {
   loading.value = true
   const res = await getGoodList()
+  if(res.data.length) {
+    res.data.sort((a,b) => a.sort - b.sort)
+  }
   goodInfo.goodList = res.data
   loading.value = false
 }

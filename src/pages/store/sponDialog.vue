@@ -1,13 +1,13 @@
 <template>
-  <s-dialog v-model:visible="visible" width="346px" @close="close">
-    <div style="text-align: center;">提示：<a-tag color="purple">支付时请不要关闭本弹窗[{{ payStatus }}...]</a-tag>
+  <s-dialog v-model:visible="visible" width="346px" @close="close" title="支付-实时到账">
+    <div style="text-align: center;">提示：<a-tag color="purple">{{ payStatus }}...</a-tag>
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>
       <p class="order_title">{{ payInfo.title }}</p>
       <div class="qr_code">
         <img
-          :src="'http://127.0.0.1:3000/pay/createQRCode?text=' + encodeURIComponent(payInfo.qrCode) + '&_=' + new Date().getTime()"
+          :src="'/pay/createQRCode?text=' + encodeURIComponent(payInfo.qrCode) + '&_=' + new Date().getTime()"
           style="display: inline-block;" alt="充值二维码">
       </div>
       <p class="order-amount">
