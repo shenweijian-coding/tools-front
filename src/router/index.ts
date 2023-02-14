@@ -5,6 +5,9 @@ import pinia from '@/store/index'
 const userStore = useUserStore(pinia)
 
 const routes = [{
+    path: '/login',
+    component: () => import('@/pages/login/index.vue'),
+  },{
   path: '/',
   redirect: 'sucai',
   auth: 'all',
@@ -76,7 +79,18 @@ router.beforeEach((to, from, next) => {
   // 1. 每个条件执行后都要跟上 next() 或 使用路由跳转 api 否则页面就会停留一动不动
   // 2. 要合理的搭配条件语句，避免出现路由死循环。
   const token = getToken()
-  
+  if(token && to.path === '/login') {
+    router.replace({
+      path: '/'
+    })
+    return
+  }
+  if(!token && to.path !== '/login') {
+    router.replace({
+      path: '/login'
+    })
+    return
+  }
   console.log(userStore.$state);
   if (to.path.indexOf('/server-admin') !== -1 && userStore && !userStore?.$state?.isAdmin) {
     router.replace({

@@ -27,6 +27,7 @@ export const useAppStore = defineStore(
             setBgImg() {
                 if (this.$state.webConfig?.bgImg) {
                     document.body.style.backgroundImage = "url(" + this.$state.webConfig?.bgImg + ")"
+                }else {
                     document.body.style.backgroundColor = '#000'
                 }
             }
