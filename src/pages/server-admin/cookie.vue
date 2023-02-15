@@ -1,52 +1,67 @@
 <template>
 <div v-loading="tableData.loading">
-  <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe>
+  <a-button type="primary" @click="addWebClick">新增站点</a-button>
+  <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe class="mt-m">
     <template #columns>
+      <a-table-column title="站点ID" data-index="id" align="center"></a-table-column>
       <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
       <a-table-column title="站点描述" data-index="desc" align="center">
-        <template #cell="{ record }">
-          <a-input v-model="record.desc"></a-input>
-        </template>
       </a-table-column>
       <a-table-column title="今日下载次数" data-index="num" align="center"></a-table-column>
-      <a-table-column title="单次扣除积分" data-index="cost" :width="160" align="center">
+      <a-table-column title="单次扣除" data-index="cost" :width="160" align="center">
+      </a-table-column>
+      <a-table-column title="是否开启解析" data-index="isRun" :width="160" align="center">
         <template #cell="{ record }">
-          <a-input-number v-model="record.cost"></a-input-number>
+          <a-tag :color="record.isRun ? '#00b42a' : '#f53f3f'">{{ record.isRun ? '开启' : '关闭' }}</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="是否开启解析" data-index="isStop" align="center">
+      <a-table-column title="编辑" align="center">
         <template #cell="{ record }">
-          <a-switch v-model="record.isRun"/>
-        </template>
-      </a-table-column>
-      <a-table-column title="cookie编辑" align="center">
-        <template #cell="{ record }">
-          <a-button type="text" @click="openCookieDialog(record)">cookie编辑</a-button>
-        </template>
-      </a-table-column>
-      <a-table-column title="操作" align="center">
-        <template #cell="{ record }">
-          <a-button type="text" @click="saveRowConfig(record)">保存配置</a-button>
+          <a-button type="text" @click="editWeb(record)">编辑</a-button>
         </template>
       </a-table-column>
     </template>
   </a-table>
-
+  <div class="mt-m">
+    <p>目前系统支持的官网如下：千图网、包图网、摄图网、90设计、千库网、图品汇、虎课网、视达网、觅知网、觅元素、90设计、熊猫办公、图克巴巴、我图VIP、六图网、图精灵、风云办公、众图网；</p>
+    <p>新增站点功能，增加的网站仅限对接的第三方支持的网站，添加的官网cookie是无法进行解析的，因为没有对接官网；</p>
+  </div>
   <!-- cookie配置弹窗 -->
-  <s-dialog v-model:visible="tableData.visible" width="500px" :title="tableData.currentCookie.name">
+  <s-dialog v-model:visible="tableData.visible" width="500px" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
     <div class="cookie-box">
-      <a-form :model="form" auto-label-width>
-      <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${index}.value`" :label="`cookie${i + 1}`">
-        <a-input v-model="cookie.value" placeholder="请复制cookie"/>
-        &nbsp;<a-button v-if="i > 0" type="text" status="danger" @click="delCookie(i)">删除</a-button>
-      </a-form-item>
+      <a-form :model="tableData.currentCookie" auto-label-width>
+        <template  v-if="!tableData.actionType">
+          <a-form-item label="站点ID">
+            <a-input-number v-model="tableData.currentCookie.id"></a-input-number>
+          </a-form-item>
+          <a-form-item label="站点名称">
+            <a-input v-model="tableData.currentCookie.name"></a-input>
+          </a-form-item>
+          <a-form-item label="站点官网">
+            <a-input v-model="tableData.currentCookie.url"></a-input>
+          </a-form-item>
+        </template>
+        <a-form-item label="站点描述">
+          <a-input v-model="tableData.currentCookie.desc"></a-input>
+        </a-form-item>
+        <a-form-item label="单次扣除">
+          <a-input-number v-model="tableData.currentCookie.cost"></a-input-number>
+        </a-form-item>
+        <a-form-item label="是否开启解析">
+          <a-switch v-model="tableData.currentCookie.isRun"/>
+        </a-form-item>
+        <a-divider direction="vertical"></a-divider>
+        <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${index}.value`" :label="`cookie${i + 1}`">
+          <a-input v-model="cookie.value" placeholder="请复制cookie"/>
+          &nbsp;<a-button v-if="i > 0" type="text" status="danger" @click="delCookie(i)">删除</a-button>
+        </a-form-item>
       </a-form> 
     </div>
     <template #footer>
       <div>
         <a-button type="primary" @click="addCookie">新增</a-button>&nbsp;
-        <a-button type="primary" @click="tableData.visible = false">保存</a-button>
+        <a-button type="primary" @click="saveRowConfig">保存</a-button>
       </div>
     </template>
   </s-dialog>
@@ -54,7 +69,7 @@
 </template>
 <script setup>
 import { webSiteMap } from '@/data-map/index.js'
-import { getCookies, saveCookies } from '@/api/admin/index.js'
+import { getCookies, saveCookies, addWeb } from '@/api/admin/index.js'
 import { timeConvert } from '@/utils/index'
 import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue'
@@ -63,7 +78,8 @@ const tableData = reactive({
   laoding: false,
   data: [],
   visible: false,
-  currentCookie: {}
+  currentCookie: {},
+  actionType: 1 // 1是编辑 0是新增
 })
 
 const getCookie = () => {
@@ -84,13 +100,26 @@ const switchChange = (item,val) => {
   console.log(item,val);
 }
 
+const dialogClose = () => {
+  tableData.actionType = 1
+  tableData.currentCookie = {
+  
+  }
+}
 // 打开cookie弹窗
-const openCookieDialog = (item) => {
+const editWeb = (item) => {
   tableData.visible = true
+  tableData.actionType = 1
   tableData.currentCookie =item
+}
+const addWebClick = () => {
+  tableData.actionType = 0
+  tableData.visible = true
+
 }
 // 增加cookie
 const addCookie = () => {
+  tableData.currentCookie.cookie || (tableData.currentCookie.cookie = [])
   tableData.currentCookie.cookie.push({
     value: '',
     id: Math.floor(new Date().getTime() / 1000)
@@ -102,22 +131,41 @@ const delCookie = (i) => {
 }
 
 // 保存配置
-const saveRowConfig = async (row) => {
-  console.log(row);
-  const res = await saveCookies({
-    id: row.id,
-    cost: Number(row.cost) || 0,
-    desc: row.desc || '-',
-    cookies: row.cookie,
-    isRun: row.isRun
-  })
-  Message.success(res.data)
+const saveRowConfig = async () => {
+  const row = tableData.currentCookie
+  if(tableData.actionType) { // 编辑
+    const res = await saveCookies({
+      id: row.id,
+      cost: Number(row.cost) || 0,
+      desc: row.desc || '-',
+      cookies: row.cookie,
+      isRun: row.isRun
+    })
+    tableData.visible = false
+    Message.success(res.data)
+  }else{ // 新增
+    const { id, name, url, cost, desc } = tableData.currentCookie
+    const hasId  = tableData.data.filter(o => o.id === id)
+    if(hasId.length) {
+      Message.success('网站ID重复')
+      return
+    }
+    if(!name || !url || !desc) {
+      Message.warning('请填写完整')
+      return
+    }
+    const res = await addWeb({
+      ...tableData.currentCookie
+    })
+    Message.success(res.data)
+  }
+  getCookie()
 }
 </script>
 
 <style lang="less" scoped>
   .cookie-box{
-    max-height: 200px;
+    max-height: 500px;
     overflow: auto;
   }
 </style>

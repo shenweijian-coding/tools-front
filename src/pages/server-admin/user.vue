@@ -21,7 +21,10 @@
         <a-table-column title="全站积分" data-index="num" align="center"></a-table-column>
         <a-table-column title="权限" data-index="auth" align="center">
           <template #cell="{ record }">
-            <p v-for="(item,prop) in record.auth" :key="prop">{{ webMap[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余积分({{ item.eNum }})</p>
+            <span v-if="record.auth && Object.keys(record.auth).length">
+              <p v-for="(item,prop) in record.auth" :key="prop">{{ webMap[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余积分({{ item.eNum }})</p>
+            </span>
+            <p v-else>--</p>
           </template>
         </a-table-column>
         <a-table-column title="操作" align="center">

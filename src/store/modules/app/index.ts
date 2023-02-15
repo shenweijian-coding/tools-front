@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import piniaStore from '@/store/index'
 import { AppState } from './types';
-import { getWebConfig } from '@/api/home';
+import { getWebConfig, getWebList } from '@/api/home';
 
 export const useAppStore = defineStore(
     // 唯一ID
@@ -14,7 +14,8 @@ export const useAppStore = defineStore(
                 banner: [],
                 bgImg: '',
                 carmiAddress: ''
-            }
+            },
+            webMap: null
         }),
         getters: {},
         actions: {
@@ -22,6 +23,18 @@ export const useAppStore = defineStore(
                  getWebConfig().then(res => {
                      this.$patch({ webConfig: res.data })
                      this.setBgImg()
+                })
+                if(!this.$state.webList.length) {
+                    this.getWebList()
+                }
+            },
+            async getWebList() {
+                getWebList().then(res => {
+                    const webMap = {}
+                    res.data.forEach(it => {
+                        webMap[it.id] = it.name
+                    });
+                    this.$patch({ webMap: webMap })
                 })
             },
             setBgImg() {

@@ -25,7 +25,7 @@
     </a-form-item>
     <a-form-item v-if="productInfo.createForm.type !==3" label="生效站点">
       <a-checkbox-group v-model="productInfo.createForm.sites">
-        <a-checkbox v-for="(o,key) in webMap" :key="+key" :value="key">{{ o }}</a-checkbox>
+        <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="+key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
     </a-form-item>
     <div class="flex" v-if="productInfo.createForm.type ===1">
@@ -60,11 +60,13 @@
 </template>
 
 <script setup>
-import { webSiteMap } from '@/data-map/index.js'
 import { createProductApi, delProduct, getProduct } from "@/api/admin/index";
 import { Message } from '@arco-design/web-vue';
-
-const webMap = ref(webSiteMap)
+import { useAppStore } from '@/store';
+const appStore = useAppStore()
+if(!appStore.$state.webMap) {
+  appStore.getWebList()
+}
 
 const productInfo = reactive({
   tableData: [],

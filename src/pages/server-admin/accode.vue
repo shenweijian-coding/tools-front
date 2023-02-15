@@ -35,11 +35,11 @@
       <template #cell="{ record }">
         <template v-if="record.type === 1">
           <span>时长会员：{{ record.num }}天；每日积分：{{ record.eNum }}；</span>
-          生效站点：<span v-for="it in record.sites" :key="it">{{ webMap[it] }} </span>
+          生效站点：<span v-for="it in record.sites" :key="it">{{ appStore.$state.webMap[it] }} </span>
         </template>
         <template v-if="record.type === 2">
           <span>站点积分会员-{{ record.num }} 积分</span>
-          生效站点：<span v-for="it in record.sites" :key="it">{{ webMap[it] }} </span>
+          生效站点：<span v-for="it in record.sites" :key="it">{{ appStore.$state.webMap[it] }} </span>
         </template>
         <template v-if="record.type === 3">
           <span>全站积分会员-{{ record.num }} 积分</span>
@@ -64,7 +64,7 @@
     </a-form-item>
     <a-form-item v-if="accodeInfo.createForm.type !==3" label="生效站点">
       <a-checkbox-group v-model="accodeInfo.createForm.sites">
-        <a-checkbox v-for="(o,key) in webMap" :key="key" :value="key">{{ o }}</a-checkbox>
+        <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
     </a-form-item>
     <div class="flex" v-if="accodeInfo.createForm.type ===1">
@@ -97,9 +97,13 @@
 </template>
 <script setup>
 import { getCodeByType, createAccodeApi } from '@/api/admin/index'
-import { webSiteMap } from '@/data-map/index.js'
+import { useAppStore } from '@/store';
+const appStore = useAppStore()
 
-const webMap = ref(webSiteMap)
+if(!appStore.$state.webMap) {
+  appStore.getWebList()
+}
+
 const accodeInfo = reactive({
   form: {
     type: 1

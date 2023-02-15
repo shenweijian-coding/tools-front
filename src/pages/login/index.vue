@@ -4,9 +4,9 @@
       <header class="login-title">登录</header>
       <a-input class="mt-m" placeholder="请输入卡密 AAA-BBB-CCC-DDD" v-model="cdkey" size="large"></a-input>
       <a-button class="login-btn" shape="round" type="primary" @click="login">登录</a-button>
-    </div>
-    <div class="get-code" v-if="appStore.$state.carmiAddress">
-      <a :href="appStore.$state.carmiAddress" class="" target="_blank">没有卡密，去获取→</a>
+      <div class="get-code" v-if="appStore.$state?.webConfig?.carmiAddress">
+        <a :href="appStore.$state.webConfig.carmiAddress" class="" target="_blank">没有卡密，去获取→</a>
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ import { Message } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 const userStore = useUserStore()
 const appStore = useAppStore()
+appStore.getWebConfig()
 
 const cdkey = ref('')
 
@@ -43,19 +44,13 @@ const login = async () => {
 
 </script>
 
-<style lang="less">
-body{
-  background-image: linear-gradient(to right top, #9ebbff, hsl(222, 100%, 72%));
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-}
+<style lang="less" scoped>
 .login-box{
   background-color: rgba(255, 255, 255, 0.4);
   position: relative;
   width: 400px;
   border-radius: 6px;
-  margin: 200px auto 0;
+  margin: 400px auto 0;
   backdrop-filter: blur(50px);
   display: flex;
   justify-content: center;
@@ -69,10 +64,20 @@ body{
       font-size: 20px;
       font-weight: bold;
       text-align: center;
+      color: #fff;
     }
   }
   .login-btn{
     margin-top: 16px;
+  }
+}
+.get-code{
+  margin-top: 16px;
+  color: rgba(230, 230, 230, 0.8);
+  display: flex;
+  justify-content: end;
+  &:hover{
+    color: #fff;
   }
 }
 </style>
