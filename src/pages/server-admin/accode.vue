@@ -35,11 +35,13 @@
       <template #cell="{ record }">
         <template v-if="record.type === 1">
           <span>时长会员：{{ record.num }}天；每日积分：{{ record.eNum }}；</span>
-          生效站点：<span v-for="it in record.sites" :key="it">{{ appStore.$state.webMap[it] }} </span>
+          生效站点：
+          <span v-if="record.sites && record.sites.length === Object.keys(appStore.$state.webMap).length">全站</span>
+          <span v-else v-for="it in record.sites" :key="it">{{ appStore.$state.webMap && appStore.$state.webMap[it] }}、 </span>
         </template>
         <template v-if="record.type === 2">
           <span>站点积分会员-{{ record.num }} 积分</span>
-          生效站点：<span v-for="it in record.sites" :key="it">{{ appStore.$state.webMap[it] }} </span>
+          生效站点：<span v-for="it in record.sites" :key="it">{{ appStore.$state.webMap && appStore.$state.webMap[it] }} </span>
         </template>
         <template v-if="record.type === 3">
           <span>全站积分会员-{{ record.num }} 积分</span>
@@ -66,20 +68,21 @@
       <a-checkbox-group v-model="accodeInfo.createForm.sites">
         <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
+      <a-button type="text" size="mini" @click="selAll">全选/全不选</a-button>
     </a-form-item>
     <div class="flex" v-if="accodeInfo.createForm.type ===1">
       <a-form-item label="可用时长(天)">
-        <a-input-number v-model="accodeInfo.createForm.num"/>
+        <a-input-number v-model="accodeInfo.createForm.num" :min="0"/>
       </a-form-item>
       <a-form-item label="每日积分">
-        <a-input-number v-model="accodeInfo.createForm.eNum"/>
+        <a-input-number v-model="accodeInfo.createForm.eNum" :min="1"/>
       </a-form-item>
     </div>
     <a-form-item label="可用积分" v-if="accodeInfo.createForm.type !==1">
-      <a-input-number v-model="accodeInfo.createForm.num" style="width:200px"/>
+      <a-input-number v-model="accodeInfo.createForm.num" style="width:200px" :min="1"/>
     </a-form-item>
     <a-form-item label="生成数量">
-      <a-input-number v-model="accodeInfo.createForm.createNum" style="width:200px"/>
+      <a-input-number v-model="accodeInfo.createForm.createNum" style="width:200px" :min="1"/>
     </a-form-item>
     </a-form>
     <div v-else>
@@ -96,9 +99,10 @@
   </s-dialog>
 </template>
 <script setup>
-import { getCodeByType, createAccodeApi } from '@/api/admin/index'
+import { getCodeByType, createAccodeApi, deleteCodeApi } from '@/api/admin/index'
 import { useAppStore } from '@/store';
 const appStore = useAppStore()
+import { Message } from '@arco-design/web-vue';
 
 if(!appStore.$state.webMap) {
   appStore.getWebList()
@@ -119,9 +123,9 @@ const accodeInfo = reactive({
   webSiteList: [],
   createForm: {
     createNum: 10,
-    eNum: 1000,
+    eNum: 10,
     type: 1,
-    num: 100
+    num: 30
   },
   createResult: []
 })
@@ -143,6 +147,20 @@ const search = async () => {
   }
 }
 
+const selAll = () => {
+  if (accodeInfo.createForm.sites && accodeInfo.createForm.sites.length === Object.keys(appStore.$state.webMap).length) {
+    accodeInfo.createForm.sites = []
+  } else {
+    accodeInfo.createForm.sites = Object.keys(appStore.$state.webMap)
+  }
+}
+
+const deleteCode = async (item) => {
+  const res = deleteCodeApi({ id: item._id })
+  Message.success('删除成功')
+  search()
+}
+
 const close = () => {
   accodeInfo.createVisible = false
   accodeInfo.createResult = []
@@ -151,9 +169,16 @@ const close = () => {
 const createAccode = async () => {
   let { type, num, eNum, createNum, sites } = accodeInfo.createForm
   if (type === 1) {
-    
+    if (!sites ||  !sites.length) {
+      Message.warning('未选择激活网站')
+      return
+    }
   } else if (type === 2) {
     eNum = 0
+    if (!sites || !sites.length) {
+      Message.warning('未选择激活网站')
+      return
+    }
   } else if (type === 3) {
     sites = []
     eNum = 0

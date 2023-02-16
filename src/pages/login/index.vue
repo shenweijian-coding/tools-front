@@ -47,10 +47,13 @@ const login = async () => {
 <style lang="less" scoped>
 .login-box{
   background-color: rgba(255, 255, 255, 0.4);
-  position: relative;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 400px;
   border-radius: 6px;
-  margin: 400px auto 0;
+  margin: 0 auto;
   backdrop-filter: blur(50px);
   display: flex;
   justify-content: center;

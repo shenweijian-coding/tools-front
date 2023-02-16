@@ -6,6 +6,7 @@
       <a-table-column title="站点ID" data-index="id" align="center"></a-table-column>
       <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
+      <a-table-column title="关键词" data-index="keyWord" align="center"></a-table-column>
       <a-table-column title="站点描述" data-index="desc" align="center">
       </a-table-column>
       <a-table-column title="今日下载次数" data-index="num" align="center"></a-table-column>
@@ -31,6 +32,7 @@
   <s-dialog v-model:visible="tableData.visible" width="500px" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
     <div class="cookie-box">
       <a-form :model="tableData.currentCookie" auto-label-width>
+        <a-divider orientation="center">基本配置</a-divider>
         <template  v-if="!tableData.actionType">
           <a-form-item label="站点ID">
             <a-input-number v-model="tableData.currentCookie.id"></a-input-number>
@@ -40,6 +42,9 @@
           </a-form-item>
           <a-form-item label="站点官网">
             <a-input v-model="tableData.currentCookie.url"></a-input>
+          </a-form-item>
+          <a-form-item label="关键字">
+            <a-input v-model="tableData.currentCookie.keyWord"></a-input>
           </a-form-item>
         </template>
         <a-form-item label="站点描述">
@@ -52,15 +57,23 @@
           <a-switch v-model="tableData.currentCookie.isRun"/>
         </a-form-item>
         <a-divider direction="vertical"></a-divider>
-        <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${index}.value`" :label="`cookie${i + 1}`">
+        <a-divider orientation="center">官网cookie</a-divider>
+        <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${i}.value`" :label="`官网cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>
-          &nbsp;<a-button v-if="i > 0" type="text" status="danger" @click="delCookie(i)">删除</a-button>
+          &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
         </a-form-item>
+        <a-button type="primary" @click="addCookie('cookie')" style="width: 160px">新增官网cookie</a-button>
+
+        <a-divider orientation="center">三方cookie</a-divider>
+        <a-form-item v-for="(cookie,i) in tableData.currentCookie.otherCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
+          <a-input v-model="cookie.value" placeholder="请复制cookie"/>
+          &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
+        </a-form-item>
+        <a-button type="primary" @click="addCookie('otherCookie')" style="width: 160px">新增三方cookie</a-button>
       </a-form> 
     </div>
     <template #footer>
       <div>
-        <a-button type="primary" @click="addCookie">新增</a-button>&nbsp;
         <a-button type="primary" @click="saveRowConfig">保存</a-button>
       </div>
     </template>
@@ -115,19 +128,18 @@ const editWeb = (item) => {
 const addWebClick = () => {
   tableData.actionType = 0
   tableData.visible = true
-
 }
 // 增加cookie
-const addCookie = () => {
-  tableData.currentCookie.cookie || (tableData.currentCookie.cookie = [])
-  tableData.currentCookie.cookie.push({
+const addCookie = (type) => {
+  tableData.currentCookie[type] || (tableData.currentCookie[type] = [])
+  tableData.currentCookie[type].push({
     value: '',
     id: Math.floor(new Date().getTime() / 1000)
   })
 }
 // 删除cookie
-const delCookie = (i) => {
-  tableData.currentCookie.cookie.splice(i, 1)
+const delCookie = (i, type) => {
+  tableData.currentCookie[type].splice(i, 1)
 }
 
 // 保存配置
@@ -138,8 +150,9 @@ const saveRowConfig = async () => {
       id: row.id,
       cost: Number(row.cost) || 0,
       desc: row.desc || '-',
-      cookies: row.cookie,
-      isRun: row.isRun
+      cookies: row.cookie.length ? row.cookie.filter(o => o.value) : [],
+      isRun: row.isRun,
+      otherCookie: row.otherCookie.length ? row.otherCookie.filter(o => o.value) : []
     })
     tableData.visible = false
     Message.success(res.data)
@@ -155,7 +168,8 @@ const saveRowConfig = async () => {
       return
     }
     const res = await addWeb({
-      ...tableData.currentCookie
+      ...tableData.currentCookie,
+      num: 0
     })
     Message.success(res.data)
   }
