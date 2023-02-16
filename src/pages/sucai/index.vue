@@ -1,4 +1,7 @@
 <script setup>
+
+
+
 import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
@@ -156,11 +159,27 @@ const getCurDownUrl = async (item) => {
     })
 
     if (res.data.result) {
-      options.list = []
-      Message.success('解析成功了，请点击立即下载按钮')
-      userStore.getUserNum()
-      downVisible.value = true
-      href.value = res.data.psd
+      if ([1, 2].includes(res.data.id)) {
+        shidahukeInfo.id = res.data.id
+        shidahukeInfo.visible = true
+        shidahukeInfo.params = res.data
+        setTimeout(() => {
+          playInstance.value = new HlsJsPlayer({
+            id: 'mse',
+            url: res.data.psd,
+            lang: "zh-cn",
+            autoplay: true,
+            playbackRate: [0.5, 1, 1.5, 2],
+            // height: '300px',
+            width: '100%'
+          });
+        });
+      } else {          
+        Message.success('解析成功了，请点击立即下载按钮')
+        userStore.getUserNum()
+        downVisible.value = true
+        href.value = res.data.psd
+      }
     }
   } catch (error) {
 
@@ -270,7 +289,6 @@ const baotuCheckClick = async e => {
     })
     baotuCheckVisible.value = false
     if (res.data && res.data.psd) {
-      options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
       userStore.getUserNum()
       downVisible.value = true
@@ -391,24 +409,10 @@ const showWebTip = (item) => {
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
+    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" title="搜索成功" @close="close">
       <div>
         <div id="mse"></div>
         <a-divider></a-divider>
-        <div style="margin-top: 20px;text-align: right;">
-          <a-button v-if="shidahukeInfo.id === 1 && shidahukeInfo.params.isDown" type="primary" @click="downFile">
-            下载素材+课堂源文件</a-button>
-          <template v-else-if="shidahukeInfo.id === 2">
-            <span>请先检查官网是否支持下载源文件和课堂素材，无法404   </span>
-            <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
-              源文件下载
-            </a-button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-button type="primary" status="warning" size="mini" @click="handleHukeFile(2)">
-              本课素材下载
-            </a-button>
-          </template>
-          <a-button type="primary" disabled size="mini" v-else>该教程无课堂文件</a-button>
-        </div>
       </div>
     </s-dialog>
 
