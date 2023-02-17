@@ -21,6 +21,7 @@
       <a-table-column title="编辑" align="center">
         <template #cell="{ record }">
           <a-button type="text" @click="editWeb(record)">编辑</a-button>
+          <a-button type="text" @click="deleteWeb(record)">删除</a-button>
         </template>
       </a-table-column>
     </template>
@@ -102,7 +103,7 @@
 </template>
 <script setup>
 import { webSiteMap } from '@/data-map/index.js'
-import { getCookies, saveCookies, addWeb, saveMoreCookieApi } from '@/api/admin/index.js'
+import { getCookies, saveCookies, addWeb, saveMoreCookieApi, delWeb } from '@/api/admin/index.js'
 import { timeConvert } from '@/utils/index'
 import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue'
@@ -146,6 +147,11 @@ const editWeb = (item) => {
   tableData.visible = true
   tableData.actionType = 1
   tableData.currentCookie =item
+}
+const deleteWeb = async (item) => {
+  const res = await delWeb({ id: item.id })
+  Message.success(res.msg)
+  getCookie()
 }
 const addWebClick = () => {
   tableData.actionType = 0

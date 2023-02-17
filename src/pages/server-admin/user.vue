@@ -22,7 +22,7 @@
         <a-table-column title="权限" data-index="auth" align="center">
           <template #cell="{ record }">
             <span v-if="record.auth && Object.keys(record.auth).length">
-              <p v-for="(item,prop) in record.auth" :key="prop">{{ webMap[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余积分({{ item.eNum }})</p>
+              <p v-for="(item,prop) in record.auth" :key="prop">{{ webMap[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余({{ item.eNum }})</p>
             </span>
             <p v-else>--</p>
           </template>
@@ -35,7 +35,7 @@
       </template>
     </a-table>
 
-    <s-dialog v-model:visible="userInfo.editVisible" width="50%" title="权限编辑">
+    <s-dialog v-model:visible="userInfo.editVisible" width="60%" title="权限编辑">
       <div class="webBox">
         <a-form :model="userInfo.tableData[0]" auto-label-width>
           <div class="flex">
@@ -54,8 +54,11 @@
             <a-form-item label="到期日期">
               <a-date-picker v-model="item.expireDate" format="YYYY-MM-DD"/>
             </a-form-item>
-            <a-form-item label="每日积分">
+            <a-form-item label="剩余" :min="0">
               <a-input-number v-model="item.eNum"/>
+            </a-form-item>
+            <a-form-item label="每日共计" :min="0">
+              <a-input-number v-model="item.initENum"/>
             </a-form-item>
           </div>
         </a-form> 
@@ -69,7 +72,7 @@
   </div>
   <div class="mt-m">
     <div class="my-l">下载记录</div>
-    <a-table :data="userInfo.downLogData" :pagination="false">
+    <a-table :data="userInfo.downLogData" style="max-height: 500px">
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site">
           <template #cell="{ record }">
@@ -141,13 +144,17 @@ const userInfo = reactive({
 const getUserInfo = async () => {
   let res = await getUserById(userInfo.form)
   if (res && res.data) {
+    if (!res.data.list.length) {
+      Message.warning('未找到')
+      return
+    }
     userInfo.tableData = res.data.list
     userInfo.payInfo = res.data.payInfo
     userInfo.downLogData = res.data.downLogs
     userInfo.total = res.data.total
   }
 }
-getUserInfo()
+
 const edit = () => {
   userInfo.editVisible = true
 }

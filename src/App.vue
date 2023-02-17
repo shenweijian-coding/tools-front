@@ -18,7 +18,7 @@ if (import.meta.env.MODE !== 'development') {
           var d=new Date();
           debugger;
           if(new Date()-d>10){
-              document.body.innerHTML='<div style="font-size: 50px;color:blur;">做网站不容易，请大哥高台贵手！谢谢你！加QQ18346638245购买解析系统</div>';
+              document.body.innerHTML='<div style="font-size: 50px;color:blur;">网站作者QQ1834638245 购买解析系统</div>';
               return true;
           }
           return false;
@@ -42,6 +42,7 @@ if (import.meta.env.MODE !== 'development') {
    
   })();
 }
+console.log("%c作者QQ1834638245 系统贱卖 嘻", "color:red;font-size:30px;font-weight:bolder;padding:50px 420px;line-height:10px;background:url('http://img.zcool.cn/community/0127c0577e00620000012e7e12da0e.gif') repeat-x;background-size:contain;");
 </script>
 
 <style>
