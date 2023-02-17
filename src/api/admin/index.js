@@ -1,9 +1,9 @@
-import request from '@/utils/http/axios'
 import { get, post } from '@utils/http/axios'
 
 export const getCookies = async () => get({ url: 'admin/getCookies' });
 
 export const saveCookies = async (data) => post({ url: 'admin/saveCookies', data })
+export const saveMoreCookieApi = async (data) => post({ url: 'admin/saveMoreCookie', data })
 
 export const getUserById = async (data) => post({ url: 'admin/getUserById', data })
 

@@ -1,6 +1,7 @@
 <template>
 <div v-loading="tableData.loading">
-  <a-button type="primary" @click="addWebClick">新增站点</a-button>
+  <a-button type="primary" @click="addWebClick">新增站点</a-button>&nbsp;
+  <a-button type="outline" @click="addMoreOtherCookie">批量添加三方cookie</a-button>
   <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe class="mt-m">
     <template #columns>
       <a-table-column title="站点ID" data-index="id" align="center"></a-table-column>
@@ -79,11 +80,29 @@
       </div>
     </template>
   </s-dialog>
+
+  <!-- 批量增加三方cookie -->
+  <s-dialog v-model:visible="tableData.moreVisible" width="50%" title="批量增加三方cookie">
+    <a-form :model="tableData.moreCookie" auto-label-width>
+
+    <a-form-item v-for="(cookie,i) in tableData.moreCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
+      <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
+      <a-input v-model="cookie.code" placeholder="对应卡密"/>
+      &nbsp;<a-button type="text" status="danger" @click="delOtherCookie(i)">删除</a-button>
+    </a-form-item>
+    </a-form>
+    <a-button type="primary" @click="addMordCookie" style="width: 160px">新增三方cookie</a-button>
+    <template #footer>
+      <div>
+        <a-button type="primary" @click="saveMoreCookie">保存</a-button>
+      </div>
+    </template>
+  </s-dialog>
 </div>
 </template>
 <script setup>
 import { webSiteMap } from '@/data-map/index.js'
-import { getCookies, saveCookies, addWeb } from '@/api/admin/index.js'
+import { getCookies, saveCookies, addWeb, saveMoreCookieApi } from '@/api/admin/index.js'
 import { timeConvert } from '@/utils/index'
 import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue'
@@ -92,8 +111,10 @@ const tableData = reactive({
   laoding: false,
   data: [],
   visible: false,
+  moreVisible: false,
   currentCookie: {},
-  actionType: 1 // 1是编辑 0是新增
+  actionType: 1, // 1是编辑 0是新增
+  moreCookie: []
 })
 
 const getCookie = () => {
@@ -138,9 +159,21 @@ const addCookie = (type) => {
     id: Math.floor(new Date().getTime() / 1000)
   })
 }
+// 增加cookie
+const addMordCookie = () => {
+  tableData.moreCookie || (tableData.moreCookie = [])
+  tableData.moreCookie.push({
+    value: '',
+    id: Math.floor(new Date().getTime() / 1000)
+  })
+}
 // 删除cookie
 const delCookie = (i, type) => {
   tableData.currentCookie[type].splice(i, 1)
+}
+// 删除cookie
+const delOtherCookie = (i) => {
+  tableData.moreCookie.splice(i, 1)
 }
 
 // 保存配置
@@ -175,6 +208,19 @@ const saveRowConfig = async () => {
     Message.success(res.data)
   }
   getCookie()
+}
+
+// 批量加cookie
+const addMoreOtherCookie = async () => {
+  tableData.moreVisible = true
+}
+const saveMoreCookie = async () => {
+  if (tableData.moreCookie.some(o => !o.value)) {
+    Message.warning('填写完整')
+    return
+  }
+  const res = await saveMoreCookieApi(tableData.moreCookie)
+  Message.success(res.msg)
 }
 </script>
 

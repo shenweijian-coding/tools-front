@@ -2,7 +2,6 @@
   font-family: "PingFang SC", "苹方", "Microsoft YaHei", sans-serif;
 }
 body {
-  background-color: #000 !important;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -59,6 +58,9 @@ body {
 }
 .text-bold {
   font-weight: bold;
+}
+.text-dark {
+  color: #1b1540;
 }
 .text-lg {
   font-size: 24px;

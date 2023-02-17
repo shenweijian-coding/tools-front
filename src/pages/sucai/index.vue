@@ -358,7 +358,7 @@ const showWebTip = (item) => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span class="text-red">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通套餐') : '未登录' }}</span>
+                    <span :class="userStore.$state?.auth?.[it.id]?.initENum ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通时长套餐') : '未登录' }}</span>
                   </div>
                 </div>
               </div>
@@ -439,7 +439,7 @@ const showWebTip = (item) => {
     </s-dialog>
 
     <!-- 站点说明 -->
-    <s-dialog v-model:visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="false" width="40%">
+    <s-dialog v-model:visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="true" width="40%">
         <p>使用说明：{{ webList.currentShowTip.desc || '-' }}</p>
         <template #footer>
           <span class="flex align-center" style="justify-content:right;">
