@@ -26,7 +26,7 @@ if (localStorage.getItem('cdkey')) {
 }
 
 const login = async () => {
-  if (!cdkey) {
+  if (!cdkey.value) {
     Message.warning('请输入卡密！')
     return
   }
