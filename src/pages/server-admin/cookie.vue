@@ -227,6 +227,8 @@ const saveMoreCookie = async () => {
   }
   const res = await saveMoreCookieApi(tableData.moreCookie)
   Message.success(res.msg)
+  tableData.moreVisible = false
+  getCookie()
 }
 </script>
 

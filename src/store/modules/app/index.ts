@@ -13,6 +13,7 @@ export const useAppStore = defineStore(
                 footer: '',
                 banner: [],
                 bgImg: '',
+                logo: '',
                 carmiAddress: ''
             },
             webMap: null

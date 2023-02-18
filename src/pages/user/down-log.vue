@@ -4,7 +4,7 @@
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site" :width="100">
           <template #cell="{ record }">
-            {{ webSiteMap[record.web_site] }}
+            {{ appStore.$state?.webMap[record.web_site] }}
           </template>
         </a-table-column>
         <a-table-column title="下载链接" data-index="web_url" :width="600" ellipsis>
@@ -28,9 +28,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { timeConvert } from '@/utils/index'
-import { webSiteMap } from '@/data-map/index'
+import { useAppStore } from '@/store';
+const appStore = useAppStore()
+if(!appStore.$state.webMap) {
+  appStore.getWebList()
+}
+
 const props = defineProps({
   data: {
     type: Object

@@ -7,6 +7,9 @@
       <a-form-item label="背景图">
         <a-input v-model="webConfig.bgImg" placeholder="网站背景图，节省服务器访问资源，复制图床链接即可"></a-input>
       </a-form-item>
+      <a-form-item label="logo图">
+        <a-input v-model="webConfig.logo" placeholder="网站logo图，节省服务器访问资源，复制图床链接即可"></a-input>
+      </a-form-item>
       <a-form-item label="底部配置">
         <a-input v-model="webConfig.footer" placeholder="网站底部内容，支持html"></a-input>
       </a-form-item>
@@ -48,6 +51,7 @@ let webConfig = reactive({
   notice: '',
   footer: '',
   bgImg: '',
+  logo: '',
   banner: [{ img: '', url: '' }, { img: '', url: '' }, { img: '', url: '' }],
   baotuIp: '',
   carmiAddress: '',
@@ -76,6 +80,7 @@ const getConfig = async () => {
       webConfig.notice = res.data.notice || ''
       webConfig.footer = res.data.footer || ''
       webConfig.bgImg = res.data.bgImg || ''
+      webConfig.logo = res.data.logo || ''
       webConfig.banner = res.data.banner
       webConfig.baotuIp = res.data.baotuIp || ''
       webConfig.carmiAddress = res.data.carmiAddress || ''

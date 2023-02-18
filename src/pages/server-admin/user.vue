@@ -45,6 +45,9 @@
             <a-form-item field="" label="禁用账号">
               <a-switch v-model="userInfo.tableData[0].isBlack"/>
             </a-form-item>
+            <a-form-item field="" label="开启管理员">
+              <a-switch v-model="userInfo.tableData[0].isAdmin"/>
+            </a-form-item>
           </div>
           <a-divider orientation="center"></a-divider>
           <div v-for="(item,prop) in userInfo.tableData[0].auth" :key="prop" class="flex">
@@ -76,7 +79,7 @@
      <template #columns>
         <a-table-column title="网站名称" data-index="web_site">
           <template #cell="{ record }">
-            {{ webMap[record.web_site] }}
+            {{ appStore.$state?.webMap[record.web_site] }}
           </template>
         </a-table-column>
         <a-table-column title="下载链接" data-index="web_url" ellipsis>
@@ -108,8 +111,12 @@ import { webSiteMap } from '@/data-map/index.js'
 import { timeConvert, dateFormate } from '@/utils/index'
 import sDialog from '@/components/s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue'
+import { useAppStore } from '@/store';
 
-const webMap = ref(webSiteMap)
+const appStore = useAppStore()
+if(!appStore.$state.webMap) {
+  appStore.getWebList()
+}
 const userInfo = reactive({
   form: {
     id: '',

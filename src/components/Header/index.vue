@@ -4,7 +4,8 @@ import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
-
+import { useAppStore } from '@/store';
+const appStore = useAppStore()
 const userStore = useUserStore()
 
 const loading = ref(false)
@@ -85,7 +86,7 @@ const logout = () => {
       <div class="mx-auto max-w-8xl">
         <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
-            <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
+            <a href="/" v-if="appStore.$state?.webConfig?.logo"><img class="h-8" :src="appStore.$state?.webConfig?.logo" alt="logo" /></a>
             <div class="relative flex items-center justify-between lg:w-full">
               <nav class="hidden text-sm font-semibold leading-6 text-white/80 lg:flex">
                 <ul class="flex space-x-14">

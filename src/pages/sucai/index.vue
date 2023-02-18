@@ -161,19 +161,23 @@ const getCurDownUrl = async (item) => {
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
-        shidahukeInfo.visible = true
         shidahukeInfo.params = res.data
-        setTimeout(() => {
-          playInstance.value = new HlsJsPlayer({
-            id: 'mse',
-            url: res.data.psd,
-            lang: "zh-cn",
-            autoplay: true,
-            playbackRate: [0.5, 1, 1.5, 2],
-            // height: '300px',
-            width: '100%'
+        if (res?.data?.psd.indexOf('m3u8') !== -1) {          
+          shidahukeInfo.visible = true
+          setTimeout(() => {
+            playInstance.value = new HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              lang: "zh-cn",
+              autoplay: true,
+              playbackRate: [0.5, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
           });
-        });
+        } else {
+          window.open(res.data.psd)
+        }
       } else {          
         Message.success('解析成功了，请点击立即下载按钮')
         userStore.getUserNum()
