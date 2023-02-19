@@ -434,7 +434,6 @@ const showWebTip = (item) => {
       </template>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
-        <p>接网站、小程序、脚本等开发，联系微信号swjznl（站长）</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
