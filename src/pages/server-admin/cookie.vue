@@ -191,7 +191,7 @@ const saveRowConfig = async () => {
       desc: row.desc || '-',
       cookies: row.cookie.length ? row.cookie.filter(o => o.value) : [],
       isRun: row.isRun,
-      otherCookie: row.otherCookie.length ? row.otherCookie.filter(o => o.value) : []
+      otherCookie: row.otherCookie.length ? row.otherCookie.filter(o => (o.value || o.code)) : []
     })
     tableData.visible = false
     Message.success(res.data)
