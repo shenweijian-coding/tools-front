@@ -21,8 +21,6 @@ const getInviteData = () => {
       inviteData.inviteNum = res.data.inviteNum
       inviteData.inviteStr = `千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 登录就可免费下载，不花钱！`
     }
-  }).finally(() => {
-    inviteData.loading = false
   })
 }
 // 创建邀请信息
@@ -31,8 +29,6 @@ const createInviteData = () => {
   createInviteCode().then(res => {
     inviteData.inviteNum = res.data.inviteNum
     inviteData.inviteStr = `千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 登录就可免费下载，不花钱！`
-  }).finally(() => {
-    inviteData.loading = false
   })
 }
 // 分享

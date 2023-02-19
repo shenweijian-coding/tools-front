@@ -65,10 +65,10 @@ const getWebList = () => {
       listLoading.value = false
     })
   } catch (error) {
-    
-  } finally(() => {
+
+  } finally {
     listLoading.value = false
-  })
+  }
 }
 getWebList()
 
