@@ -18,7 +18,7 @@ if (import.meta.env.MODE !== 'development') {
           var d=new Date();
           debugger;
           if(new Date()-d>10){
-              document.body.innerHTML='<div style="font-size: 50px;color:blur;">网站作者QQ1834638245 购买解析系统</div>';
+              document.body.innerHTML='<div style="font-size: 50px;color:blur;">系统售卖QQ1834638245</div>';
               return true;
           }
           return false;
