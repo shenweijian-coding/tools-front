@@ -5,9 +5,9 @@
 import { useUserStore } from '@/store/modules/user/index'
 const instance = useUserStore()
 instance.$subscribe((_, state) => {
-  sessionStorage.setItem('user', JSON.stringify({ ...state }));
+  localStorage.setItem('user', JSON.stringify({ ...state }));
 });
-const old = sessionStorage.getItem('user');
+const old = localStorage.getItem('user');
 if (old) {
     instance.$state = JSON.parse(old);
 }
@@ -42,7 +42,7 @@ if (import.meta.env.MODE !== 'development') {
    
   })();
 }
-console.log("%c作者QQ1834638245 系统贱卖 嘻", "color:red;font-size:30px;font-weight:bolder;padding:50px 420px;line-height:10px;background:url('http://img.zcool.cn/community/0127c0577e00620000012e7e12da0e.gif') repeat-x;background-size:contain;");
+console.log("%c作者QQ1834638245", "color:red;font-size:30px;font-weight:bolder;padding:50px 420px;line-height:10px;background:url('http://img.zcool.cn/community/0127c0577e00620000012e7e12da0e.gif') repeat-x;background-size:contain;");
 </script>
 
 <style>

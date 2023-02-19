@@ -23,6 +23,11 @@ const paths = reactive({
       path: '/shop',
       id: 3,
       text: ''
+    }, {
+      name: '书签插件',
+      path: '/plugin',
+      id: 4,
+      text: ''
     }]
 })
 const loginVisible = ref(false);

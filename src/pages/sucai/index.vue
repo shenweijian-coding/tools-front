@@ -1,7 +1,4 @@
 <script setup>
-
-
-
 import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
@@ -61,9 +58,15 @@ let link = ''
 
 // 获取网站列表
 const getWebList = () => {
-  listLoading.value = true
-  webList.list.length || getInfo().then(res => {
-    webList.list = res.data
+  try {
+    listLoading.value = true
+    webList.list.length || getInfo().then(res => {
+      webList.list = res.data
+      listLoading.value = false
+    })
+  } catch (error) {
+    
+  } finally(() => {
     listLoading.value = false
   })
 }

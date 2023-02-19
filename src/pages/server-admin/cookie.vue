@@ -4,16 +4,23 @@
   <a-button type="outline" @click="addMoreOtherCookie">批量添加三方cookie</a-button>
   <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe class="mt-m">
     <template #columns>
-      <a-table-column title="站点ID" data-index="id" align="center"></a-table-column>
+      <a-table-column title="ID" data-index="id" align="center"></a-table-column>
       <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
       <a-table-column title="关键词" data-index="keyWord" align="center"></a-table-column>
       <a-table-column title="站点描述" data-index="desc" align="center">
       </a-table-column>
       <a-table-column title="今日下载次数" data-index="num" align="center"></a-table-column>
-      <a-table-column title="单次扣除" data-index="cost" :width="160" align="center">
+      <a-table-column title="单次扣除" data-index="cost" align="center">
       </a-table-column>
-      <a-table-column title="是否开启解析" data-index="isRun" :width="160" align="center">
+      <a-table-column title="使用官方/第三方" data-index="tag" align="center">
+        <template #cell="{ record }">
+          <a-tag v-if="record.otherCookie?.length" color="#7302d6">第三方解析</a-tag>
+          <a-tag v-else-if="record.cookie?.length" color="#00b42a">官方解析</a-tag>
+          <a-tag v-else color="#f53f3f">未配置</a-tag>
+        </template>
+      </a-table-column>
+      <a-table-column title="是否开启解析" data-index="isRun" align="center">
         <template #cell="{ record }">
           <a-tag :color="record.isRun ? '#00b42a' : '#f53f3f'">{{ record.isRun ? '开启' : '关闭' }}</a-tag>
         </template>
@@ -64,15 +71,16 @@
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>
           &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
         </a-form-item>
-        <a-button type="primary" @click="addCookie('cookie')" style="width: 160px">新增官网cookie</a-button>
+        <a-button type="outline" @click="addCookie('cookie')" style="width: 160px">新增官网cookie</a-button>
 
         <a-divider orientation="center">三方cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.otherCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.code" placeholder="对应卡密"/>
-          &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
+          <a-button type="text" status="success" @click="getOtherAuth(cookie)">查看权限</a-button>
+          <a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
         </a-form-item>
-        <a-button type="primary" @click="addCookie('otherCookie')" style="width: 160px">新增三方cookie</a-button>
+        <a-button type="outline" @click="addCookie('otherCookie')" style="width: 160px">新增三方cookie</a-button>
       </a-form> 
     </div>
     <template #footer>
@@ -86,13 +94,11 @@
   <s-dialog v-model:visible="tableData.moreVisible" width="50%" title="批量增加三方cookie">
     <a-form :model="tableData.moreCookie" auto-label-width>
 
-    <a-form-item v-for="(cookie,i) in tableData.moreCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
-      <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
-      <a-input v-model="cookie.code" placeholder="对应卡密"/>
-      &nbsp;<a-button type="text" status="danger" @click="delOtherCookie(i)">删除</a-button>
+    <a-form-item label="`三方cookie">
+      <a-input v-model="tableData.moreCookie.value" placeholder="请复制cookie"/>&nbsp;
+      <a-input v-model="tableData.moreCookie.code" placeholder="对应卡密"/>
     </a-form-item>
     </a-form>
-    <a-button type="primary" @click="addMordCookie" style="width: 160px">新增三方cookie</a-button>
     <template #footer>
       <div>
         <a-button type="primary" @click="saveMoreCookie">保存</a-button>
@@ -103,7 +109,7 @@
 </template>
 <script setup>
 import { webSiteMap } from '@/data-map/index.js'
-import { getCookies, saveCookies, addWeb, saveMoreCookieApi, delWeb } from '@/api/admin/index.js'
+import { getCookies, saveCookies, addWeb, saveMoreCookieApi, delWeb, getOtherCookieApi} from '@/api/admin/index.js'
 import { timeConvert } from '@/utils/index'
 import { Message } from '@arco-design/web-vue';
 import sDialog from '@/components/s-dialog/index.vue'
@@ -115,7 +121,7 @@ const tableData = reactive({
   moreVisible: false,
   currentCookie: {},
   actionType: 1, // 1是编辑 0是新增
-  moreCookie: []
+  moreCookie: { code: '', value: '' }
 })
 
 const getCookie = () => {
@@ -165,14 +171,7 @@ const addCookie = (type) => {
     id: Math.floor(new Date().getTime() / 1000)
   })
 }
-// 增加cookie
-const addMordCookie = () => {
-  tableData.moreCookie || (tableData.moreCookie = [])
-  tableData.moreCookie.push({
-    value: '',
-    id: Math.floor(new Date().getTime() / 1000)
-  })
-}
+
 // 删除cookie
 const delCookie = (i, type) => {
   tableData.currentCookie[type].splice(i, 1)
@@ -196,6 +195,7 @@ const saveRowConfig = async () => {
     })
     tableData.visible = false
     Message.success(res.data)
+    getCookie()
   }else{ // 新增
     const { id, name, url, cost, desc } = tableData.currentCookie
     const hasId  = tableData.data.filter(o => o.id === id)
@@ -211,7 +211,10 @@ const saveRowConfig = async () => {
       ...tableData.currentCookie,
       num: 0
     })
+    tableData.visible
     Message.success(res.data)
+    getCookie()
+
   }
   getCookie()
 }
@@ -221,14 +224,29 @@ const addMoreOtherCookie = async () => {
   tableData.moreVisible = true
 }
 const saveMoreCookie = async () => {
-  if (tableData.moreCookie.some(o => !o.value)) {
+  if (!tableData.moreCookie.code) {
     Message.warning('填写完整')
     return
   }
+  tableData.moreCookie.id = Math.floor(new Date().getTime() / 1000)
+
   const res = await saveMoreCookieApi(tableData.moreCookie)
   Message.success(res.msg)
   tableData.moreVisible = false
   getCookie()
+}
+
+// 查看第三方权限
+const getOtherAuth = async (cookie) => {
+  const res = await getOtherCookieApi(cookie)
+  console.log(res);
+  if (res.code == 200 && res?.data?.list?.length) {
+    let str = ''
+    res.data.list.forEach(it => {
+      str += it.name + '：' + it.limit + '\n'
+    });
+    alert(str)
+  }
 }
 </script>
 

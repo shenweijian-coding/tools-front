@@ -22,4 +22,7 @@ export const getProduct = async () => get({ url: 'admin/getProduct'})
 export const createProductApi = async (data) => post({ url: 'admin/createProduct', data})
 export const delProduct = async (data) => post({ url: 'admin/delProduct', data})
 export const addWeb = async (data) => post({ url: 'admin/addWeb', data})
-export const delWeb = async (data) => post({ url: 'admin/delWeb', data})
+export const delWeb = async (data) => post({ url: 'admin/delWeb', data })
+
+// 获取第三方权限
+export const getOtherCookieApi = async (data) => post({ url: 'admin/getOtherAuth', data })

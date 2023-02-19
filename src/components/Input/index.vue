@@ -17,6 +17,7 @@ const props = defineProps({
     type: Boolean
   }
 })
+
 const emit = defineEmits(['getPlay'])
 const url = ref('')
 const getPlay = () => {
@@ -25,6 +26,14 @@ const getPlay = () => {
     return
   }}
   emit('getPlay', url)
+}
+
+// 处理黄蜂链接
+const href = window.location.href
+const hfUrl = href.match(/url=(\S*)/)?.[1] // 匹配黄蜂链接
+if (hfUrl) {
+  url.value = hfUrl
+  getPlay()
 }
 </script>
 <style>

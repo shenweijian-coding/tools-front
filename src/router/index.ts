@@ -24,6 +24,10 @@ const routes = [{
       component: () => import('@/pages/store/index.vue')
     },
     {
+      path: '/plugin',
+      component: () => import('@/pages/plugin/index.vue')
+    },
+    {
       path: '/help',
       component: () => import('@/pages/help/index.vue')
     }

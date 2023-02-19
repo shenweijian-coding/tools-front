@@ -73,13 +73,17 @@ const goodChange = (val) => {
 }
 
 const getList = async () => {
-  loading.value = true
-  const res = await getGoodList()
-  if(res.data.length) {
-    res.data.sort((a,b) => a.sort - b.sort)
+  try {    
+    loading.value = true
+    const res = await getGoodList()
+    if(res.data.length) {
+      res.data.sort((a,b) => a.sort - b.sort)
+    }
+    goodInfo.goodList = res.data
+    loading.value = false
+  } catch (error) {
+    loading.value = false
   }
-  goodInfo.goodList = res.data
-  loading.value = false
 }
 
 const pollOrderStatus = (tradeNo) => {
@@ -135,7 +139,7 @@ getList()
   position: relative;
   margin: 20px auto 0;
   backdrop-filter: blur(.625rem);
-  border-radius: .3rem;
+  border-radius: .2rem;
   flex-direction: column;
   justify-content: space-between;
 
