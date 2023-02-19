@@ -20,6 +20,10 @@ const routes = [{
       component: () => import('@/pages/user/index.vue')
     },
     {
+      path: '/invite',
+      component: () => import('@/pages/invite/index.vue')
+    },
+    {
       path: '/shop',
       component: () => import('@/pages/store/index.vue')
     },
@@ -83,19 +87,6 @@ router.beforeEach((to, from, next) => {
   // 1. 每个条件执行后都要跟上 next() 或 使用路由跳转 api 否则页面就会停留一动不动
   // 2. 要合理的搭配条件语句，避免出现路由死循环。
   const token = getToken()
-  if(token && to.path === '/login') {
-    router.replace({
-      path: '/'
-    })
-    return
-  }
-  if(!token && to.path !== '/login') {
-    router.replace({
-      path: '/login'
-    })
-    return
-  }
-  console.log(userStore.$state);
   if (to.path.indexOf('/server-admin') !== -1 && userStore && !userStore?.$state?.isAdmin) {
     router.replace({
       path: '/'

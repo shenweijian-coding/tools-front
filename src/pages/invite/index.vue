@@ -14,7 +14,8 @@ const inviteData = reactive({
 const getInviteData = () => {
   inviteData.loading = true
   getInviteInfo().then(res => {
-    inviteData.list = res.data.list
+    inviteData.list = res.data?.list?.length ? res.data.list : []
+    inviteData.loading = false
     if (!res.data.inviteCode) {
       createInviteData()
     } else {
@@ -27,6 +28,7 @@ const getInviteData = () => {
 const createInviteData = () => {
   inviteData.loading = true
   createInviteCode().then(res => {
+    inviteData.loading = false
     inviteData.inviteNum = res.data.inviteNum
     inviteData.inviteStr = `千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 登录就可免费下载，不花钱！`
   })

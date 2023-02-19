@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
+import wxLogin from '../wxapp-login/index.vue'
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import { useAppStore } from '@/store';
 const appStore = useAppStore()
 const userStore = useUserStore()
-
 const loading = ref(false)
 
 const curPath = ref((toRaw(useRoute()).path))
@@ -19,6 +19,11 @@ const paths = reactive({
       id: 1,
       text: ''
     }, {
+      name: '邀请送分',
+      path: '/invite',
+      id: 2,
+      text: '热'
+    }, {
       name: '在线充值',
       path: '/shop',
       id: 3,
@@ -28,12 +33,19 @@ const paths = reactive({
       path: '/plugin',
       id: 4,
       text: ''
+    }, {
+      name: '网站代理',
+      path: 'https://docs.qq.com/doc/DTWdDa3pFTWZxSm1L?&u=e7e62fcefa1d47a09a12cbb8c90651ac',
+      id: 5,
+      text: '',
+      target: '_blank'
     }]
 })
 const loginVisible = ref(false);
 
 const loginInfo = reactive({
-  cdkey: ''
+  cdkey: '',
+  loginType: 1 // 1是卡密登录 0是小程序登录
 })
 
 const openLogin = () => {
@@ -57,7 +69,7 @@ if (!userStore.userIsLogin) {
 }
 
 const login = async () => {
-  if (!loginInfo.cdkey) {
+  if (loginInfo.loginType && !loginInfo.cdkey) {
     Message.warning('请输入卡密！')
     return
   }
@@ -81,7 +93,10 @@ const logout = () => {
   userStore.logout()
   Message.success('退出成功')
 }
-
+// 切换登录
+const toggleLogin = () => {
+  loginInfo.loginType = loginInfo.loginType === 1 ? 0 : 1
+}
 </script>
 
 <template>
@@ -98,7 +113,8 @@ const logout = () => {
                   <template v-for="it in paths.list" :key="it.id">
                     <li class="ml-14"
                       :class="curPath === it.path ? 'border-b-4 rounded-sm border-white text-white' : ''">
-                      <router-link :to="it.path" class="hover:text-white">{{it.name}}</router-link>
+                      <router-link v-if="!it.target" :to="it.path" class="hover:text-white">{{it.name}}</router-link>
+                      <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
                     </li>
                   </template>
                 </ul>
@@ -139,10 +155,16 @@ const logout = () => {
     </div>
   </header>
   <s-dialog v-model:visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
-    <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
-    <div class="get-code">
-      <a href="" class="">没有卡密，去获取→</a>
-    </div>
+    <!-- <a-button type="text" @click="toggleLogin">切换 卡密/微信扫码 登录</a-button> -->
+    <template v-if="loginInfo.loginType">
+      <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
+      <div class="get-code">
+        <a href="" class="">没有卡密，去获取→</a>
+      </div>
+    </template>
+    <!-- <template v-else>
+      <wxLogin></wxLogin>
+    </template> -->
   </s-dialog>
 </template>
 
