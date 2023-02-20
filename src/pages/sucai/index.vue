@@ -123,21 +123,6 @@ const getDownUrl = async (url) => {
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           downVisible.value = true
-        } else if ([1, 2].includes(res.data.id)) {
-          shidahukeInfo.id = res.data.id
-          shidahukeInfo.visible = true
-          shidahukeInfo.params = res.data
-          setTimeout(() => {
-            playInstance.value = new HlsJsPlayer({
-              id: 'mse',
-              url: res.data.psd,
-              lang: "zh-cn",
-              autoplay: true,
-              playbackRate: [0.5, 1, 1.5, 2],
-              // height: '300px',
-              width: '100%'
-            });
-          });
         } else {
           downVisible.value = true
           href.value = res.data.psd
@@ -179,7 +164,8 @@ const getCurDownUrl = async (item) => {
             });
           });
         } else {
-          window.open(res.data.psd)
+          downVisible.value = true
+          href.value = res.data.psd
         }
       } else {          
         Message.success('解析成功了，请点击立即下载按钮')
@@ -308,20 +294,6 @@ const baotuCheckClick = async e => {
     baotuCheckVisible.value = false
   }
 
-}
-// 下载视达素材
-const downFile = async () => {
-  const { data } = await getDownFile(shidahukeInfo.params)
-  window.open(data)
-}
-// 下载虎课素材
-const handleHukeFile = async (type) => {
-  const res = await getHukeFile({ id: shidahukeInfo.params.hukeId, type: type })
-  if (res.data) {
-    window.open(res.data)
-  } else {
-    Message.error('出现错误,请联系管理员！')
-  }
 }
 
 const showWebTip = (item) => {

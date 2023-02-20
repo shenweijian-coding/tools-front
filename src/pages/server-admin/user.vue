@@ -151,17 +151,13 @@ const userInfo = reactive({
 const getUserInfo = async () => {
   let res = await getUserById(userInfo.form)
   if (res && res.data) {
-    if (!res.data.list.length) {
-      Message.warning('未找到')
-      return
-    }
     userInfo.tableData = res.data.list
     userInfo.payInfo = res.data.payInfo
     userInfo.downLogData = res.data.downLogs
     userInfo.total = res.data.total
   }
 }
-
+getUserInfo()
 const edit = () => {
   userInfo.editVisible = true
 }

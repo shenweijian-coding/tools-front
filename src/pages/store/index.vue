@@ -60,6 +60,7 @@ const active = async () => {
     })
     if (res.data) {
       Message.success(res.data)
+      userStore.getUserNum()
     }
   } catch (error) {
 
