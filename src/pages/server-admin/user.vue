@@ -22,7 +22,7 @@
         <a-table-column title="权限" data-index="auth" align="center">
           <template #cell="{ record }">
             <span v-if="record.auth && Object.keys(record.auth).length">
-              <p v-for="(item,prop) in record.auth" :key="prop">{{ webMap[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余({{ item.eNum }})</p>
+              <p v-for="(item,prop) in record.auth" :key="prop">{{ appStore.$state?.webMap?.[prop] }}: 站点专用积分({{ item.num }})-到期时间({{ item.expireDate }})-今日剩余({{ item.eNum }})</p>
             </span>
             <p v-else>--</p>
           </template>
@@ -51,7 +51,7 @@
           </div>
           <a-divider orientation="center"></a-divider>
           <div v-for="(item,prop) in userInfo.tableData[0].auth" :key="prop" class="flex">
-            <a-form-item :label="webMap[prop] + '专用积分'">
+            <a-form-item :label="appStore.$state?.webMap?.[prop] + '专用积分'">
               <a-input-number v-model="item.num"/>
             </a-form-item>
             <a-form-item label="到期日期">
