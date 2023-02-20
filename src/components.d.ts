@@ -33,8 +33,6 @@ declare module '@vue/runtime-core' {
     ASwitch: typeof import('@arco-design/web-vue')['Switch']
     ATable: typeof import('@arco-design/web-vue')['Table']
     ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
-    ATabPane: typeof import('@arco-design/web-vue')['TabPane']
-    ATabs: typeof import('@arco-design/web-vue')['Tabs']
     ATag: typeof import('@arco-design/web-vue')['Tag']
     ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     Floor: typeof import('./components/floor/index.vue')['default']
