@@ -157,7 +157,7 @@ const toggleLogin = () => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
+  <s-dialog :visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
     <!-- <a-button type="text" @click="toggleLogin">切换 卡密/微信扫码 登录</a-button> -->
     <template v-if="loginInfo.loginType">
       <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>

@@ -56,7 +56,7 @@
     </a-table-column>
   </template>
   </a-table>
-  <s-dialog v-model:visible="accodeInfo.createVisible" width="50%" title="新建卡密" @close="close">
+  <s-dialog :visible="accodeInfo.createVisible" width="50%" title="新建卡密" @close="close">
     <a-form v-if="!accodeInfo.createResult.length" :model="accodeInfo.createForm" auto-label-width>
       <a-form-item label="卡密类型">
         <a-radio-group v-model="accodeInfo.createForm.type">

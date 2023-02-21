@@ -257,6 +257,7 @@ const close = () => {
   visible.value = false
   checkVisible.value = false
   webSiteCheckVisible.value = false
+  downVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
   playInstance.value = ''
 }
@@ -365,13 +366,13 @@ const showWebTip = (item) => {
 
     <NumLack :visible="visible" @close="close" />
 
-    <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
+    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
     </s-dialog>
     <!-- // 90设计的滑动验证码 -->
-    <s-dialog v-model:visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
+    <s-dialog :visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
       <div style="width: 100%" v-loading="checkLoading">
         <div class="canvas-box">
           <canvas id="c3"></canvas>
@@ -383,12 +384,12 @@ const showWebTip = (item) => {
       </div>
     </s-dialog>
     <!-- 包图验证码 -->
-    <s-dialog v-model:visible="baotuCheckVisible" @close="close" title="包图验证">
+    <s-dialog :visible="baotuCheckVisible" @close="close" title="包图验证">
       <div style="width: 100%" class="yanzheng-wrap" v-html="baotuCheckInfo.content" @click="baotuCheckClick">
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" title="搜索成功" @close="close">
+    <s-dialog :visible="shidahukeInfo.visible" width="50%" title="搜索成功" @close="close">
       <div>
         <div id="mse"></div>
         <a-divider></a-divider>
@@ -396,7 +397,7 @@ const showWebTip = (item) => {
     </s-dialog>
 
     <!-- 下载弹窗 -->
-    <s-dialog v-model:visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
+    <s-dialog :visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
       <template v-if="zhongtuUrl">
         <p>复制众图下载链接后，粘贴到迅雷即可下载，浏览器无法直接访问！</p>
         <a-divider></a-divider>
@@ -417,7 +418,7 @@ const showWebTip = (item) => {
     </s-dialog>
 
     <!-- 站点说明 -->
-    <s-dialog v-model:visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="true" width="40%">
+    <s-dialog :visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="true" width="40%">
         <p>使用说明：{{ webList.currentShowTip.desc || '-' }}</p>
         <template #footer>
           <span class="flex align-center" style="justify-content:right;">
