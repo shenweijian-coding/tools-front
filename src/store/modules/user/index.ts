@@ -16,7 +16,8 @@ export const useUserStore = defineStore('user', {
         num: 0,
         isSign: false,
         adNum: 0,
-        auth: []
+        auth: [],
+        selSiteNum: 0
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -68,6 +69,7 @@ export const useUserStore = defineStore('user', {
             const { data } = await userLogin(loginForm);
             this.setInfo(data);
             setToken(data?._id)
+            this.getUserNum()
             return data;
         },
         // Logout

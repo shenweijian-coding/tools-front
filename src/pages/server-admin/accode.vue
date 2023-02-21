@@ -37,6 +37,7 @@
           <span>时长会员：{{ record.num }}天；每日积分：{{ record.eNum }}；</span>
           生效站点：
           <span v-if="record.sites && record.sites.length === Object.keys(appStore.$state.webMap).length">全站</span>
+          <span v-else-if="record.selSiteNum">自选{{ record.selSiteNum }}网</span>
           <span v-else v-for="it in record.sites" :key="it">{{ appStore.$state.webMap && appStore.$state.webMap[it] }}、 </span>
         </template>
         <template v-if="record.type === 2">
@@ -64,7 +65,16 @@
           <a-radio :value="3">全站次数卡</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item v-if="accodeInfo.createForm.type !==3" label="生效站点">
+    <a-form-item label="激活方式" v-if="accodeInfo.createForm.type !==3">
+      <a-radio-group v-model="accodeInfo.createForm.activeMethod">
+        <a-radio :value="1">用户自选</a-radio>
+        <a-radio :value="2">固定站点</a-radio>
+      </a-radio-group>
+    </a-form-item>
+    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1">
+        <a-input-number v-model="accodeInfo.createForm.selSiteNum" :min="1" :max="Object.keys(appStore.$state?.webMap).length" style="width: 200px;"/>
+      </a-form-item>
+    <a-form-item v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.activeMethod == 2" label="生效站点">
       <a-checkbox-group v-model="accodeInfo.createForm.sites">
         <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
@@ -125,7 +135,9 @@ const accodeInfo = reactive({
     createNum: 10,
     eNum: 10,
     type: 1,
-    num: 30
+    num: 30,
+    activeMethod: 1,
+    selSiteNum: 1
   },
   createResult: []
 })
@@ -167,13 +179,15 @@ const close = () => {
 }
 
 const createAccode = async () => {
-  let { type, num, eNum, createNum, sites } = accodeInfo.createForm
-  if (type === 1) {
+  let { type, num, eNum, createNum, sites, activeMethod, selSiteNum } = accodeInfo.createForm
+  if (type === 1 && activeMethod == 2) {
+    selSiteNum = 0
     if (!sites ||  !sites.length) {
       Message.warning('未选择激活网站')
       return
     }
-  } else if (type === 2) {
+  } else if (type === 2 && activeMethod == 2) {
+    selSiteNum = 0
     eNum = 0
     if (!sites || !sites.length) {
       Message.warning('未选择激活网站')
@@ -182,8 +196,14 @@ const createAccode = async () => {
   } else if (type === 3) {
     sites = []
     eNum = 0
+    selSiteNum = 0
+  } else if ((type === 1 || type === 2) && activeMethod == 1) {
+    if (!selSiteNum) {
+      Message.warning('请输入自选数量')
+      return
+    }
   }
-  const res = await createAccodeApi({ type, num, eNum, createNum, sites })
+  const res = await createAccodeApi({ type, num, eNum, createNum, sites, selSiteNum })
   let str = ''
   res.data.forEach(it => {
     str += it.code + '\n'

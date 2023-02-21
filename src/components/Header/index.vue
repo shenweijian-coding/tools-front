@@ -6,6 +6,7 @@ import wxLogin from '../wxapp-login/index.vue'
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import { useAppStore } from '@/store';
+import selSites from './sel-sites.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const loading = ref(false)
@@ -168,6 +169,8 @@ const toggleLogin = () => {
       <wxLogin></wxLogin>
     </template> -->
   </s-dialog>
+  <!-- 自选站点 -->
+  <sel-sites></sel-sites>
 </template>
 
 <style lang="less" scoped>

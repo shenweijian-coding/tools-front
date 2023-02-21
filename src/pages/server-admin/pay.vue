@@ -77,7 +77,8 @@ const productInfo = reactive({
     type: 1,
     num: 7,
     price: 1,
-    sort: 0
+    sort: 0,
+    name: ''
   }
 })
 
@@ -89,6 +90,10 @@ getProductList()
 const createProduct = async () => {
   console.log(productInfo.createForm);
   const reqData = JSON.parse(JSON.stringify(productInfo.createForm))
+  if (!reqData.price || !reqData.name) {
+    Message.warning('请填写完整')
+    return
+  }
   if (reqData.type === 2) {
     reqData.eNum = 0
   } else if (reqData.type === 3) {
