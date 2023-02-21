@@ -245,6 +245,7 @@ const close = () => {
   visible.value = false
   checkVisible.value = false
   webSiteCheckVisible.value = false
+  downVisible.value = false
   webSiteCheckInfo.webSiteCheckCode = ''
   playInstance.value = ''
 }
