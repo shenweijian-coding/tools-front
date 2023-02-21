@@ -1,6 +1,6 @@
 <template>
   <s-dialog
-    v-model:visible="visible"
+    :visible="visible"
     width="300px"
     title="人机校验(验证成功继续下载)"
     @close="close"

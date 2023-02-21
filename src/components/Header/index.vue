@@ -218,7 +218,7 @@ const pwd2WxappConfirm = async (pwd) => {
       </div>
     </div>
   </header>
-  <s-dialog v-model:visible="visible" width="300px" @close="close" title="微信扫码登录">
+  <s-dialog :visible="visible" width="300px" @close="close" title="微信扫码登录">
     <div>
       <!-- <a-tabs default-active-key="2"> -->
       <wxappLogin @login="visible = false"></wxappLogin>
@@ -234,7 +234,7 @@ const pwd2WxappConfirm = async (pwd) => {
       <!-- </a-tabs> -->
     </div>
   </s-dialog>
-  <s-dialog v-model:visible="stepsVisible" title="免费获取积分" width="400px">
+  <s-dialog :visible="stepsVisible" title="免费获取积分" width="400px">
     <Wxapp></Wxapp>
   </s-dialog>
 </template>

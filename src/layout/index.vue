@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <!-- <s-dialog v-if="notice" v-model:visible="visible" width="600px" title="站内公告" @close="close">
+  <!-- <s-dialog v-if="notice" :visible="visible" width="600px" title="站内公告" @close="close">
     <p v-html="notice" style="line-height:22px">
     </p>
     <div slot="footer" class="footer"> -->

@@ -1,5 +1,5 @@
 <template>
-  <s-dialog v-model:visible="visible" width="346px" @close="close">
+  <s-dialog :visible="visible" width="346px" @close="close">
     <div style="text-align: center;">提示：<a-tag color="purple">支付时请不要关闭本弹窗[{{ payStatus }}...]</a-tag>
     </div>
     <div class="pay-box">

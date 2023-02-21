@@ -365,13 +365,13 @@ const handleHukeFile = async (type) => {
     <NumLack :visible="visible" @close="close" />
     <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
-    <s-dialog v-model:visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
+    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
     </s-dialog>
     <!-- // 90设计的滑动验证码 -->
-    <s-dialog v-model:visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
+    <s-dialog :visible="sheji90CheckVisible" @close="close" title="拖动滑块完成拼图">
       <div style="width: 100%" v-loading="checkLoading">
         <div class="canvas-box">
           <canvas id="c3"></canvas>
@@ -383,12 +383,12 @@ const handleHukeFile = async (type) => {
       </div>
     </s-dialog>
     <!-- 包图验证码 -->
-    <s-dialog v-model:visible="baotuCheckVisible" @close="close" title="包图验证">
+    <s-dialog :visible="baotuCheckVisible" @close="close" title="包图验证">
       <div style="width: 100%" class="yanzheng-wrap" v-html="baotuCheckInfo.content" @click="baotuCheckClick">
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog v-model:visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
+    <s-dialog :visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
       <div>
         <div id="mse"></div>
         <div style="margin-top: 20px;text-align: right;">
@@ -408,11 +408,13 @@ const handleHukeFile = async (type) => {
     </s-dialog>
 
     <!-- 下载弹窗 -->
-    <s-dialog v-model:visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
-      <div v-if="zhongtuUrl" class="mt-2" style="display: flex;justify-content:right;align-items: center;">
+    <s-dialog :visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
+      <div v-if="zhongtuUrl" class="mt-2">
         <p>复制众图下载链接后，粘贴到迅雷即可下载，浏览器无法直接访问！</p>
         <a-divider></a-divider>
-        <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
+        <span style="display: flex;justify-content:right;align-items: center;">
+          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
+        </span>
       </div>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
