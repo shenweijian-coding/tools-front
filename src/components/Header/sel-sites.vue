@@ -1,5 +1,5 @@
 <template>
-  <s-dialog :visible="userStore.$state.selSiteNum" :title="'请自选' + userStore.$state.selSiteNum +'网'" width="40%" :closeOnClickOverlay="false" >
+  <s-dialog :visible="!!userStore.$state.selSiteNum" :title="'请自选' + userStore.$state.selSiteNum +'网'" width="40%" :closeOnClickOverlay="false" >
     <a-checkbox-group :model-value="activeSites" @change="sitesChange">
       <a-checkbox v-for="(name, id) in appStore.$state.webMap" :key="id" :value="id">{{ name }}</a-checkbox>
     </a-checkbox-group>

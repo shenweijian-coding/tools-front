@@ -91,7 +91,8 @@
   </s-dialog>
 
   <!-- 批量增加三方cookie -->
-  <s-dialog :visible="tableData.moreVisible" width="50%" title="批量增加三方cookie">
+  <s-dialog :visible="tableData.moreVisible" width="50%" title="批量增加三方cookie" @close="tableData.moreVisible = false
+  ">
     <a-form :model="tableData.moreCookie" auto-label-width>
 
     <a-form-item label="`三方cookie">
@@ -144,9 +145,8 @@ const switchChange = (item,val) => {
 
 const dialogClose = () => {
   tableData.actionType = 1
-  tableData.currentCookie = {
-  
-  }
+  tableData.visible = false
+  tableData.currentCookie = {}
 }
 // 打开cookie弹窗
 const editWeb = (item) => {
@@ -211,7 +211,7 @@ const saveRowConfig = async () => {
       ...tableData.currentCookie,
       num: 0
     })
-    tableData.visible
+    tableData.visible = false
     Message.success(res.data)
     getCookie()
 

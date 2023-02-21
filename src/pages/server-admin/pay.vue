@@ -14,7 +14,7 @@
     </a-table-column>
     </template>
   </a-table>
-  <s-dialog :visible="productInfo.createVisible" width="50%" title="新建产品" @close="close">
+  <s-dialog :visible="productInfo.createVisible" width="50%" title="新建产品" @close="tableData.moreVisible = false">
     <a-form :model="productInfo.createForm" auto-label-width>
       <a-form-item label="卡密类型">
         <a-radio-group v-model="productInfo.createForm.type">
