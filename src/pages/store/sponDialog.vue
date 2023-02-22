@@ -1,5 +1,5 @@
 <template>
-  <s-dialog v-model:visible="visible" width="346px" @close="close" title="支付-实时到账">
+  <s-dialog :visible="visible" width="346px" @close="close" title="支付-实时到账">
     <div style="text-align: center;">提示：<a-tag color="purple">{{ payStatus }}...</a-tag>
     </div>
     <div class="pay-box">

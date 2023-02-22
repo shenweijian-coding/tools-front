@@ -14,7 +14,7 @@
     </a-table-column>
     </template>
   </a-table>
-  <s-dialog v-model:visible="productInfo.createVisible" width="50%" title="新建产品" @close="close">
+  <s-dialog :visible="productInfo.createVisible" width="50%" title="新建产品" @close="tableData.moreVisible = false">
     <a-form :model="productInfo.createForm" auto-label-width>
       <a-form-item label="卡密类型">
         <a-radio-group v-model="productInfo.createForm.type">
@@ -77,7 +77,8 @@ const productInfo = reactive({
     type: 1,
     num: 7,
     price: 1,
-    sort: 0
+    sort: 0,
+    name: ''
   }
 })
 
@@ -89,6 +90,10 @@ getProductList()
 const createProduct = async () => {
   console.log(productInfo.createForm);
   const reqData = JSON.parse(JSON.stringify(productInfo.createForm))
+  if (!reqData.price || !reqData.name) {
+    Message.warning('请填写完整')
+    return
+  }
   if (reqData.type === 2) {
     reqData.eNum = 0
   } else if (reqData.type === 3) {

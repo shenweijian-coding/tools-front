@@ -7,4 +7,5 @@ export interface UserState {
     num: Number;
     isSign: Boolean;
     adNum: Number;
+    selSiteNum: Number;
 }

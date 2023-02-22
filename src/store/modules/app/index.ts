@@ -25,9 +25,9 @@ export const useAppStore = defineStore(
                      this.$patch({ webConfig: res.data })
                      this.setBgImg()
                 })
-                if(!this.$state.webMap) {
-                    this.getWebList()
-                }
+                // if(!this.$state.webMap) {
+                //     this.getWebList()
+                // }
             },
             async getWebList() {
                 getWebList().then(res => {

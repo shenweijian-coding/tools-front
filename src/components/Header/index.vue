@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import { useAppStore } from '@/store';
+import selSites from './sel-sites.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
 
@@ -144,6 +145,9 @@ const logout = () => {
       <a href="" class="">没有卡密，去获取→</a>
     </div>
   </s-dialog>
+
+  <!-- 自选站点 -->
+  <sel-sites></sel-sites>
 </template>
 
 <style lang="less" scoped>

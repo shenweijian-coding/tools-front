@@ -35,7 +35,7 @@
       </template>
     </a-table>
 
-    <s-dialog v-model:visible="userInfo.editVisible" width="60%" title="权限编辑">
+    <s-dialog :visible="userInfo.editVisible" width="60%" title="权限编辑" @close="userInfo.editVisible = false">
       <div class="webBox">
         <a-form :model="userInfo.tableData[0]" auto-label-width>
           <div class="flex">
