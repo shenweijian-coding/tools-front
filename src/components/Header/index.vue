@@ -37,7 +37,7 @@ const paths = reactive({
       id: 4,
       text: ''
     }, {
-      name: '网站代理',
+      name: '网站源码',
       path: 'https://docs.qq.com/doc/DTWdDa3pFTWZxSm1L?&u=e7e62fcefa1d47a09a12cbb8c90651ac',
       id: 5,
       text: '',
