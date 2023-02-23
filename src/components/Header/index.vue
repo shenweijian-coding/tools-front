@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
@@ -45,8 +45,8 @@ const paths = reactive({
       id: 3,
       text: ''
     }, {
-      name: '登录后查看',
-      path: '',
+      name: '视频教程',
+      path: '/help',
       id: 4,
       text: ''
     }]
@@ -75,11 +75,12 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-  paths.list.splice(3, 1, {
-    name: '视频教程',
-    path: '/help',
-    id: 4,
-    text: ''
+  paths.list.push({
+    name: '站内活动',
+    path: 'https://docs.qq.com/doc/DTURGRkVZa0RiR0dP',
+    id: 5,
+    text: '',
+    target: '_blank'
   })
 }
 const login = async (type) => {
@@ -152,11 +153,11 @@ const pwd2WxappConfirm = async (pwd) => {
 </script>
 
 <template>
-  <header class="antialiased bg-white Male text-slate-500 dark:text-slate-400 dark:bg-slate-900">
+  <header class="antialiased bg-white Male text-slate-500">
     <div
-      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent">
+      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 bg-white/95 supports-backdrop-blur:bg-white/60">
       <div class="mx-auto max-w-8xl">
-        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10">
+        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
             <!-- <router-link
               to="/"
@@ -165,25 +166,19 @@ const pwd2WxappConfirm = async (pwd) => {
             <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
             <!-- </router-link> -->
             <div class="relative flex items-center justify-between lg:w-full">
-              <nav class="hidden text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200 lg:flex">
+              <nav class="hidden text-sm font-semibold leading-6 text-slate-700 lg:flex">
                 <ul class="flex space-x-14">
                   <template v-for="it in paths.list" :key="it.id">
                     <li class="ml-14"
                       :class="curPath === it.path ? 'border-b-4 rounded-sm border-blue-400 text-blue-500' : ''">
-                      <a-badge v-if="it.text" :text="it.text"
-                        :dotStyle="{ height: '16px', fontSize: '12px', lineHeight: '16px' }" :offset="[12, -4]">
-                        <router-link :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{ it.name }}
+                        <router-link v-if="!it.target" :to="it.path" class="hover:text-blue-500">{{ it.name }}
                         </router-link>
-                      </a-badge>
-                      <router-link v-else :to="it.path" class="hover:text-blue-500 dark:hover:text-blue-400">{{
-                          it.name
-                      }}
-                      </router-link>
+                        <a v-else :href="it.path" :target="it.target" class="hover:text-blue-500">{{ it.name }}</a>
                     </li>
                   </template>
                 </ul>
               </nav>
-              <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
+              <nav class="text-sm font-semibold leading-6 text-slate-700">
                 <ul class="flex space-x-10">
                   <li class="flex items-center">
                     <span class="flex items-center mr-2 cursor-pointer hover:bg-gray-50" @click="bindWxApp">
@@ -192,7 +187,7 @@ const pwd2WxappConfirm = async (pwd) => {
                     </span>
                     <a-divider direction="vertical"></a-divider>
                     <span v-if="userStore.userIsLogin" @click="openLogin"
-                      class="cursor-pointer hover:text-blue-500 dark:hover:text-blue-400">
+                      class="cursor-pointer hover:text-blue-500">
                       登录</span>
                     <span v-else class="flex items-center">
 
