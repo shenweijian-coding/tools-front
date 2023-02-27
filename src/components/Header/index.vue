@@ -229,7 +229,7 @@ const pwd2WxappConfirm = async (pwd) => {
       <!-- </a-tabs> -->
     </div>
   </s-dialog>
-  <s-dialog :visible="stepsVisible" title="免费获取积分" width="400px">
+  <s-dialog :visible="stepsVisible" title="免费获取积分" width="400px" @close="stepsVisible = false">
     <Wxapp></Wxapp>
   </s-dialog>
 </template>

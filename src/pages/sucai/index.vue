@@ -389,7 +389,7 @@ const handleHukeFile = async (type) => {
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog :visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="close">
+    <s-dialog :visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="shidahukeInfo.visible = false">
       <div>
         <div id="mse"></div>
         <div style="margin-top: 20px;text-align: right;">
