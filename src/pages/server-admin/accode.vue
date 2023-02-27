@@ -71,7 +71,7 @@
         <a-radio :value="2">固定站点</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1">
+    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1 && accodeInfo.createForm.type != 3">
         <a-input-number v-model="accodeInfo.createForm.selSiteNum" :min="1" :max="Object.keys(appStore.$state?.webMap).length" style="width: 200px;"/>
       </a-form-item>
     <a-form-item v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.activeMethod == 2" label="生效站点">
