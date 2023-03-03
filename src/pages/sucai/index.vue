@@ -109,29 +109,12 @@ const getDownUrl = async (url) => {
         if (res.data.id === 17) {
           zhongtuUrl.value = res.data.psd
           downVisible.value = true
-          Message.warning('由于众图网官方限制，下载众图时请使用迅雷，否则无法下载！')
-        } else if ([1, 2].includes(res.data.id)) {
-          shidahukeInfo.id = res.data.id
-          shidahukeInfo.visible = true
-          shidahukeInfo.params = res.data
-          setTimeout(() => {
-            playInstance.value = new HlsJsPlayer({
-              id: 'mse',
-              url: res.data.psd,
-              lang: "zh-cn",
-              autoplay: true,
-              playbackRate: [0.5, 1, 1.5, 2],
-              // height: '300px',
-              width: '100%'
-            });
-          });
         } else {
           downVisible.value = true
           href.value = res.data.psd
         }
       }
     }
-
   } catch (error) {
 
   } finally {
@@ -148,14 +131,32 @@ const getCurDownUrl = async (item) => {
     })
 
     if (res.data.result) {
-      options.list = []
-      Message.success('解析成功了，请点击立即下载按钮')
+      if ([1, 2].includes(res.data.id)) {
+        shidahukeInfo.id = res.data.id
+        shidahukeInfo.params = res.data
+        if (res?.data?.psd.indexOf('m3u8') !== -1) {          
+          shidahukeInfo.visible = true
+          setTimeout(() => {
+            playInstance.value = new HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              lang: "zh-cn",
+              autoplay: true,
+              playbackRate: [0.5, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
+          });
+        } else {
+          window.open(res.data.psd)
+        }
+      } else {        
+        downVisible.value = true
+        href.value = res.data.psd
+        // window.open(res.data.psd)
+      }
       userStore.getUserNum()
-      downVisible.value = true
-      href.value = res.data.psd
-      // window.open(res.data.psd)
     }
-    console.log(res);
   } catch (error) {
 
   } finally {
@@ -389,7 +390,8 @@ const handleHukeFile = async (type) => {
       </div>
     </s-dialog>
     <!-- 视达虎课播放弹窗 -->
-    <s-dialog :visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title" @close="shidahukeInfo.visible = false">
+    <s-dialog :visible="shidahukeInfo.visible" width="50%" :title="shidahukeInfo.params.title"
+      @close="shidahukeInfo.visible = false">
       <div>
         <div id="mse"></div>
         <div style="margin-top: 20px;text-align: right;">
@@ -411,14 +413,15 @@ const handleHukeFile = async (type) => {
     <!-- 下载弹窗 -->
     <s-dialog :visible="downVisible" @close="close" title="资源搜索成功" :closeOnClickOverlay="false" width="40%">
       <div v-if="zhongtuUrl" class="mt-2">
-        <p>复制众图下载链接后，粘贴到迅雷即可下载，浏览器无法直接访问！</p>
+        <p>重要！重要！重要！众图下载链接出现403页面时，把链接粘贴到迅雷即可下载，浏览器无法直接访问！</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
-          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接</a-button>
+          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接至迅雷</a-button>
         </span>
       </div>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
+        <p>除众图可能会出现403提示使用迅雷外，其它网站不要使用迅雷下载，可能会导致下载失败！</p>
         <p>接网站、小程序、脚本等开发，联系微信号swjznl（站长）</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
