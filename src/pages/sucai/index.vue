@@ -397,15 +397,6 @@ const handleHukeFile = async (type) => {
         <div style="margin-top: 20px;text-align: right;">
           <a-button v-if="shidahukeInfo.id === 1 && shidahukeInfo.params.isDown" type="primary" @click="downFile">
             下载素材+课堂源文件</a-button>
-          <template v-else-if="shidahukeInfo.id === 2">
-            <a-button type="primary" status="success" size="mini" @click="handleHukeFile(1)">
-              源文件下载
-            </a-button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-button type="primary" status="warning" size="mini" @click="handleHukeFile(2)">
-              本课素材下载
-            </a-button>
-          </template>
-          <a-button type="primary" disabled size="mini" v-else>该教程无课堂文件</a-button>
         </div>
       </div>
     </s-dialog>
