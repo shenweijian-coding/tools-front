@@ -372,7 +372,7 @@ const handleHukeFile = async (type) => {
     <div class="app-page-adb">
       <a-row :gutter="24">
         <a-col :lg="{ span: 6 }" :xs="{ span: 12 }"  v-for="(item,i) in webInfo.ads" :key="i">
-          <a-carousel class="app-ad-item" :auto-play="true" indicator-type="dot" show-arrow="hover">
+          <a-carousel class="app-ad-item" :auto-play="true" indicator-type="dot" show-arrow="hover" :move-speed="1000">
             <a-carousel-item v-for="(image,i) in item" :key="i" class="ad-item">
               <a :href="image.url" target="_blank">
                 <img :src="image.img" :style="{ width: '100%',height: '100%' }" />
