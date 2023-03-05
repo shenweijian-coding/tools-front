@@ -44,8 +44,9 @@ const baotuCheckInfo = reactive({
   content: '',
   params: ''
 })
-const webList = reactive({
-  list: []
+const webInfo = reactive({
+  list: [],
+  ads: []
 })
 let link = ''
 const options = reactive({
@@ -54,7 +55,8 @@ const options = reactive({
 listLoading.value = true
 getInfo().then(res => {
   console.log(res)
-  webList.list = res.data.webList
+  webInfo.list = res.data.webList
+  webInfo.ads = res.data.ads
   listLoading.value = false
 })
 // 被邀请的逻辑
@@ -134,7 +136,7 @@ const getCurDownUrl = async (item) => {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
         shidahukeInfo.params = res.data
-        if (res?.data?.psd.indexOf('m3u8') !== -1) {          
+        if (res?.data?.psd.indexOf('m3u8') !== -1) {
           shidahukeInfo.visible = true
           setTimeout(() => {
             playInstance.value = new HlsJsPlayer({
@@ -150,7 +152,7 @@ const getCurDownUrl = async (item) => {
         } else {
           window.open(res.data.psd)
         }
-      } else {        
+      } else {
         downVisible.value = true
         href.value = res.data.psd
         // window.open(res.data.psd)
@@ -301,6 +303,7 @@ const handleHukeFile = async (type) => {
     Message.error('出现错误,请联系管理员！')
   }
 }
+
 </script>
 
 <template>
@@ -348,7 +351,7 @@ const handleHukeFile = async (type) => {
         </div>
         <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
         <a-row>
-          <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webList.list" :key="it.id">
+          <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
               <div class="app-weblist-item shou">
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
@@ -364,6 +367,22 @@ const handleHukeFile = async (type) => {
         </a-row>
       </div>
     </div>
+
+    <!-- 底部广告 -->
+    <div class="app-page-adb">
+      <a-row :gutter="24">
+        <a-col :lg="{ span: 6 }" :xs="{ span: 12 }"  v-for="(item,i) in webInfo.ads" :key="i">
+          <a-carousel class="app-ad-item" :auto-play="true" indicator-type="dot" show-arrow="hover">
+            <a-carousel-item v-for="(image,i) in item" :key="i" class="ad-item">
+              <a :href="image.url" target="_blank">
+                <img :src="image.img" :style="{ width: '100%',height: '100%' }" />
+              </a>
+            </a-carousel-item>
+          </a-carousel>
+        </a-col>
+      </a-row>
+    </div>
+
     <NumLack :visible="visible" @close="close" />
     <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
@@ -557,6 +576,23 @@ const handleHukeFile = async (type) => {
         color: #9c9c9c;
       }
     }
+  }
+
+  .app-page-adb {
+    max-width: 1240px;
+    margin: 20px auto auto;
+    // padding: 0 10px;
+    .app-ad-item{
+      height: 125px;
+      margin-bottom: 12px;
+    }
+    .ad-item {
+      border-radius: 4px;
+      overflow: hidden;
+      -webkit-transition: All .25s;
+      transition: All .25s;
+      opacity: .8;
+  }
   }
 }
 

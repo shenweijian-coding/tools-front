@@ -1,6 +1,6 @@
 <template>
-  <s-dialog :visible="visible" width="346px" @close="close">
-    <div style="text-align: center;">提示：<a-tag color="purple">支付时请不要关闭本弹窗[{{ payStatus }}...]</a-tag>
+  <s-dialog :visible="visible" width="346px" @close="close" :closeOnClickOverlay="false">
+    <div style="text-align: center;">提示：<a-tag color="purple">支付完成会自动关闭弹窗[{{ payStatus }}...]</a-tag>
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>
