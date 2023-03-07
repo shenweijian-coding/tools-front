@@ -119,6 +119,7 @@ const login = async (type) => {
 
 const close = () => {
   loginCode.value = ''
+  visible.value = false;
 }
 // const task = () => {
 //   if (!userStore.adNum || !userStore.isSign) {

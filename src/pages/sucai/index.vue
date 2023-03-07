@@ -112,8 +112,8 @@ const getDownUrl = async (url) => {
           zhongtuUrl.value = res.data.psd
           downVisible.value = true
         } else {
-          downVisible.value = true
           href.value = res.data.psd
+          downVisible.value = true
         }
       }
     }
@@ -153,9 +153,14 @@ const getCurDownUrl = async (item) => {
           window.open(res.data.psd)
         }
       } else {
-        downVisible.value = true
-        href.value = res.data.psd
-        // window.open(res.data.psd)
+        if (res.data.options) {
+          options.list = res.data.options
+          Message.info('请重新点击分类下载按钮')
+        } else {          
+          href.value = res.data.psd
+          downVisible.value = true
+          // window.open(res.data.psd)
+        }
       }
       userStore.getUserNum()
     }
