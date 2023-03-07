@@ -150,8 +150,10 @@ const getCurDownUrl = async (item) => {
             });
           });
         } else {
-          window.open(res.data.psd)
+          href.value = res.data.psd
+          downVisible.value = true
         }
+        options.list = []
       } else {
         if (res.data.options) {
           options.list = res.data.options
@@ -159,6 +161,7 @@ const getCurDownUrl = async (item) => {
         } else {          
           href.value = res.data.psd
           downVisible.value = true
+          options.list = []
           // window.open(res.data.psd)
         }
       }
