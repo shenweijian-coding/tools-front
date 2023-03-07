@@ -116,16 +116,40 @@ const getDownUrl = async (url) => {
     }
 
     if (res.data.result) {
-      if (res.data.options) {
-        options.list = res.data.options
-      } else {
-        await userStore.getUserNum()
-        if (res.data.id === 17) {
-          zhongtuUrl.value = res.data.psd
-          downVisible.value = true
+      if ([1, 2].includes(res.data.id)) {
+        shidahukeInfo.id = res.data.id
+        shidahukeInfo.params = res.data
+        if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {          
+          shidahukeInfo.visible = true
+          setTimeout(() => {
+            playInstance.value = new HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              lang: "zh-cn",
+              autoplay: true,
+              playbackRate: [0.5, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
+          });
         } else {
           downVisible.value = true
           href.value = res.data.psd
+        }
+        options.list = []
+
+      } else {        
+        if (res.data.options) {
+          options.list = res.data.options
+        } else {
+          await userStore.getUserNum()
+          if (res.data.id === 17) {
+            zhongtuUrl.value = res.data.psd
+            downVisible.value = true
+          } else {
+            downVisible.value = true
+            href.value = res.data.psd
+          }
         }
       }
     }
