@@ -103,17 +103,40 @@ const getDownUrl = async (url) => {
     }
 
     if (res.data.result) {
-      if (res.data.options) {
-        options.list = res.data.options
-      } else {
-        Message.success('解析成功了，请点击立即下载按钮')
-        await userStore.getUserNum()
-        if (res.data.id === 17) {
-          zhongtuUrl.value = res.data.psd
-          downVisible.value = true
+      if ([1, 2].includes(res.data.id)) {
+        shidahukeInfo.id = res.data.id
+        shidahukeInfo.params = res.data
+        if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {
+          shidahukeInfo.visible = true
+          setTimeout(() => {
+            playInstance.value = new HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              lang: "zh-cn",
+              autoplay: true,
+              playbackRate: [0.5, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
+          });
         } else {
           href.value = res.data.psd
           downVisible.value = true
+        }
+        options.list = []
+      } else {
+        if (res.data.options) {
+          options.list = res.data.options
+        } else {
+          Message.success('解析成功了，请点击立即下载按钮')
+          await userStore.getUserNum()
+          if (res.data.id === 17) {
+            zhongtuUrl.value = res.data.psd
+            downVisible.value = true
+          } else {
+            href.value = res.data.psd
+            downVisible.value = true
+          }
         }
       }
     }
@@ -158,7 +181,7 @@ const getCurDownUrl = async (item) => {
         if (res.data.options) {
           options.list = res.data.options
           Message.info('请重新点击分类下载按钮')
-        } else {          
+        } else {
           href.value = res.data.psd
           downVisible.value = true
           options.list = []
@@ -379,11 +402,11 @@ const handleHukeFile = async (type) => {
     <!-- 底部广告 -->
     <div class="app-page-adb">
       <a-row :gutter="24">
-        <a-col :lg="{ span: 6 }" :xs="{ span: 12 }"  v-for="(item,i) in webInfo.ads" :key="i">
+        <a-col :lg="{ span: 6 }" :xs="{ span: 12 }" v-for="(item, i) in webInfo.ads" :key="i">
           <a-carousel class="app-ad-item" :auto-play="true" indicator-type="dot" show-arrow="hover" :move-speed="1000">
-            <a-carousel-item v-for="(image,i) in item" :key="i" class="ad-item">
+            <a-carousel-item v-for="(image, i) in item" :key="i" class="ad-item">
               <a :href="image.url" target="_blank">
-                <img :src="image.img" :style="{ width: '100%',height: '100%' }" />
+                <img :src="image.img" :style="{ width: '100%', height: '100%' }" />
               </a>
             </a-carousel-item>
           </a-carousel>
@@ -589,18 +612,20 @@ const handleHukeFile = async (type) => {
   .app-page-adb {
     max-width: 1240px;
     margin: 20px auto auto;
+
     // padding: 0 10px;
-    .app-ad-item{
+    .app-ad-item {
       height: 125px;
       margin-bottom: 12px;
     }
+
     .ad-item {
       border-radius: 4px;
       overflow: hidden;
       -webkit-transition: All .25s;
       transition: All .25s;
       opacity: .8;
-  }
+    }
   }
 }
 
