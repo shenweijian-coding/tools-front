@@ -173,6 +173,7 @@ const getCurDownUrl = async (item) => {
         downVisible.value = true
         href.value = res.data.psd
       }
+      options.list = []
     }
   } catch (error) {
 
