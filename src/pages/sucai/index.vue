@@ -167,13 +167,19 @@ const getCurDownUrl = async (item) => {
           downVisible.value = true
           href.value = res.data.psd
         }
+        options.list = []
+
       } else {          
-        Message.success('解析成功了，请点击立即下载按钮')
-        userStore.getUserNum()
-        downVisible.value = true
-        href.value = res.data.psd
+        if (res.data.options) {
+          options.list = res.data.options
+          Message.info('请重新点击分类下载按钮')
+        } else {          
+          href.value = res.data.psd
+          downVisible.value = true
+          // window.open(res.data.psd)
+          options.list = []
+        }
       }
-      options.list = []
     }
   } catch (error) {
 
