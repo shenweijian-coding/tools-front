@@ -136,8 +136,6 @@ const getDownUrl = async (url) => {
           downVisible.value = true
           href.value = res.data.psd
         }
-        options.list = []
-
       } else {        
         if (res.data.options) {
           options.list = res.data.options
