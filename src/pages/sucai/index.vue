@@ -103,7 +103,7 @@ const getDownUrl = async (url) => {
     }
 
     if (res.data.result) {
-      if ([1, 2].includes(res.data.id)) {
+      if ([1, 2].includes(res.data.id) && !res.data.options) {
         shidahukeInfo.id = res.data.id
         shidahukeInfo.params = res.data
         if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {
@@ -123,7 +123,6 @@ const getDownUrl = async (url) => {
           href.value = res.data.psd
           downVisible.value = true
         }
-        options.list = []
       } else {
         if (res.data.options) {
           options.list = res.data.options
