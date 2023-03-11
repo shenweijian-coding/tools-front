@@ -93,6 +93,7 @@ const pollOrderStatus = (tradeNo) => {
     if (res.data === 1) {
       clearInterval(timer.value)
       Message.success('充值成功')
+      userStore.getUserNum()
       close()
     } else if (res.data === -1) {
       Message.success('已扫码,等待支付···')
