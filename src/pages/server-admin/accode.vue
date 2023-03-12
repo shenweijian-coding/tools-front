@@ -2,19 +2,20 @@
   <a-form :model="accodeInfo.form" layout="inline">
     <a-form-item label="类型:">
       <a-radio-group v-model="accodeInfo.form.type"  @change="search">
-        <a-radio :value="1">时长卡</a-radio>
+        <a-radio :value="1">时长卡（分站次数）</a-radio>
+        <a-radio :value="4">时长卡（总站次数）</a-radio>
         <a-radio :value="2">站点次数卡</a-radio>
         <a-radio :value="3">全站次数卡</a-radio>
       </a-radio-group>
     </a-form-item>
-    <!-- <a-form-item label="卡密:">
+    <a-form-item label="卡密:">
       <a-input v-model="accodeInfo.form.code" placeholder="请复制卡密"></a-input>
-    </a-form-item> -->
-    <!-- <a-form-item>
+    </a-form-item>
+    <a-form-item>
       <a-space>
         <a-button type="primary" @click="search">搜索</a-button>
       </a-space>
-    </a-form-item> -->
+    </a-form-item>
   </a-form>
   <a-divider orientation="center"></a-divider>
   <a-button type="primary" @click="accodeInfo.createVisible = true">新建卡密</a-button>
@@ -26,7 +27,8 @@
     <a-table-column title="卡密" data-index="code" align="center"></a-table-column>
     <a-table-column title="类型" data-index="type" align="center">
       <template #cell="{ record }">
-        <a-tag v-if="record.type == 1" color="#7816ff">时长卡</a-tag>
+        <a-tag v-if="record.type == 1" color="#7816ff">时长卡（分站次数）</a-tag>
+        <a-tag v-else-if="record.type == 4" color="#A8BB91">时长卡（总站次数）</a-tag>
         <a-tag v-else-if="record.type == 2" color="#00b42a">站点次数卡</a-tag>
         <a-tag v-else color="#0fc6c2">全站次数卡</a-tag>
       </template>
@@ -60,27 +62,28 @@
     <a-form v-if="!accodeInfo.createResult.length" :model="accodeInfo.createForm" auto-label-width>
       <a-form-item label="卡密类型">
         <a-radio-group v-model="accodeInfo.createForm.type">
-          <a-radio :value="1">时长卡</a-radio>
+          <a-radio :value="1">时长卡（分站次数）</a-radio>
+          <a-radio :value="4">时长卡（总站次数）</a-radio>
           <a-radio :value="2">站点次数卡</a-radio>
           <a-radio :value="3">全站次数卡</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="激活方式" v-if="accodeInfo.createForm.type !==3">
+    <a-form-item label="激活方式" v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.type !==4">
       <a-radio-group v-model="accodeInfo.createForm.activeMethod">
         <a-radio :value="1">用户自选</a-radio>
         <a-radio :value="2">固定站点</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1 && accodeInfo.createForm.type != 3">
-        <a-input-number v-model="accodeInfo.createForm.selSiteNum" :min="1" :max="Object.keys(appStore.$state?.webMap).length" style="width: 200px;"/>
-      </a-form-item>
+    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1 && accodeInfo.createForm.type != 3 && accodeInfo.createForm.type != 4">
+      <a-input-number v-model="accodeInfo.createForm.selSiteNum" :min="1" :max="Object.keys(appStore.$state?.webMap).length" style="width: 200px;"/>
+    </a-form-item>
     <a-form-item v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.activeMethod == 2" label="生效站点">
       <a-checkbox-group v-model="accodeInfo.createForm.sites">
         <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
       <a-button type="text" size="mini" @click="selAll">全选/全不选</a-button>
     </a-form-item>
-    <div class="flex" v-if="accodeInfo.createForm.type ===1">
+    <div class="flex" v-if="accodeInfo.createForm.type ===1 || accodeInfo.createForm.type ===4">
       <a-form-item label="可用时长(天)">
         <a-input-number v-model="accodeInfo.createForm.num" :min="0"/>
       </a-form-item>
@@ -88,7 +91,7 @@
         <a-input-number v-model="accodeInfo.createForm.eNum" :min="1"/>
       </a-form-item>
     </div>
-    <a-form-item label="可用积分" v-if="accodeInfo.createForm.type !==1">
+    <a-form-item label="可用积分" v-if="accodeInfo.createForm.type ===3 || accodeInfo.createForm.type === 2">
       <a-input-number v-model="accodeInfo.createForm.num" style="width:200px" :min="1"/>
     </a-form-item>
     <a-form-item label="生成数量">
@@ -202,6 +205,9 @@ const createAccode = async () => {
       Message.warning('请输入自选数量')
       return
     }
+  } else if(type == 4) {
+    sites = Object.keys(appStore.$state.webMap)
+    selSiteNum = 0
   }
   const res = await createAccodeApi({ type, num, eNum, createNum, sites, selSiteNum })
   let str = ''

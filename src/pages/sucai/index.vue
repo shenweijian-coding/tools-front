@@ -140,7 +140,9 @@ const getDownUrl = async (url) => {
         if (res.data.options) {
           options.list = res.data.options
         } else {
-          await userStore.getUserNum()
+          setTimeout(() => {
+            userStore.getUserNum()
+          }, 1000);
           if (res.data.id === 17) {
             zhongtuUrl.value = res.data.psd
             downVisible.value = true
@@ -195,7 +197,10 @@ const getCurDownUrl = async (item) => {
         if (res.data.options) {
           options.list = res.data.options
           Message.info('请重新点击分类下载按钮')
-        } else {          
+        } else {        
+          setTimeout(() => {
+            userStore.getUserNum()
+          }, 1000);  
           href.value = res.data.psd
           downVisible.value = true
           // window.open(res.data.psd)
@@ -218,7 +223,9 @@ const websitCheckCode = async () => {
     }
     const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
-      await userStore.getUserNum()
+      setTimeout(() => {
+        userStore.getUserNum()
+      }, 1000);
       window.open(res.data.psd)
     }
   } catch (error) {
@@ -314,7 +321,9 @@ const baotuCheckClick = async e => {
     baotuCheckVisible.value = false
     if (res.data && res.data.psd) {
       Message.success('解析成功了，请点击立即下载按钮')
-      userStore.getUserNum()
+      setTimeout(() => {
+        userStore.getUserNum()
+      }, 1000);
       downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
@@ -368,7 +377,7 @@ const showWebTip = (item) => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span :class="userStore.$state?.auth?.[it.id]?.initENum ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通时长套餐') : '未登录' }}</span>
+                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : '开通套餐')) : '未登录' }}</span>
                   </div>
                 </div>
               </div>
