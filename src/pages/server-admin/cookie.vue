@@ -5,27 +5,28 @@
   <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe class="mt-m">
     <template #columns>
       <a-table-column title="ID" data-index="id" align="center"></a-table-column>
-      <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
+      <a-table-column title="站点名称" data-index="name" align="center"  width="90"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
-      <a-table-column title="关键词" data-index="keyWord" align="center"></a-table-column>
-      <a-table-column title="站点描述" data-index="desc" align="center">
+      <a-table-column title="关键词" data-index="keyWord" align="center"  width="100"></a-table-column>
+      <a-table-column title="站点描述" data-index="desc" align="center"  width="300">
       </a-table-column>
-      <a-table-column title="今日下载次数" data-index="num" align="center"></a-table-column>
-      <a-table-column title="单次扣除" data-index="cost" align="center">
+      <a-table-column title="今日下载" data-index="num" align="center" width="100"></a-table-column>
+      <a-table-column title="单次扣除" data-index="cost" align="center" width="100">
       </a-table-column>
-      <a-table-column title="使用官方/第三方" data-index="tag" align="center">
+      <a-table-column title="官方/第三方" data-index="tag" align="center" width="100">
         <template #cell="{ record }">
-          <a-tag v-if="record.otherCookie?.length" color="#7302d6">第三方解析</a-tag>
+          <a-tag v-if="record.otherCookie?.length && record.cookie?.length" color="#1342d6">三方+官网</a-tag>
+          <a-tag v-else-if="record.otherCookie?.length" color="#7302d6">第三方解析</a-tag>
           <a-tag v-else-if="record.cookie?.length" color="#00b42a">官方解析</a-tag>
           <a-tag v-else color="#f53f3f">未配置</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="是否开启解析" data-index="isRun" align="center">
+      <a-table-column title="是否开启" data-index="isRun" align="center" width="100">
         <template #cell="{ record }">
           <a-tag :color="record.isRun ? '#00b42a' : '#f53f3f'">{{ record.isRun ? '开启' : '关闭' }}</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="编辑" align="center">
+      <a-table-column title="编辑" align="center" width="100">
         <template #cell="{ record }">
           <a-button type="text" @click="editWeb(record)">编辑</a-button>
           <a-button type="text" @click="deleteWeb(record)">删除</a-button>
@@ -38,7 +39,7 @@
     <p>新增站点功能，增加的网站仅限对接的第三方支持的网站，添加的官网cookie是无法进行解析的，因为没有对接官网；</p>
   </div>
   <!-- cookie配置弹窗 -->
-  <s-dialog :visible="tableData.visible" width="50%" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
+  <s-dialog :visible="tableData.visible" width="500px" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
     <div class="cookie-box">
       <a-form :model="tableData.currentCookie" auto-label-width>
         <a-divider orientation="center">基本配置</a-divider>
