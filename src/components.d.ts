@@ -5,6 +5,14 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AButton: typeof import('@arco-design/web-vue')['Button']
+    ACheckbox: typeof import('@arco-design/web-vue')['Checkbox']
+    ACheckboxGroup: typeof import('@arco-design/web-vue')['CheckboxGroup']
+    ADivider: typeof import('@arco-design/web-vue')['Divider']
+    ADoption: typeof import('@arco-design/web-vue')['Doption']
+    ADropdown: typeof import('@arco-design/web-vue')['Dropdown']
+    AInputSearch: typeof import('@arco-design/web-vue')['InputSearch']
+    ASpace: typeof import('@arco-design/web-vue')['Space']
     Floor: typeof import('./components/floor/index.vue')['default']
     Header: typeof import('./components/Header/index.vue')['default']
     Input: typeof import('./components/Input/index.vue')['default']

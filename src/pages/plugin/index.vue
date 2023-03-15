@@ -1,17 +1,17 @@
 <template>
   <div class="plugin-box">
     <div style="width: 140px; height: 40px; margin: 40px auto 0;">
-      <a :href="pluginUrl"
-        class="btna">书签插件</a>
+      <a :href="pluginUrl" class="btna">书签插件</a>
     </div>
-    <div style="padding-left: 10px; font-size: 14px; text-align: center; line-height: 30px; margin-top: 50px;">光标移动到【书签插件】按钮上，鼠标左键按住拖放到【浏览器书签栏】，添加完成；<br > 添加好插件后，到素材官网找到要下载的素材页，点击添加好的书签插件就可以直接搜索下载；</div>
+    <div style="padding-left: 10px; font-size: 14px; text-align: center; line-height: 30px; margin-top: 50px;">
+      光标移动到【书签插件】按钮上，鼠标左键按住拖放到【浏览器书签栏】，添加完成；<br> 添加好插件后，到素材官网找到要下载的素材页，点击添加好的书签插件就可以直接搜索下载；</div>
   </div>
 </template>
 
 <script setup>
 console.log(window.location.host);
 const host = window.location.host
-const pluginUrl = ref(`javascript:(function(a){if(window.location.hostname != '${host}' && window.location.hostname != 'localhost'){if(window.location.href.indexOf('woofeng.cn') != false){if(document.getElementById('myModal').style.cssText.indexOf('block')==-1||document.getElementById('sc_aid').value==''){alert('请先选择素材点击后再试！');return false;}else{window.location.href = 'http://${host}/#/sucai?url=' + document.getElementById('sc_aid').value}}else{window.location.href = 'http://${host}/#/sucai?url=' + window.location.href}}})(window);`)
+const pluginUrl = ref(`javascript:(function(a){if(window.location.hostname != '${host}' && window.location.hostname != 'localhost'){if(window.location.href.indexOf('woofeng.cn') != -1){if(document.getElementById('myModal').style.cssText.indexOf('block')==-1||document.getElementById('sc_aid').value==''){alert('请先选择素材点击后再试！');return false;}else{window.location.href = 'http://${host}/#/sucai?url=' + document.getElementById('sc_aid').value}}else{window.location.href = 'http://${host}/#/sucai?url=' + window.location.href}}})(window);`)
 </script>
 
 <style lang="less" scoped>
@@ -46,4 +46,5 @@ const pluginUrl = ref(`javascript:(function(a){if(window.location.hostname != '$
       box-shadow: 0 5px 20px 0 #3a6dee;
     }
   }
-}</style>
+}
+</style>
