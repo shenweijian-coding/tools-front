@@ -39,7 +39,7 @@
     <p>新增站点功能，增加的网站仅限对接的第三方支持的网站，添加的官网cookie是无法进行解析的，因为没有对接官网；</p>
   </div>
   <!-- cookie配置弹窗 -->
-  <s-dialog :visible="tableData.visible" width="500px" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
+  <s-dialog :visible="tableData.visible" width="50%" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
     <div class="cookie-box">
       <a-form :model="tableData.currentCookie" auto-label-width>
         <a-divider orientation="center">基本配置</a-divider>

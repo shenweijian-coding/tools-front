@@ -2,7 +2,7 @@
   <Header></Header>
   <router-view></router-view>
   <floor></floor>
-  <s-dialog :visible="isShowNotice" width="36%" title="公告" @close="isShowNotice = false">
+  <s-dialog :visible="isShowNotice" width="56%" title="公告" @close="isShowNotice = false">
     <p v-html="appStore.$state.webConfig.notice"></p>
   </s-dialog>
 </template>
