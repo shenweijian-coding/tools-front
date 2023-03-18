@@ -2,11 +2,11 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
-import wxLogin from '../wxapp-login/index.vue'
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import { useAppStore } from '@/store';
 import selSites from './sel-sites.vue'
+import myVideo from './video.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const loading = ref(false)
@@ -36,16 +36,10 @@ const paths = reactive({
       path: '/plugin',
       id: 4,
       text: ''
-    }, {
-      name: '网站源码',
-      path: 'https://docs.qq.com/doc/DTWdDa3pFTWZxSm1L?&u=e7e62fcefa1d47a09a12cbb8c90651ac',
-      id: 5,
-      text: '',
-      target: '_blank'
     }]
 })
 const loginVisible = ref(false);
-
+const videoVisible = ref(false)
 const loginInfo = reactive({
   cdkey: '',
   loginType: 1 // 1是卡密登录 0是小程序登录
@@ -120,6 +114,7 @@ const toggleLogin = () => {
                       <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
                     </li>
                   </template>
+                  <li class="ml-14 hover:text-white cursor-pointer" @click="videoVisible = true">视频教程</li>
                 </ul>
               </nav>
               <nav class="text-sm font-semibold leading-6 text-white dark:text-slate-200">
@@ -171,6 +166,7 @@ const toggleLogin = () => {
   </s-dialog>
   <!-- 自选站点 -->
   <sel-sites></sel-sites>
+  <myVideo :videoVisible="videoVisible" @close="videoVisible = false"></myVideo>
 </template>
 
 <style lang="less" scoped>

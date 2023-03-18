@@ -1,10 +1,13 @@
 <template>
   <div class="plugin-box">
-    <div style="width: 140px; height: 40px; margin: 40px auto 0;">
+    <div style="width: 140px; height: 40px; margin: 20px auto 0;">
       <a :href="pluginUrl" class="btna">书签插件</a>
     </div>
-    <div style="padding-left: 10px; font-size: 14px; text-align: center; line-height: 30px; margin-top: 50px;">
+    <div style="padding-left: 10px; font-size: 14px; text-align: center; line-height: 30px; margin:20px 0;">
       光标移动到【书签插件】按钮上，鼠标左键按住拖放到【浏览器书签栏】，添加完成；<br> 添加好插件后，到素材官网找到要下载的素材页，点击添加好的书签插件就可以直接搜索下载；</div>
+    <video controls>
+      <source src="https://tools1998.top/20230317_224822.mp4" type="video/mp4">
+    </video>
   </div>
 </template>
 
