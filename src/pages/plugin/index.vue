@@ -6,7 +6,7 @@
     <div style="padding-left: 10px; font-size: 14px; text-align: center; line-height: 30px; margin:20px 0;">
       光标移动到【书签插件】按钮上，鼠标左键按住拖放到【浏览器书签栏】，添加完成；<br> 添加好插件后，到素材官网找到要下载的素材页，点击添加好的书签插件就可以直接搜索下载；</div>
     <video controls>
-      <source src="https://tools1998.top/20230317_224822.mp4" type="video/mp4">
+      <source src="http://cloud.video.taobao.com/play/u/null/p/1/e/6/t/1/402182286428.mp4" type="video/mp4">
     </video>
   </div>
 </template>
