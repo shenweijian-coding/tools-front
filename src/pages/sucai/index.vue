@@ -153,7 +153,35 @@ const getCurDownUrl = async (item) => {
       url: link,
       option: toRaw(item)
     })
-
+    
+    if (res.data && res.data.status) { // 校验状态
+      if (res.data.status === -1) {
+        visible.value = true
+        return
+      } else if (res.data.status === 1002) { // 网站自己的校验
+        if (res.data.id === 8) { // 90设计验证
+          sheji90CheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+          setTimeout(() => {
+            sheji90check()
+          });
+        } else if (res.data.id === 5) { // 包图验证
+          baotuCheckVisible.value = true
+          baotuCheckInfo.content = res.data.handle
+          baotuCheckInfo.params = res.data.batch
+          baotuCheckInfo.setCookies = res.data.setCookies
+        } else if (res.data.id === 7) { // 觅元素验证
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        } else { // 风云办公验证       
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        }
+        return
+      } else if (res.data.status === 1000) { // 爬虫校验
+        checkVisible.value = true
+      }
+    }
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
