@@ -238,8 +238,11 @@ const websitCheckCode = async () => {
     }
     const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
-      await userStore.getUserNum()
-      window.open(res.data.psd)
+      webSiteCheckVisible.value = false
+      if (res.data && res.data.psd) {
+        await userStore.getUserNum()
+        res.data.psd && window.open(res.data.psd)
+      }
     }
   } catch (error) {
     console.log(error);
@@ -444,7 +447,7 @@ const handleHukeFile = async (type) => {
     <NumLack :visible="visible" @close="close" />
     <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
-    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
+    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading" title="验证">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
