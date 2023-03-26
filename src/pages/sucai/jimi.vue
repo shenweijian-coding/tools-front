@@ -7,8 +7,8 @@
         <div class="mt-l" v-if="info.file_size">文件大小：<span>{{ info.file_size }}</span></div>
         <div class="mt-l" v-if="info.extension">文件类型：<span>{{ info.extension }}</span></div>
         <div class="mt-l" v-if="info.path">
+          <a-button @click="copyUrl(info.path)" class="mr-2">复制下载链接</a-button>&nbsp;
           <a :href="info.path" target="_blank" referrerpolicy="no-referrer">
-            <a-button @click="copyUrl(info.path)" class="mr-2">复制下载链接</a-button>&nbsp;
             <a-button type="primary">立即下载</a-button>
             <p class="mt-m">tip：下载无法跳转时，复制下载地址在浏览器打开</p>
           </a>
