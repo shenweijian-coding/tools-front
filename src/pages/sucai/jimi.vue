@@ -8,7 +8,9 @@
         <div class="mt-l" v-if="info.extension">文件类型：<span>{{ info.extension }}</span></div>
         <div class="mt-l" v-if="info.path">
           <a :href="info.path" target="_blank" referrerpolicy="no-referrer">
-            <a-button type="primary">点我 立即下载</a-button>
+            <a-button @click="copyUrl(info.path)" class="mr-2">复制下载链接</a-button>&nbsp;
+            <a-button type="primary">立即下载</a-button>
+            <p class="mt-m">tip：下载无法跳转时，复制下载地址在浏览器打开</p>
           </a>
         </div>
       </div>
@@ -69,6 +71,18 @@ const getJimiInfo = async () => {
   return res
 }
 const close = () => {
+  clearInterval(timer)
   emit('close')
+}
+const copyUrl = (copyText) => {
+
+var textareaC = document.createElement('textarea');
+textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+textareaC.value = copyText;
+document.body.appendChild(textareaC); //将textarea添加为body子元素
+textareaC.select();
+var res = document.execCommand('copy');
+document.body.removeChild(textareaC);//移除DOM元素
+Message.success('复制成功！');
 }
 </script>
