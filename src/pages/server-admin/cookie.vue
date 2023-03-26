@@ -77,7 +77,8 @@
         <a-divider orientation="center">三方cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.otherCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
-          <a-input v-model="cookie.code" placeholder="对应卡密"/>
+          <a-input v-model="cookie.code" placeholder="对应卡密"/>&nbsp;
+          <a-input v-model="cookie.api" placeholder="三方ID"/>
           <a-button type="text" status="success" @click="getOtherAuth(cookie)">查看权限</a-button>
           <a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
         </a-form-item>
@@ -98,7 +99,8 @@
 
     <a-form-item label="`三方cookie">
       <a-input v-model="tableData.moreCookie.value" placeholder="请复制cookie"/>&nbsp;
-      <a-input v-model="tableData.moreCookie.code" placeholder="对应卡密"/>
+      <a-input v-model="tableData.moreCookie.code" placeholder="对应卡密"/>&nbsp;
+      <a-input v-model="tableData.moreCookie.api" placeholder="三方ID"/>
     </a-form-item>
     </a-form>
     <template #footer>
@@ -123,7 +125,7 @@ const tableData = reactive({
   moreVisible: false,
   currentCookie: {},
   actionType: 1, // 1是编辑 0是新增
-  moreCookie: { code: '', value: '' }
+  moreCookie: { code: '', value: '', api: null }
 })
 
 const getCookie = () => {
@@ -225,7 +227,7 @@ const addMoreOtherCookie = async () => {
   tableData.moreVisible = true
 }
 const saveMoreCookie = async () => {
-  if (!tableData.moreCookie.code) {
+  if (!tableData.moreCookie.code || !tableData.moreCookie.api) {
     Message.warning('填写完整')
     return
   }

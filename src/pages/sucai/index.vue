@@ -12,6 +12,7 @@ import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
+import jimi from './jimi.vue'
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -29,6 +30,12 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
+
+//jiimi
+const jimiInfo = reactive({
+  visible: false,
+  f:  ''
+})
 // 视达虎课播放
 const shidahukeInfo = reactive({
   visible: false,
@@ -54,7 +61,8 @@ const options = reactive({
   list: []
 })
 
-let link = ''
+const link = ref('')
+// let link = ''
 
 // 获取网站列表
 const getWebList = () => {
@@ -87,7 +95,7 @@ const getDownUrl = async (url) => {
     href.value = ''
     options.list = []
     console.log(url.value);
-    link = url.value
+    link.value = url.value
     const res = await getPngUrl({ url: url.value })
     if (res.data.status) { // 校验状态
       if (res.data.status === -1) {
@@ -113,6 +121,16 @@ const getDownUrl = async (url) => {
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
       }
+    }
+
+    // 第三方解析
+    if (res.data && res.data.t == 2 && res.data.psd) {
+      jimiInfo.visible = true
+      jimiInfo.f = res.data.psd
+      setTimeout(() => {
+        userStore.getUserNum()
+      }, 5000);
+      return
     }
 
     if (res.data.result) {
@@ -166,7 +184,7 @@ const getCurDownUrl = async (item) => {
   try {
     loading.value = true
     const res = await getPngUrl({
-      url: link,
+      url: link.value,
       option: toRaw(item)
     })
     // 验证
@@ -251,7 +269,7 @@ const websitCheckCode = async () => {
       Message.error('请输入')
       return
     }
-    const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
+    const res = await webCheck({ url: link.value, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
       webSiteCheckVisible.value = false
       if (res.data && res.data.psd) {
@@ -295,7 +313,7 @@ const sheji90check = async () => {
     try {
       checkLoading.value = true
       console.log(cat.style.left);
-      const res = await webCheck({ url: link, code: parseFloat(cat.style.left) })
+      const res = await webCheck({ url: link.value, code: parseFloat(cat.style.left) })
       console.log(res);
       if (res.data.result) {
         downVisible.value = true
@@ -344,7 +362,7 @@ const baotuCheckClick = async e => {
   try {
     console.log(e.target.getAttribute('data-key'));
     const res = await webCheck({
-      url: link, code: {
+      url: link.value, code: {
         setCookies: baotuCheckInfo.setCookies,
         params: `answer_key=${e.target.getAttribute('data-key')}${baotuCheckInfo.params}`
       }
@@ -501,6 +519,9 @@ const showWebTip = (item) => {
           </span>
         </template>
     </s-dialog>
+
+    <!-- jimi -->
+    <jimi v-if="jimiInfo.visible" :visible="jimiInfo.visible" :file="jimiInfo.f" :url="link" @close="jimiInfo.visible = false"></jimi>
   </div>
 </template>
 
