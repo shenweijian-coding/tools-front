@@ -143,13 +143,13 @@ const getDownUrl = async (url) => {
         } else {
           Message.success('解析成功了，请点击立即下载按钮')
           await userStore.getUserNum()
-          if (res.data.id === 17) {
-            zhongtuUrl.value = res.data.psd
-            downVisible.value = true
-          } else {
-            href.value = res.data.psd
-            downVisible.value = true
-          }
+          // if (res.data.id === 17) {
+          //   zhongtuUrl.value = res.data.psd
+          //   downVisible.value = true
+          // } else {
+          href.value = res.data.psd
+          downVisible.value = true
+          // }
         }
       }
     }
@@ -501,12 +501,11 @@ const handleHukeFile = async (type) => {
         <p>重要！重要！重要！众图下载链接出现403页面时，把链接粘贴到迅雷即可下载，浏览器无法直接访问！</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
-          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制众图下载链接至迅雷</a-button>
+          <a-button @click="copyUrl(zhongtuUrl)" type="primary">复制下载链接</a-button>
         </span>
       </div>
       <template v-else-if="href">
         <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
-        <p>除众图可能会出现403提示使用迅雷外，其它网站不要使用迅雷下载，可能会导致下载失败！</p>
         <p>接网站、小程序、脚本等开发，联系微信号swjznl（站长）</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
