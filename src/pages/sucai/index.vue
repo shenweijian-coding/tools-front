@@ -13,6 +13,7 @@ import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
+import jimi from './jimi.vue'
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -35,7 +36,11 @@ const shidahukeInfo = reactive({
   playUrl: '',
   params: ''
 })
-
+//jiimi
+const jimiInfo = reactive({
+  visible: false,
+  f:  ''
+})
 const webSiteCheckInfo = reactive({
   imgUrl: '',
   webSiteCheckCode: ''
@@ -48,7 +53,7 @@ const webInfo = reactive({
   list: [],
   ads: []
 })
-let link = ''
+const link = ref('')
 const options = reactive({
   list: []
 })
@@ -73,7 +78,7 @@ const getDownUrl = async (url) => {
     href.value = ''
     options.list = []
     console.log(url.value);
-    link = url.value
+    link.value = url.value
     const res = await getPngUrl({ url: url.value })
     if (res.data.status) { // 校验状态
       if (res.data.status === 1001) {
@@ -101,9 +106,18 @@ const getDownUrl = async (url) => {
         checkVisible.value = true
       }
     }
+        // 第三方解析
+        if (res.data && res.data.t == 2 && res.data.psd) {
+      jimiInfo.visible = true
+      jimiInfo.f = res.data.psd
+      setTimeout(() => {
+        userStore.getUserNum()
+      }, 5000);
+      return
+    }
 
     if (res.data.result) {
-      if ([1, 2].includes(res.data.id)) {
+      if ([1, 2].includes(res.data.id) && !res.data.options) {
         shidahukeInfo.id = res.data.id
         shidahukeInfo.params = res.data
         if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {
@@ -150,10 +164,38 @@ const getCurDownUrl = async (item) => {
   try {
     loading.value = true
     const res = await getPngUrl({
-      url: link,
+      url: link.value,
       option: toRaw(item)
     })
-
+    
+    if (res.data && res.data.status) { // 校验状态
+      if (res.data.status === -1) {
+        visible.value = true
+        return
+      } else if (res.data.status === 1002) { // 网站自己的校验
+        if (res.data.id === 8) { // 90设计验证
+          sheji90CheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+          setTimeout(() => {
+            sheji90check()
+          });
+        } else if (res.data.id === 5) { // 包图验证
+          baotuCheckVisible.value = true
+          baotuCheckInfo.content = res.data.handle
+          baotuCheckInfo.params = res.data.batch
+          baotuCheckInfo.setCookies = res.data.setCookies
+        } else if (res.data.id === 7) { // 觅元素验证
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        } else { // 风云办公验证       
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        }
+        return
+      } else if (res.data.status === 1000) { // 爬虫校验
+        checkVisible.value = true
+      }
+    }
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
@@ -208,10 +250,13 @@ const websitCheckCode = async () => {
       Message.error('请输入')
       return
     }
-    const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
+    const res = await webCheck({ url: link.value, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
-      await userStore.getUserNum()
-      window.open(res.data.psd)
+      webSiteCheckVisible.value = false
+      if (res.data && res.data.psd) {
+        await userStore.getUserNum()
+        res.data.psd && window.open(res.data.psd)
+      }
     }
   } catch (error) {
     console.log(error);
@@ -249,7 +294,7 @@ const sheji90check = async () => {
     try {
       checkLoading.value = true
       console.log(cat.style.left);
-      const res = await webCheck({ url: link, code: parseFloat(cat.style.left) })
+      const res = await webCheck({ url: link.value, code: parseFloat(cat.style.left) })
       console.log(res);
       if (res.data.result) {
         downVisible.value = true
@@ -297,7 +342,7 @@ const baotuCheckClick = async e => {
   try {
     console.log(e.target.getAttribute('data-key'));
     const res = await webCheck({
-      url: link, code: {
+      url: link.value, code: {
         setCookies: baotuCheckInfo.setCookies,
         params: `answer_key=${e.target.getAttribute('data-key')}${baotuCheckInfo.params}`
       }
@@ -416,7 +461,7 @@ const handleHukeFile = async (type) => {
     <NumLack :visible="visible" @close="close" />
     <CheckDialog :visible="checkVisible" @close="close" @checkCode="checkCode" />
 
-    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
+    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading" title="验证">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />
@@ -472,6 +517,10 @@ const handleHukeFile = async (type) => {
         </span>
       </template>
     </s-dialog>
+    
+    <!-- jimi -->
+    <jimi v-if="jimiInfo.visible" :visible="jimiInfo.visible" :file="jimiInfo.f" :url="link" @close="jimiInfo.visible = false"></jimi>
+
   </div>
 </template>
 

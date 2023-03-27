@@ -28,9 +28,6 @@ const routes = [{
       component: () => import('@/pages/help/index.vue')
     }
   ]
-}, {
-  path: '/server-admin',
-  component: () => import('@/pages/server-admin/index.vue')
 }]
 //导入生成的路由数据
 const router = createRouter({
@@ -42,12 +39,6 @@ router.beforeEach((to, from, next) => {
   // 1. 每个条件执行后都要跟上 next() 或 使用路由跳转 api 否则页面就会停留一动不动
   // 2. 要合理的搭配条件语句，避免出现路由死循环。
   const token = getToken()
-  console.log(token);
-  if (to.path === '/server-admin' && userStore && !userStore.$state.isAdmin) {
-    router.replace({
-      path: '/'
-    })
-  }
   if (to.path === '/user') {
     if (!token) {
       router.replace({
