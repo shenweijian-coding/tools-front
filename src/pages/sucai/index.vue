@@ -161,13 +161,13 @@ const getDownUrl = async (url) => {
           setTimeout(() => {
             userStore.getUserNum()
           }, 1000);
-          if (res.data.id === 17) {
-            zhongtuUrl.value = res.data.psd
-            downVisible.value = true
-          } else {
+          // if (res.data.id === 17) {
+          //   zhongtuUrl.value = res.data.psd
+          //   downVisible.value = true
+          // } else {
             downVisible.value = true
             href.value = res.data.psd
-          }
+          // }
         }
       }
     }
