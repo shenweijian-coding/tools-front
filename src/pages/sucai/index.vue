@@ -12,7 +12,6 @@ import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
-import jimi from './jimi.vue'
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -22,6 +21,7 @@ const loading = ref(false)
 const checkLoading = ref(false)
 const listLoading = ref(false)
 const href = ref('')
+const href2 = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
 const sheji90CheckVisible = ref(false)
@@ -93,6 +93,7 @@ const getDownUrl = async (url) => {
     zhongtuUrl.value = ''
     loading.value = true
     href.value = ''
+    href2.value = ''
     options.list = []
     console.log(url.value);
     link.value = url.value
@@ -166,6 +167,7 @@ const getDownUrl = async (url) => {
           //   downVisible.value = true
           // } else {
             downVisible.value = true
+            href2.value = res.data.psd2
             href.value = res.data.psd
           // }
         }
@@ -250,6 +252,7 @@ const getCurDownUrl = async (item) => {
             userStore.getUserNum()
           }, 1000);  
           href.value = res.data.psd
+          href2.value = res.data.psd2
           downVisible.value = true
           // window.open(res.data.psd)
           options.list = []
@@ -389,6 +392,10 @@ const showWebTip = (item) => {
   webList.webTipVisible = true
   webList.currentShowTip = item
 }
+
+const openNewPage = (url) => {
+  window.open(url, '_blank')
+}
 </script>
 
 <template>
@@ -494,13 +501,14 @@ const showWebTip = (item) => {
         </span>
       </template>
       <template v-else-if="href">
-        <p>立即下载无法跳转时，请复制下载地址自行打开！Ctrl+D 收藏本站为书签，防止丢失！</p>
+        <p style="font-size: 18px;">立即下载无法跳转时，请复制下载地址自行在浏览器打开！</p>
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
-          <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
-          <a :href="href" target="_blank" referrerpolicy="no-referrer">
-            <a-button class="mt-2" type="primary" style="margin:0">立即下载</a-button>
-          </a>
+          <a-button v-if="href2" @click="copyUrl('https:' + href2)" class="mr-2">复制通道2地址</a-button>
+          <a-button @click="copyUrl(href)" class="mr-2">复制通道1地址</a-button>
+          <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0" @click="openNewPage(href2)">下载-通道2</a-button>
+          &nbsp;
+          <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">下载-通道1</a-button>
         </span>
       </template>
     </s-dialog>
@@ -520,8 +528,6 @@ const showWebTip = (item) => {
         </template>
     </s-dialog>
 
-    <!-- jimi -->
-    <jimi v-if="jimiInfo.visible" :visible="jimiInfo.visible" :file="jimiInfo.f" :url="link" @close="jimiInfo.visible = false"></jimi>
   </div>
 </template>
 
