@@ -73,16 +73,16 @@ const getUserNum = async () => {
     }
   }, 200);
 }
-// if (!userStore.userIsLogin) {
-//   getUserNum()
-//   paths.list.push({
-//     name: '站内活动',
-//     path: 'https://docs.qq.com/doc/DTURGRkVZa0RiR0dP',
-//     id: 5,
-//     text: '',
-//     target: '_blank'
-//   })
-// }
+if (!userStore.userIsLogin) {
+  getUserNum()
+  // paths.list.push({
+  //   name: '站内活动',
+  //   path: 'https://docs.qq.com/doc/DTURGRkVZa0RiR0dP',
+  //   id: 5,
+  //   text: '',
+  //   target: '_blank'
+  // })
+}
 const login = async (type) => {
   loading.value = true
   if (type === 1 && !loginCode.value) {
