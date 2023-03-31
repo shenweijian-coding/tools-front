@@ -21,6 +21,7 @@ const loading = ref(false)
 const checkLoading = ref(false)
 const listLoading = ref(false)
 const href = ref('')
+const href2 = ref('')
 const visible = ref(false)
 const webSiteCheckVisible = ref(false)
 const sheji90CheckVisible = ref(false)
@@ -54,7 +55,8 @@ const options = reactive({
   list: []
 })
 
-let link = ''
+const link = ref('')
+// let link = ''
 
 // 获取网站列表
 const getWebList = () => {
@@ -85,9 +87,10 @@ const getDownUrl = async (url) => {
     zhongtuUrl.value = ''
     loading.value = true
     href.value = ''
+    href2.value = ''
     options.list = []
     console.log(url.value);
-    link = url.value
+    link.value = url.value
     const res = await getPngUrl({ url: url.value })
     if (res.data.status) { // 校验状态
       if (res.data.status === -1) {
@@ -116,16 +119,40 @@ const getDownUrl = async (url) => {
     }
 
     if (res.data.result) {
-      if (res.data.options) {
-        options.list = res.data.options
-      } else {
-        await userStore.getUserNum()
-        if (res.data.id === 17) {
-          zhongtuUrl.value = res.data.psd
-          downVisible.value = true
+      if ([1, 2].includes(res.data.id) && !res.data.options) {
+        shidahukeInfo.id = res.data.id
+        shidahukeInfo.params = res.data
+        if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {          
+          shidahukeInfo.visible = true
+          setTimeout(() => {
+            playInstance.value = new HlsJsPlayer({
+              id: 'mse',
+              url: res.data.psd,
+              lang: "zh-cn",
+              autoplay: true,
+              playbackRate: [0.5, 1, 1.5, 2],
+              // height: '300px',
+              width: '100%'
+            });
+          });
         } else {
           downVisible.value = true
           href.value = res.data.psd
+        }
+      } else {        
+        if (res.data.options) {
+          options.list = res.data.options
+        } else {
+          setTimeout(() => {
+            userStore.getUserNum()
+          }, 1000);
+          // if (res.data.id === 17) {
+          //   zhongtuUrl.value = res.data.psd
+          //   downVisible.value = true
+          // } else {
+            downVisible.value = true
+            href.value = res.data.psd
+          // }
         }
       }
     }
@@ -142,10 +169,40 @@ const getCurDownUrl = async (item) => {
   try {
     loading.value = true
     const res = await getPngUrl({
-      url: link,
+      url: link.value,
       option: toRaw(item)
     })
+    // 验证
+    if (res.data && res.data.status) { // 校验状态
+      if (res.data.status === -1) {
+        visible.value = true
+        return
+      } else if (res.data.status === 1002) { // 网站自己的校验
+        if (res.data.id === 8) { // 90设计验证
+          sheji90CheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+          setTimeout(() => {
+            sheji90check()
+          });
+        } else if (res.data.id === 5) { // 包图验证
+          baotuCheckVisible.value = true
+          baotuCheckInfo.content = res.data.handle
+          baotuCheckInfo.params = res.data.batch
+          baotuCheckInfo.setCookies = res.data.setCookies
+        } else if (res.data.id === 7) { // 觅元素验证
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        } else { // 风云办公验证       
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
+        }
+        return
+      } else if (res.data.status === 1000) { // 爬虫校验
+        checkVisible.value = true
+      }
+    }
 
+    // 有记录
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
@@ -167,11 +224,21 @@ const getCurDownUrl = async (item) => {
           downVisible.value = true
           href.value = res.data.psd
         }
+        options.list = []
+
       } else {          
-        Message.success('解析成功了，请点击立即下载按钮')
-        userStore.getUserNum()
-        downVisible.value = true
-        href.value = res.data.psd
+        if (res.data.options) {
+          options.list = res.data.options
+          Message.info('请重新点击分类下载按钮')
+        } else {        
+          setTimeout(() => {
+            userStore.getUserNum()
+          }, 1000);  
+          href.value = res.data.psd
+          downVisible.value = true
+          // window.open(res.data.psd)
+          options.list = []
+        }
       }
     }
   } catch (error) {
@@ -187,10 +254,13 @@ const websitCheckCode = async () => {
       Message.error('请输入')
       return
     }
-    const res = await webCheck({ url: link, code: webSiteCheckInfo.webSiteCheckCode })
+    const res = await webCheck({ url: link.value, code: webSiteCheckInfo.webSiteCheckCode })
     if (res.data.result) {
-      await userStore.getUserNum()
-      window.open(res.data.psd)
+      webSiteCheckVisible.value = false
+      if (res.data && res.data.psd) {
+        await userStore.getUserNum()
+        res.data.psd && window.open(res.data.psd)
+      }
     }
   } catch (error) {
     console.log(error);
@@ -228,7 +298,7 @@ const sheji90check = async () => {
     try {
       checkLoading.value = true
       console.log(cat.style.left);
-      const res = await webCheck({ url: link, code: parseFloat(cat.style.left) })
+      const res = await webCheck({ url: link.value, code: parseFloat(cat.style.left) })
       console.log(res);
       if (res.data.result) {
         downVisible.value = true
@@ -277,7 +347,7 @@ const baotuCheckClick = async e => {
   try {
     console.log(e.target.getAttribute('data-key'));
     const res = await webCheck({
-      url: link, code: {
+      url: link.value, code: {
         setCookies: baotuCheckInfo.setCookies,
         params: `answer_key=${e.target.getAttribute('data-key')}${baotuCheckInfo.params}`
       }
@@ -285,7 +355,9 @@ const baotuCheckClick = async e => {
     baotuCheckVisible.value = false
     if (res.data && res.data.psd) {
       Message.success('解析成功了，请点击立即下载按钮')
-      userStore.getUserNum()
+      setTimeout(() => {
+        userStore.getUserNum()
+      }, 1000);
       downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
@@ -301,6 +373,10 @@ const baotuCheckClick = async e => {
 const showWebTip = (item) => {
   webList.webTipVisible = true
   webList.currentShowTip = item
+}
+
+const openNewPage = (url) => {
+  window.open(url, '_blank')
 }
 </script>
 
@@ -339,7 +415,7 @@ const showWebTip = (item) => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span :class="userStore.$state?.auth?.[it.id]?.initENum ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : '开通时长套餐') : '未登录' }}</span>
+                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : '开通套餐')) : '未登录' }}</span>
                   </div>
                 </div>
               </div>
@@ -367,7 +443,7 @@ const showWebTip = (item) => {
 
     <NumLack :visible="visible" @close="close" />
 
-    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading">
+    <s-dialog :visible="webSiteCheckVisible" @close="close" v-loading="checkLoading" title="验证">
       <img :src="webSiteCheckInfo.imgUrl" style="width:100%;margin-bottom:10px;" @click="refreshYzm" alt="验证码">
       <a-input-search placeholder="请输入图形码" v-model="webSiteCheckInfo.webSiteCheckCode" button-text="提交" search-button
         @search="websitCheckCode" />

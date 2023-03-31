@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex" style="min-width:720px;overflow: auto;">
     <a-menu
       :style="{ width: '200px'}"
       theme="dark"

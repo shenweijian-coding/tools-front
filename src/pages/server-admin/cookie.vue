@@ -5,27 +5,28 @@
   <a-table :data="tableData.data" size="small" bordered :pagination="false" stripe class="mt-m">
     <template #columns>
       <a-table-column title="ID" data-index="id" align="center"></a-table-column>
-      <a-table-column title="站点名称" data-index="name" align="center"></a-table-column>
+      <a-table-column title="站点名称" data-index="name" align="center"  width="90"></a-table-column>
       <a-table-column title="官网地址" data-index="url" align="center"></a-table-column>
-      <a-table-column title="关键词" data-index="keyWord" align="center"></a-table-column>
-      <a-table-column title="站点描述" data-index="desc" align="center">
+      <a-table-column title="关键词" data-index="keyWord" align="center"  width="100"></a-table-column>
+      <a-table-column title="站点描述" data-index="desc" align="center"  width="300">
       </a-table-column>
-      <a-table-column title="今日下载次数" data-index="num" align="center"></a-table-column>
-      <a-table-column title="单次扣除" data-index="cost" align="center">
+      <a-table-column title="今日下载" data-index="num" align="center" width="100"></a-table-column>
+      <a-table-column title="单次扣除" data-index="cost" align="center" width="100">
       </a-table-column>
-      <a-table-column title="使用官方/第三方" data-index="tag" align="center">
+      <a-table-column title="官方/第三方" data-index="tag" align="center" width="100">
         <template #cell="{ record }">
-          <a-tag v-if="record.otherCookie?.length" color="#7302d6">第三方解析</a-tag>
+          <a-tag v-if="record.otherCookie?.length && record.cookie?.length" color="#1342d6">三方+官网</a-tag>
+          <a-tag v-else-if="record.otherCookie?.length" color="#7302d6">第三方解析</a-tag>
           <a-tag v-else-if="record.cookie?.length" color="#00b42a">官方解析</a-tag>
           <a-tag v-else color="#f53f3f">未配置</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="是否开启解析" data-index="isRun" align="center">
+      <a-table-column title="是否开启" data-index="isRun" align="center" width="100">
         <template #cell="{ record }">
           <a-tag :color="record.isRun ? '#00b42a' : '#f53f3f'">{{ record.isRun ? '开启' : '关闭' }}</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="编辑" align="center">
+      <a-table-column title="编辑" align="center" width="100">
         <template #cell="{ record }">
           <a-button type="text" @click="editWeb(record)">编辑</a-button>
           <a-button type="text" @click="deleteWeb(record)">删除</a-button>
@@ -76,7 +77,8 @@
         <a-divider orientation="center">三方cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.otherCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
-          <a-input v-model="cookie.code" placeholder="对应卡密"/>
+          <a-input v-model="cookie.code" placeholder="对应卡密"/>&nbsp;
+          <a-input v-model="cookie.api" placeholder="三方ID"/>
           <a-button type="text" status="success" @click="getOtherAuth(cookie)">查看权限</a-button>
           <a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
         </a-form-item>
@@ -97,7 +99,8 @@
 
     <a-form-item label="`三方cookie">
       <a-input v-model="tableData.moreCookie.value" placeholder="请复制cookie"/>&nbsp;
-      <a-input v-model="tableData.moreCookie.code" placeholder="对应卡密"/>
+      <a-input v-model="tableData.moreCookie.code" placeholder="对应卡密"/>&nbsp;
+      <a-input v-model="tableData.moreCookie.api" placeholder="三方ID"/>
     </a-form-item>
     </a-form>
     <template #footer>
@@ -122,7 +125,7 @@ const tableData = reactive({
   moreVisible: false,
   currentCookie: {},
   actionType: 1, // 1是编辑 0是新增
-  moreCookie: { code: '', value: '' }
+  moreCookie: { code: '', value: '', api: null }
 })
 
 const getCookie = () => {
@@ -224,7 +227,7 @@ const addMoreOtherCookie = async () => {
   tableData.moreVisible = true
 }
 const saveMoreCookie = async () => {
-  if (!tableData.moreCookie.code) {
+  if (!tableData.moreCookie.code || !tableData.moreCookie.api) {
     Message.warning('填写完整')
     return
   }
