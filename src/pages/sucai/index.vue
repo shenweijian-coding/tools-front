@@ -11,6 +11,8 @@ import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
+import polling from './polling.vue'
+
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
@@ -37,9 +39,9 @@ const shidahukeInfo = reactive({
   params: ''
 })
 //jiimi
-const jimiInfo = reactive({
+const pollingInfo = reactive({
   visible: false,
-  f:  ''
+  fileName:  ''
 })
 const webSiteCheckInfo = reactive({
   imgUrl: '',
@@ -106,10 +108,10 @@ const getDownUrl = async (url) => {
         checkVisible.value = true
       }
     }
-        // 第三方解析
-        if (res.data && res.data.t == 2 && res.data.psd) {
-      jimiInfo.visible = true
-      jimiInfo.f = res.data.psd
+    // 返回了 filename 说明是轮询下载
+    if (res.data && res.data.fileName) {
+      pollingInfo.visible = true
+      pollingInfo.fileName = res.data.fileName
       setTimeout(() => {
         userStore.getUserNum()
       }, 5000);
@@ -521,6 +523,9 @@ const openNewPage = (url) => {
         </span>
       </template>
     </s-dialog>
+    
+    <polling :visible="pollingInfo.visible" :file="fileName" :url="link"></polling>
+
   </div>
 </template>
 

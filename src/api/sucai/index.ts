@@ -13,7 +13,7 @@ export const getPngUrl = async (data: url) => post<any>({ url: 'sucai', data })
 
 export const getInfo = async () => get<any>({ url: 'sucai/info' })
 
-export const getJimiInfoApi = async (file, url) => get<any>({ url: 'sucai/getPathByfile?file='+ file + '&url=' + url })
+export const getPathByfile = async (file, url) => get<any>({ url: 'sucai/getPathByfile?file='+ file + '&url=' + url })
 
 export const checkInfo = async (data: code) => post<any>({ url: 'user/check', data })
 

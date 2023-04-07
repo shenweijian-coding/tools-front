@@ -1,5 +1,5 @@
 <template>
-  <s-dialog :visible="visible" title="云端解析下载中，请耐心等待加载完成，根据文件大小情况而定" width="44%" @close="close">
+  <s-dialog :visible="visible" title="使用云端下载，待云端下载完成，您即可开始下载，请耐心等待！" width="44%" @close="close">
     <div class="flex">
       <img v-if="info.image" :src="info.image" alt="图片" style="width: 140px">
       <div class="ml-m" v-if="info.title">
@@ -24,7 +24,7 @@
 
 <script setup>
 import sDialog from '@/components/s-dialog/index.vue'
-import { getJimiInfoApi } from '@/api/sucai/index'
+import { getPathByfile } from '@/api/sucai/index'
 const emit = defineEmits(['close'])
 const props = defineProps({
   visible: {
@@ -49,7 +49,7 @@ const info = reactive({
 
 
 let timer = setInterval(async () => {
-  const res = await getJimiInfo()
+  const res = await pollingInfo()
   if (res.data) {
     info.title = res.data.title
     info.image = res.data.image
@@ -66,23 +66,23 @@ let timer = setInterval(async () => {
 }, 3000);
 
 
-const getJimiInfo = async () => {
-  const res = await getJimiInfoApi(props.file, props.url)
+const pollingInfo = async () => {
+  const res = await getPathByfile(props.file, props.url)
   return res
 }
 const close = () => {
   clearInterval(timer)
   emit('close')
 }
-const copyUrl = (copyText) => {
 
-var textareaC = document.createElement('textarea');
-textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
-textareaC.value = copyText;
-document.body.appendChild(textareaC); //将textarea添加为body子元素
-textareaC.select();
-var res = document.execCommand('copy');
-document.body.removeChild(textareaC);//移除DOM元素
-Message.success('复制成功！');
+const copyUrl = (copyText) => {
+  var textareaC = document.createElement('textarea');
+  textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+  textareaC.value = copyText;
+  document.body.appendChild(textareaC); //将textarea添加为body子元素
+  textareaC.select();
+  var res = document.execCommand('copy');
+  document.body.removeChild(textareaC);//移除DOM元素
+  Message.success('复制成功！');
 }
 </script>
