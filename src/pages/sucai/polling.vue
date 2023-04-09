@@ -10,10 +10,10 @@
       <div class="ml-m align-center flex flex-col jc-center">
         <a-progress type="circle" :percent="info.progress / 100" size="large" />
         <div class="mt-l">部分网站使用云端下载，待云端下载完成，您即可开始下载，请耐心等待！</div>
-        <div class="mt-l" v-if="info.path">
-          <a-button @click="copyUrl(info.path)" class="mr-2">复制下载链接</a-button>&nbsp;
+        <div class="mt-l">
+          <a-button @click="copyUrl(info.path)" class="mr-2" :disabled="!info.path">复制下载链接</a-button>&nbsp;
           <a :href="info.path" target="_blank" referrerpolicy="no-referrer">
-            <a-button type="primary">立即下载</a-button>
+            <a-button type="primary" :disabled="!info.path">立即下载</a-button>
           </a>
         </div>
       </div>
