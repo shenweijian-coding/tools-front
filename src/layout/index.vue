@@ -1,21 +1,12 @@
 <template>
   <Header></Header>
-  <!-- <s-dialog v-if="notice" :visible="visible" width="600px" title="站内公告" @close="close">
+  <s-dialog v-if="notice" :visible="visible" width="600px" title="站内公告" @close="close">
     <p v-html="notice" style="line-height:22px">
     </p>
-    <div slot="footer" class="footer"> -->
-      <!-- <a-checkbox v-model="noTip">不再提示</a-checkbox> -->
-      <!-- <a-button type="primary" size="mini" @click="handleRead">我知道了</a-button>
+    <div slot="footer" class="footer">
+      <a-button type="primary" size="mini" @click="handleRead">我知道了</a-button>
     </div>
-  </s-dialog> -->
-  <!-- <div class="top-tip_b" v-if="isClose && notice">
-    <div class="tipBox">
-      <span class="desc">
-        <span>🎉</span>{{ notice }}
-      </span>
-      <icon-close class="close" @click="close" />
-    </div>
-  </div> -->
+  </s-dialog>
   <router-view></router-view>
   <floor></floor>
   <Slide></Slide>
@@ -27,23 +18,22 @@ import Floor from "@components/floor/index.vue"
 import Slide from '@/components/slide/index.vue'
 import { getNoticeInfo } from '@/api/home/index'
 import sDialog from '@/components/s-dialog/index.vue'
-import { Notification } from '@arco-design/web-vue';
 
 const notice = ref('')
 const visible = ref(false)
+const version = localStorage.getItem('_v')
+
 if (localStorage.getItem('token')) {
-  // visible.value = true
   getNoticeInfo().then(res => {
-    // notice.value = res.data
-    if (res.data) {
-      res.data.forEach(it => {
-        Notification.info({
-          content: it,
-          closable: true,
-          duration: 60000,
-          position: 'topLeft'
-        })
-      });
+    if (res.data && res.data.info) {
+      visible.value = true
+      notice.value = res.data.info
+      
+      // 版本管理
+      if(version != res.data.version) {
+        localStorage.setItem('_v', res.data.version)
+        window.location.reload()
+      }
     }
   })
 }

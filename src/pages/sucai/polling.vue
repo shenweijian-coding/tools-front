@@ -1,22 +1,21 @@
 <template>
-  <s-dialog :visible="visible" title="使用云端下载，待云端下载完成，您即可开始下载，请耐心等待！" width="44%" @close="close">
-    <div class="flex">
-      <img v-if="info.image" :src="info.image" alt="图片" style="width: 140px">
-      <div class="ml-m" v-if="info.title">
+  <s-dialog :visible="visible" title="云端下载中" width="40%" @close="close">
+    <div class="flex jc-center">
+      <!-- <img v-if="info.image" :src="info.image" alt="图片" style="width: 140px"> -->
+      <!-- <div class="ml-m" v-if="info.title">
         <div style="max-width: 300px">素材标题：<span>{{ info.title }}</span></div>
         <div class="mt-l" v-if="info.file_size">文件大小：<span>{{ info.file_size }}</span></div>
         <div class="mt-l" v-if="info.extension">文件类型：<span>{{ info.extension }}</span></div>
+      </div> -->
+      <div class="ml-m align-center flex flex-col jc-center">
+        <a-progress type="circle" :percent="info.progress / 100" size="large" />
+        <div class="mt-l">部分网站使用云端下载，待云端下载完成，您即可开始下载，请耐心等待！</div>
         <div class="mt-l" v-if="info.path">
           <a-button @click="copyUrl(info.path)" class="mr-2">复制下载链接</a-button>&nbsp;
           <a :href="info.path" target="_blank" referrerpolicy="no-referrer">
             <a-button type="primary">立即下载</a-button>
-            <p class="mt-m">tip：下载无法跳转时，复制下载地址在浏览器打开</p>
           </a>
         </div>
-      </div>
-      <div class="ml-m align-center flex flex-col jc-center">
-        <a-progress type="circle" :percent="info.progress / 100" size="large" />
-        <div class="mt-m ">云端下载进度 请等待</div>
       </div>
     </div>
   </s-dialog>
@@ -25,7 +24,7 @@
 <script setup>
 import sDialog from '@/components/s-dialog/index.vue'
 import { getPathByfile } from '@/api/sucai/index'
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'complete'])
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -47,23 +46,23 @@ const info = reactive({
   "path": "",
 })
 
-
 let timer = setInterval(async () => {
   const res = await pollingInfo()
   if (res.data) {
     info.title = res.data.title
-    info.image = res.data.image
-    info.file_size = res.data.file_size
-    info.extension = res.data.extension
+    // info.image = res.data.image
+    // info.file_size = res.data.file_size
+    // info.extension = res.data.extension
     info.progress = res.data.progress
-    if (res.data.status == 1) {
-      info.path = res.data.path
+    if (res.data.link && res.data.progress == 100) {
+      emit('complete', res.data.link)
+      info.path = res.data.link
       clearInterval(timer)
     }
   } else {
     clearInterval(timer)
   }
-}, 3000);
+}, 1500);
 
 
 const pollingInfo = async () => {

@@ -112,9 +112,6 @@ const getDownUrl = async (url) => {
     if (res.data && res.data.fileName) {
       pollingInfo.visible = true
       pollingInfo.fileName = res.data.fileName
-      setTimeout(() => {
-        userStore.getUserNum()
-      }, 5000);
       return
     }
 
@@ -144,7 +141,7 @@ const getDownUrl = async (url) => {
           options.list = res.data.options
         } else {
           Message.success('解析成功了，请点击立即下载按钮')
-          await userStore.getUserNum()
+          handleUserNum()
           // if (res.data.id === 17) {
           //   zhongtuUrl.value = res.data.psd
           //   downVisible.value = true
@@ -198,6 +195,15 @@ const getCurDownUrl = async (item) => {
         checkVisible.value = true
       }
     }
+
+    // 返回了 filename 说明是轮询下载
+    if (res.data && res.data.fileName) {
+      pollingInfo.visible = true
+      pollingInfo.fileName = res.data.fileName
+      console.log(pollingInfo.fileName);
+      return
+    }
+
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
@@ -232,7 +238,7 @@ const getCurDownUrl = async (item) => {
           // window.open(res.data.psd)
         }
       }
-      userStore.getUserNum()
+      handleUserNum()
     }
   } catch (error) {
 
@@ -257,7 +263,7 @@ const websitCheckCode = async () => {
     if (res.data.result) {
       webSiteCheckVisible.value = false
       if (res.data && res.data.psd) {
-        await userStore.getUserNum()
+        handleUserNum()
         res.data.psd && window.open(res.data.psd)
       }
     }
@@ -354,7 +360,7 @@ const baotuCheckClick = async e => {
     if (res.data && res.data.psd) {
       options.list = []
       Message.success('解析成功了，请点击立即下载按钮')
-      userStore.getUserNum()
+      handleUserNum()
       downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
@@ -384,6 +390,12 @@ const handleHukeFile = async (type) => {
 
 const openNewPage = (url) => {
   window.open(url, '_blank')
+}
+
+const handleUserNum = () => {
+  setTimeout(() => {
+    userStore.getUserNum()
+  }, 1000)
 }
 
 </script>
@@ -516,15 +528,15 @@ const openNewPage = (url) => {
         <a-divider></a-divider> 
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button v-if="href2" @click="copyUrl('https:' + href2)" class="mr-2">复制通道2地址</a-button>
-          <a-button @click="copyUrl(href)" class="mr-2">复制通道1地址</a-button>
+          <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
           <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0" @click="openNewPage(href2)">下载-通道2</a-button>
           &nbsp;
-          <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">下载-通道1</a-button>
+          <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">立即下载</a-button>
         </span>
       </template>
     </s-dialog>
     
-    <polling :visible="pollingInfo.visible" :file="fileName" :url="link"></polling>
+    <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link" @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
 
   </div>
 </template>
