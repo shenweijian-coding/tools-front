@@ -10,6 +10,7 @@ import { useUserStore, useAppStore } from '@/store';
 import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
+import polling from './polling.vue'
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
@@ -32,9 +33,9 @@ const playInstance = ref('')
 const downVisible = ref(false)
 
 //jiimi
-const jimiInfo = reactive({
+const pollingInfo = reactive({
   visible: false,
-  f:  ''
+  fileName:  ''
 })
 // 视达虎课播放
 const shidahukeInfo = reactive({
@@ -124,13 +125,10 @@ const getDownUrl = async (url) => {
       }
     }
 
-    // 第三方解析
-    if (res.data && res.data.t == 2 && res.data.psd) {
-      jimiInfo.visible = true
-      jimiInfo.f = res.data.psd
-      setTimeout(() => {
-        userStore.getUserNum()
-      }, 5000);
+    // 返回了 filename 说明是轮询下载
+    if (res.data && res.data.fileName) {
+      pollingInfo.visible = true
+      pollingInfo.fileName = res.data.fileName
       return
     }
 
@@ -159,9 +157,7 @@ const getDownUrl = async (url) => {
         if (res.data.options) {
           options.list = res.data.options
         } else {
-          setTimeout(() => {
-            userStore.getUserNum()
-          }, 1000);
+          handleUserNum()
           // if (res.data.id === 17) {
           //   zhongtuUrl.value = res.data.psd
           //   downVisible.value = true
@@ -219,6 +215,13 @@ const getCurDownUrl = async (item) => {
       }
     }
 
+    // 返回了 filename 说明是轮询下载
+    if (res.data && res.data.fileName) {
+      pollingInfo.visible = true
+      pollingInfo.fileName = res.data.fileName
+      return
+    }
+
     // 有记录
     if (res.data.result) {
       if ([1, 2].includes(res.data.id)) {
@@ -248,9 +251,7 @@ const getCurDownUrl = async (item) => {
           options.list = res.data.options
           Message.info('请重新点击分类下载按钮')
         } else {        
-          setTimeout(() => {
-            userStore.getUserNum()
-          }, 1000);  
+          handleUserNum() 
           href.value = res.data.psd
           href2.value = res.data.psd2
           downVisible.value = true
@@ -276,7 +277,7 @@ const websitCheckCode = async () => {
     if (res.data.result) {
       webSiteCheckVisible.value = false
       if (res.data && res.data.psd) {
-        await userStore.getUserNum()
+        handleUserNum()
         res.data.psd && window.open(res.data.psd)
       }
     }
@@ -373,9 +374,7 @@ const baotuCheckClick = async e => {
     baotuCheckVisible.value = false
     if (res.data && res.data.psd) {
       Message.success('解析成功了，请点击立即下载按钮')
-      setTimeout(() => {
-        userStore.getUserNum()
-      }, 1000);
+      handleUserNum()
       downVisible.value = true
       href.value = res.data.psd
       // window.open(res.data.psd)
@@ -395,6 +394,12 @@ const showWebTip = (item) => {
 
 const openNewPage = (url) => {
   window.open(url, '_blank')
+}
+
+const handleUserNum = () => {
+  setTimeout(() => {
+    userStore.getUserNum()
+  }, 1000)
 }
 </script>
 
@@ -505,10 +510,10 @@ const openNewPage = (url) => {
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button v-if="href2" @click="copyUrl('https:' + href2)" class="mr-2">复制通道2地址</a-button>
-          <a-button @click="copyUrl(href)" class="mr-2">复制通道1地址</a-button>
+          <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
           <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0" @click="openNewPage(href2)">下载-通道2</a-button>
           &nbsp;
-          <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">下载-通道1</a-button>
+          <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">立即下载</a-button>
         </span>
       </template>
     </s-dialog>
@@ -527,6 +532,8 @@ const openNewPage = (url) => {
           </span>
         </template>
     </s-dialog>
+
+    <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link" @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
 
   </div>
 </template>

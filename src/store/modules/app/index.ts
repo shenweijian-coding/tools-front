@@ -22,6 +22,11 @@ export const useAppStore = defineStore(
         actions: {
             getWebConfig() {
                  getWebConfig().then(res => {
+                     const _v = localStorage.getItem('_v')
+                     if(res.data.version != _v) {
+                        localStorage.setItem('_v', res.data.version)
+                        window.location.reload()
+                     }
                      this.$patch({ webConfig: res.data })
                      this.setBgImg()
                 })
