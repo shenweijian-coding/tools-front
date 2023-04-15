@@ -23,6 +23,8 @@ export const createProductApi = async (data) => post({ url: 'admin/createProduct
 export const delProduct = async (data) => post({ url: 'admin/delProduct', data})
 export const addWeb = async (data) => post({ url: 'admin/addWeb', data})
 export const delWeb = async (data) => post({ url: 'admin/delWeb', data })
-
+export const getCacheByWeb = async (data) => post({ url: 'admin/getCacheByWeb', data })
+export const deleteCacheApi = async(data) => post({url: 'admin/deleteCacheByName', data})
+export const updateCache = async(data) => post({url: 'admin/updateCache', data})
 // 获取第三方权限
 export const getOtherCookieApi = async (data) => post({ url: 'admin/getOtherAuth', data })

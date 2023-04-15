@@ -70,6 +70,11 @@ const routes = [{
         component: () => import('@/pages/server-admin/pay.vue')
       },
       {
+        path: '/server-admin/cache',
+        title: '缓存管理',
+        component: () => import('@/pages/server-admin/cache.vue')
+      },
+      {
         path: '/server-admin/other',
         title: '第三方API对接',
         component: () => import('@/pages/server-admin/otherInfo.vue')
