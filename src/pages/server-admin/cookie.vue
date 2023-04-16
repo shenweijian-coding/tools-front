@@ -79,6 +79,7 @@
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.code" placeholder="对应卡密"/>&nbsp;
           <a-input v-model="cookie.api" placeholder="三方ID"/>
+          <a-switch v-model="cookie.isOpen"></a-switch>
           <a-button type="text" status="success" @click="getOtherAuth(cookie)">查看权限</a-button>
           <a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
         </a-form-item>
@@ -125,7 +126,7 @@ const tableData = reactive({
   moreVisible: false,
   currentCookie: {},
   actionType: 1, // 1是编辑 0是新增
-  moreCookie: { code: '', value: '', api: null }
+  moreCookie: { code: '', value: '', api: null, isOpen: true }
 })
 
 const getCookie = () => {
@@ -198,7 +199,6 @@ const saveRowConfig = async () => {
     })
     tableData.visible = false
     Message.success(res.data)
-    getCookie()
   }else{ // 新增
     const { id, name, url, cost, desc } = tableData.currentCookie
     const hasId  = tableData.data.filter(o => o.id === id)

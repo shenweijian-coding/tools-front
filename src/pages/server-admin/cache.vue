@@ -28,6 +28,7 @@
       <a-table-column title="类型" data-index="ext" align="center"></a-table-column>
       <a-table-column title="素材ID" data-index="sc_id" align="center"></a-table-column>
       <a-table-column title="类型" data-index="type" align="center"></a-table-column>
+      <a-table-column title="网站" data-index="mark" align="center"></a-table-column>
       <a-table-column title="subid" data-index="subid" align="center"></a-table-column>
       <a-table-column title="直链" data-index="link" align="center"></a-table-column>
       <a-table-column title="操作" align="center">
