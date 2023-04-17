@@ -92,6 +92,11 @@
             {{ timeConvert(record.time) }}
           </template>
         </a-table-column>
+        <a-table-column title="下载IP">
+          <template #cell="{ record }">
+            {{ record.ip }}
+          </template>
+        </a-table-column>
         <a-table-column title="结果" data-index="is_ok">
           <template #cell="{ record }">
           <a-tag :color="record.is_ok ? '#165dff' : '#f53f3f'">{{ record.is_ok ? '成功' : '失败' }}</a-tag>

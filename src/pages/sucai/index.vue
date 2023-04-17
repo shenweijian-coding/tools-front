@@ -510,7 +510,7 @@ const handleUserNum = () => {
         <a-divider></a-divider>
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button v-if="href2" @click="copyUrl('https:' + href2)" class="mr-2">复制通道2地址</a-button>
-          <a-button @click="copyUrl(href)" class="mr-2">复制下载地址</a-button>
+          <a-button @click="copyUrl(href)" type="outline" class="mr-2">复制下载地址</a-button>
           <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0" @click="openNewPage(href2)">下载-通道2</a-button>
           &nbsp;
           <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">立即下载</a-button>
