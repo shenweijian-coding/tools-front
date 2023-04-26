@@ -428,7 +428,7 @@ const handleUserNum = () => {
         <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
-            <span>永久积分：</span><span>{{ userStore.userNum }}</span>
+            <span>永久积分：</span><span>{{ userStore.userNum >= 0 ? userStore.userNum : 0}}</span>
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
