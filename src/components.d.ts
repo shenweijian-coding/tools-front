@@ -5,10 +5,13 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AAlert: typeof import('@arco-design/web-vue')['Alert']
     AButton: typeof import('@arco-design/web-vue')['Button']
     ACarousel: typeof import('@arco-design/web-vue')['Carousel']
     ACarouselItem: typeof import('@arco-design/web-vue')['CarouselItem']
     ACol: typeof import('@arco-design/web-vue')['Col']
+    ACollapse: typeof import('@arco-design/web-vue')['Collapse']
+    ACollapseItem: typeof import('@arco-design/web-vue')['CollapseItem']
     ADivider: typeof import('@arco-design/web-vue')['Divider']
     ADoption: typeof import('@arco-design/web-vue')['Doption']
     ADropdown: typeof import('@arco-design/web-vue')['Dropdown']
@@ -16,6 +19,8 @@ declare module '@vue/runtime-core' {
     AInputSearch: typeof import('@arco-design/web-vue')['InputSearch']
     APopover: typeof import('@arco-design/web-vue')['Popover']
     AProgress: typeof import('@arco-design/web-vue')['Progress']
+    ARadio: typeof import('@arco-design/web-vue')['Radio']
+    ARadioGroup: typeof import('@arco-design/web-vue')['RadioGroup']
     ARow: typeof import('@arco-design/web-vue')['Row']
     ASpace: typeof import('@arco-design/web-vue')['Space']
     ATable: typeof import('@arco-design/web-vue')['Table']

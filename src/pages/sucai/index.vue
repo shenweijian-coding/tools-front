@@ -31,6 +31,10 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
+const limitTimer = reactive({
+  timer: null,
+  time: 0
+})
 // 视达虎课播放
 const shidahukeInfo = reactive({
   visible: false,
@@ -229,12 +233,13 @@ const getCurDownUrl = async (item) => {
       } else {
         if (res.data.options) {
           options.list = res.data.options
-          Message.info('请重新点击分类下载按钮')
+          Message.info('请重新选择分类按钮')
         } else {
           href.value = res.data.psd
           href2.value = res.data.psd2
           downVisible.value = true
           options.list = []
+          disableSearch()
           // window.open(res.data.psd)
         }
       }
@@ -398,6 +403,16 @@ const handleUserNum = () => {
   }, 1000)
 }
 
+const disableSearch =() => {
+  limitTimer.time = 30
+  limitTimer.timer = setInterval(() => {
+    limitTimer.time -= 1 
+    if(limitTimer.time <=0) {
+      clearInterval(limitTimer.timer)
+    }
+  }, 1000);
+}
+
 </script>
 
 <template>
@@ -415,7 +430,7 @@ const handleUserNum = () => {
               <router-link to="/user?key=5">卡密激活</router-link>
             </span>
           </div>
-          <Input @getPlay="getDownUrl" :loading="loading" />
+          <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
