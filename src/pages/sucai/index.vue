@@ -7,7 +7,7 @@ import { Message, Modal } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
-import { useUserStore } from '@/store';
+import { useUserStore, useAppStore } from '@/store';
 import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
@@ -16,6 +16,7 @@ import polling from './polling.vue'
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
 
+const appStore = useAppStore()
 const userStore = useUserStore()
 const route = useRoute()
 const loading = ref(false)
@@ -69,6 +70,9 @@ getInfo().then(res => {
   webInfo.list = res.data.webList
   webInfo.ads = res.data.ads
   listLoading.value = false
+  appStore.$patch({
+    webList: res.data.webList
+  })
 })
 // 被邀请的逻辑
 setTimeout(() => {

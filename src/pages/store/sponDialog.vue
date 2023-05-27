@@ -1,6 +1,6 @@
 <template>
   <s-dialog :visible="visible" width="346px" @close="close" :closeOnClickOverlay="false">
-    <div style="text-align: center;">提示：<a-tag color="purple">支付完成会自动关闭弹窗[{{ payStatus }}...]</a-tag>
+    <div style="text-align: center;"><a-tag color="black">支付完成权限发放成功会自动关闭弹窗，请勿手动刷新</a-tag>
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>
@@ -19,7 +19,7 @@
         扫描二维码支付
       </div>
     </div>
-  </s-dialog>
+  </s-dialog> 
 </template>
 <script setup lang="ts">
 import sDialog from '@/components/s-dialog/index.vue';

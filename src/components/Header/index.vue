@@ -10,22 +10,22 @@ import Wxapp from '@/components/wxapp/index.vue'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import wxappLogin from '../wxapp-login/index.vue'
 import { pwd2Wxapp } from '@api/user/index'
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const userStore = useUserStore()
-const theme = computed(() => {
-  return appStore.theme
-})
+// const theme = computed(() => {
+//   return appStore.theme
+// })
 const loading = ref(false)
-const isDark = useDark({
-  selector: 'body',
-  attribute: 'arco-theme',
-  valueDark: 'dark',
-  valueLight: 'light',
-  storageKey: 'arco-theme',
-  onChanged(dark) {
-    appStore.toggleTheme(dark);
-  },
-})
+// const isDark = useDark({
+//   selector: 'body',
+//   attribute: 'arco-theme',
+//   valueDark: 'dark',
+//   valueLight: 'light',
+//   storageKey: 'arco-theme',
+//   onChanged(dark) {
+//     appStore.toggleTheme(dark);
+//   },
+// })
 const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
@@ -45,7 +45,7 @@ const paths = reactive({
       id: 3,
       text: ''
     }, {
-      name: '视频教程',
+      name: '使用帮助',
       path: '/help',
       id: 4,
       text: ''
