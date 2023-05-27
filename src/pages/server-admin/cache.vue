@@ -42,8 +42,21 @@
 
   <s-dialog :visible="cacheForm.showAddCache" width="40%" title="添加/配置" @close="close">
     <a-form :model="cacheForm.form" layout="">
+      <a-form-item label="识别：">
+        <a-input-search
+        placeholder="链接"
+        v-model="cacheForm.scUrl"
+        button-text="搜索"
+        search-button
+        @search="autoWrite"/>
+      </a-form-item>
+      <a-form-item label="类型" v-if="cacheForm.cacheOptions.length">
+        <a-radio-group @change="cacheOptionChange">
+          <a-radio v-for="(it,i) in cacheForm.cacheOptions" :value="i" :key="i">{{ it.text }}</a-radio>
+        </a-radio-group>
+      </a-form-item>
       <a-form-item label="网站：">
-        <a-select v-model="cacheForm.createForm.mark" placeholder="网站">
+        <a-select v-model="cacheForm.createForm.mark" placeholder="网站" style="width: 120px">
           <a-option v-for="o of cacheForm.cacheWebList" :value="o.val" :label="o.name" :key="o.val"/>
         </a-select>
       </a-form-item>
@@ -51,16 +64,19 @@
         <a-input v-model="cacheForm.createForm.file" placeholder="文件名"></a-input>
       </a-form-item>
       <a-form-item label="类型:">
-        <a-input v-model="cacheForm.createForm.ext" placeholder="类型"></a-input>
+        <a-radio-group v-model="cacheForm.createForm.ext">
+          <a-radio v-for="it in ['.zip', '.rar', '.jpg', '.png', '.mp3', '.mp4']" :key="it" :value="it">{{ it }}</a-radio>
+        </a-radio-group>
+        <a-input v-model="cacheForm.createForm.ext" placeholder="类型" style="width: 120px"></a-input>
       </a-form-item>
       <a-form-item label="分类:">
-        <a-input v-model="cacheForm.createForm.type" placeholder="分类"></a-input>
+        <a-input v-model="cacheForm.createForm.type" placeholder="分类" style="width: 120px"></a-input>
       </a-form-item>
       <a-form-item label="素材ID:">
         <a-input v-model="cacheForm.createForm.sc_id" placeholder="素材ID"></a-input>
       </a-form-item>
       <a-form-item label="subid:">
-        <a-input v-model="cacheForm.createForm.subid" placeholder="subid"></a-input>
+        <a-input v-model="cacheForm.createForm.subid" placeholder="subid" style="width: 120px"></a-input>
       </a-form-item>
       <a-form-item label="直链:">
         <a-input v-model="cacheForm.createForm.link" placeholder="直链"></a-input>
@@ -78,6 +94,8 @@
 <script setup>
 import { getCacheByWeb, deleteCacheApi, updateCache } from '@/api/admin/index'
 import { Message } from '@arco-design/web-vue';
+import { dateFormate } from '@/utils/index'
+import { getPngUrl } from '@api/sucai/index'
 
 const cacheForm = reactive({
   cacheWebList: [
@@ -89,6 +107,15 @@ const cacheForm = reactive({
     {name: '觅元素',val: '51yuansu'},
     {name: '众图网',val: 'ztupic'},
     {name: '字魂网',val: 'izihun'},
+    {name: '办图网',val: '888ppt'},
+    {name: '稻壳网',val: 'docer'},
+    {name: '六图网',val: '16pic'},
+    {name: '风云办公',val: 'ppt118'},
+    {name: '千库网',val: '588ku'},
+    {name: '求字体',val: 'qiuziti'},
+    {name: '90设计',val: '90sheji'},
+    {name: '图精灵',val: '616pic'},
+    {name: '图品汇',val: '88tph'},
   ],
   form: {
     mark: '58pic',
@@ -96,7 +123,7 @@ const cacheForm = reactive({
     sc_id: '',
   },
   createForm: {
-    file: '',
+    file: '/' + dateFormate() + '-',
     ext: '',
     sc_id: '',
     type: '',
@@ -111,10 +138,31 @@ const cacheForm = reactive({
     'page-size': 10
   },
   showAddCache: false,
-  isEdit: false
+  isEdit: false,
+  scUrl: '',
+  cacheOptions: []
 })
 
 const search = () => {
+
+}
+
+const autoWrite = async() => {
+  if(!cacheForm.scUrl) {
+    return
+  }
+  const res = await getPngUrl({
+    url: cacheForm.scUrl
+  })
+  cacheForm.cacheOptions = res.data.options ? res.data.options : []
+}
+
+const cacheOptionChange = (index) => {
+  const { mark, parentid, subid, type } = cacheForm.cacheOptions[index]
+  cacheForm.createForm.sc_id = parentid
+  cacheForm.createForm.type = type
+  cacheForm.createForm.subid = subid
+  cacheForm.createForm.mark = mark
 
 }
 
@@ -135,8 +183,10 @@ const pageChange = (page) => {
 const close = () => {
   cacheForm.showAddCache = false
   cacheForm.isEdit = false
+  cacheForm.cacheOptions = []
+  cacheForm.scUrl = ''
   cacheForm.createForm = {
-    file: '',
+    file: '/' + dateFormate() + '-',
     ext: '',
     sc_id: '',
     type: '',

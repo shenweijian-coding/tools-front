@@ -1,6 +1,6 @@
 <template>
-  <s-dialog :visible="visible" width="500px" title="权限不足" @close="close">
-    <p style="line-height: 30px;">您可以选择如下方式获取权限<br>
+  <s-dialog :visible="visible" width="500px" title="次数不足" @close="close">
+    <p style="line-height: 30px;">您可以选择如下方式获取下载次数<br>
     1. 站内直接充值（实时到账）<a-button size="mini" type="text" status="success" href="#/shop">点我跳转</a-button><br>
     <template v-if="appStore.$state?.webConfig?.carmiAddress">
       2. 其它站点购买（发送卡密）    <a style="color: #42c562" target="_blank" :href="appStore.$state.webConfig.carmiAddress">点我跳转</a>

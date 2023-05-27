@@ -20,12 +20,6 @@ const paths = reactive({
       id: 1,
       text: ''
     }, 
-    // {
-    //   name: '邀请送分',
-    //   path: '/invite',
-    //   id: 2,
-    //   text: '热'
-    // }, 
     {
       name: '在线充值',
       path: '/shop',
@@ -114,7 +108,7 @@ const toggleLogin = () => {
                       <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
                     </li>
                   </template>
-                  <li class="ml-14 hover:text-white cursor-pointer" @click="videoVisible = true">视频教程</li>
+                  <!-- <li class="ml-14 hover:text-white cursor-pointer" @click="videoVisible = true">视频教程</li> -->
                 </ul>
               </nav>
               <nav class="text-sm font-semibold leading-6 text-white dark:text-slate-200">
@@ -166,7 +160,7 @@ const toggleLogin = () => {
   </s-dialog>
   <!-- 自选站点 -->
   <sel-sites></sel-sites>
-  <myVideo :videoVisible="videoVisible" @close="videoVisible = false"></myVideo>
+  <!-- <myVideo :videoVisible="videoVisible" @close="videoVisible = false"></myVideo> -->
 </template>
 
 <style lang="less" scoped>

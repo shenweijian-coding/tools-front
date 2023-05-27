@@ -28,7 +28,7 @@ export function timeConvert(time: any) {
 
 export function dateFormate(dateTime, timeflag) {
   console.log(dateTime, 'dateTime')
-  const date = new Date(dateTime * 1000);
+  const date = dateTime ? new Date(dateTime * 1000) : new Date();
   const y = date.getFullYear();
   let m = date.getMonth() + 1;
   m = m < 10 ? (`0${m}`) : m;   

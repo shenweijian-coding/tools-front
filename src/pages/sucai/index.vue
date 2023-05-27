@@ -433,12 +433,12 @@ const handleUserNum = () => {
               </template >
               <div class="app-weblist-item cursor-pointer">
                 <div class="hidden item-logo sm:flex">
-                  <img :src="it.url + '/favicon.ico'" :alt="it.name">
+                  <img :src="it.webLogo ? it.webLogo : (it.url + '/favicon.ico')" :alt="it.name">
                 </div>
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : '开通套餐')) : '未登录' }}</span>
+                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) : '未登录' }}</span>
                   </div>
                 </div>
               </div>
