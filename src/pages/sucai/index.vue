@@ -446,6 +446,12 @@ const handleUserNum = () => {
           </a-col>
         </a-row>
       </div>
+      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.q.url" type="warning">
+      {{ appStore.$state.webConfig?.q.text }}
+        <template #action>
+          <a-button size="small" type="primary" status="success" :href="appStore.$state.webConfig?.q.url" target="_blank">查看常见问题（99%的问题）</a-button>
+        </template>
+      </a-alert>
     </div>
     <!-- 轮播图 -->
     <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner">
