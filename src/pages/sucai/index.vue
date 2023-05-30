@@ -415,7 +415,7 @@ const openNewPage = (url) => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : '开通套餐')) : '未登录' }}</span>
+                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : (`${it.cost}积分/次`))) : '未登录' }}</span>
                   </div>
                 </div>
               </div>
