@@ -163,6 +163,7 @@ const cacheOptionChange = (index) => {
   cacheForm.createForm.type = type
   cacheForm.createForm.subid = subid
   cacheForm.createForm.mark = mark
+  cacheForm.createForm.file = cacheForm.createForm.file + '-' + mark + parentid
 
 }
 
