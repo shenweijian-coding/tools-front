@@ -9,7 +9,8 @@ import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import wxappLogin from '../wxapp-login/index.vue'
-import { pwd2Wxapp } from '@api/user/index'
+import { pwd2Wxapp, handleBindEmail } from '@api/user/index'
+import { sendMail } from '@api/home/index'
 // const appStore = useAppStore()
 const userStore = useUserStore()
 // const theme = computed(() => {
@@ -34,12 +35,7 @@ const paths = reactive({
       path: '/sucai',
       id: 1,
       text: ''
-    },{
-      name: '邀请送分',
-      path: '/invite',
-      id: 2,
-      text: '热'
-    },{
+    }, {
       name: '在线充值',
       path: '/shop',
       id: 3,
@@ -151,6 +147,66 @@ const pwd2WxappConfirm = async (pwd) => {
     location.reload()
   }
 }
+
+var pattern = /^([0-9a-zA-Z_\.\-\u4e00-\u9fa5])+\@([0-9a-zA-Z_\.\-\])+\.([a-zA-Z]{2,8})$/;
+const sendMailAddress = ref()
+const sendYzm = ref()
+const disabledSendMail = ref(false)
+const handleSendMail = async() => {
+  if(!sendMailAddress.value) {
+    Message.warning('请填写邮箱')
+    return
+  }
+  if(!pattern.test(sendMailAddress.value)) {
+    Message.warning('邮箱格式有误')
+    return
+  }
+  const res = await sendMail({ mail: sendMailAddress.value })
+  Message.success(res.data)
+  disabledSendMail.value = true
+  setTimeout(() => {
+    disabledSendMail.value = false
+  }, 10000);
+}
+const mailLogin = async () => {
+  if(!sendMailAddress.value || !sendYzm.value) {
+    Message.warning('请填写邮箱和验证码')
+    return
+  }
+  if(!pattern.test(sendMailAddress.value)) {
+    Message.warning('邮箱格式有误')
+    return
+  }
+  const res = await userStore.mailLogin({
+    mail: sendMailAddress.value,
+    code: sendYzm.value
+  })
+  Message.success('登录成功')
+
+  visible.value = false;
+  loading.value = false
+}
+
+const mailVisible = ref(false)
+if(!userStore.userIsLogin && !userStore.email) {
+  mailVisible.value = true
+}
+const emailBindId = async() => {
+  if(!sendMailAddress.value || !sendYzm.value) {
+    Message.warning('请填写')
+    return
+  }
+  if(!pattern.test(sendMailAddress.value)) {
+    Message.warning('邮箱格式有误')
+    return
+  }
+  const res = await handleBindEmail({
+    mail: sendMailAddress.value,
+    code: sendYzm.value
+  })
+  mailVisible.value = false
+  Message.success(res.data)
+}
 </script>
 
 <template>
@@ -172,9 +228,9 @@ const pwd2WxappConfirm = async (pwd) => {
                   <template v-for="it in paths.list" :key="it.id">
                     <li class="ml-14"
                       :class="curPath === it.path ? 'border-b-4 rounded-sm border-blue-400 text-blue-500' : ''">
-                        <router-link v-if="!it.target" :to="it.path" class="hover:text-blue-500">{{ it.name }}
-                        </router-link>
-                        <a v-else :href="it.path" :target="it.target" class="hover:text-blue-500">{{ it.name }}</a>
+                      <router-link v-if="!it.target" :to="it.path" class="hover:text-blue-500">{{ it.name }}
+                      </router-link>
+                      <a v-else :href="it.path" :target="it.target" class="hover:text-blue-500">{{ it.name }}</a>
                     </li>
                   </template>
                 </ul>
@@ -182,13 +238,7 @@ const pwd2WxappConfirm = async (pwd) => {
               <nav class="text-sm font-semibold leading-6 text-slate-700">
                 <ul class="flex space-x-10">
                   <li class="flex items-center">
-                    <span class="flex items-center mr-2 cursor-pointer hover:bg-gray-50" @click="bindWxApp">
-                      <SvgIcon name="svg-jifen" style="width: 20px;" class="mr-1" />
-                      <span style="color:#caa36e">免费得积分</span>
-                    </span>
-                    <a-divider direction="vertical"></a-divider>
-                    <span v-if="userStore.userIsLogin" @click="openLogin"
-                      class="cursor-pointer hover:text-blue-500">
+                    <span v-if="userStore.userIsLogin" @click="openLogin" class="cursor-pointer hover:text-blue-500">
                       登录</span>
                     <span v-else class="flex items-center">
 
@@ -214,24 +264,40 @@ const pwd2WxappConfirm = async (pwd) => {
       </div>
     </div>
   </header>
-  <s-dialog :visible="visible" width="300px" @close="close" title="微信扫码登录">
+  <s-dialog :visible="visible" width="300px" @close="close" title="">
     <div>
-      <!-- <a-tabs default-active-key="2"> -->
-      <wxappLogin @login="visible = false"></wxappLogin>
-      <!-- <a-tab-pane key="1" title="微信登录"> -->
-      <!-- <a-input-search placeholder="请输入5位验证码" button-text="验证码登录" v-model="loginCode" search-button @search="login(1)">
-          </a-input-search>
-          <QR tip="验证码" v-if="visible" style="margin-top: 12px" /> -->
-      <!-- </a-tab-pane>
-        <a-tab-pane key="2" title="卡密登录">
+      <a-tabs default-active-key="1">
+        <a-tab-pane key="0" title="小程序登录">
+          <wxappLogin @login="visible = false"></wxappLogin>
+        </a-tab-pane>
+
+        <a-tab-pane key="1" title="邮箱登陆">
+          <div class="flex">
+            <a-input placeholder="请输入邮箱" button-text="发送" v-model="sendMailAddress" search-button></a-input>
+            <a-button @click="handleSendMail" type="primary" :disabled="disabledSendMail">发送</a-button>
+          </div>
+          <a-input placeholder="请输入发送的邮箱验证码" class="mt-l" v-model="sendYzm"></a-input>
+          <a-button type="primary" class="w-100 mt-l" @click="mailLogin">登陆</a-button>
+        </a-tab-pane>
+        <!-- <a-tab-pane key="2" title="卡密登录">
           <a-input-search placeholder="卡密yyy-xxx-jjj" button-text="卡密登录" v-model="accode" search-button @search="login(2)">
           </a-input-search>
         </a-tab-pane> -->
-      <!-- </a-tabs> -->
+      </a-tabs>
     </div>
   </s-dialog>
   <s-dialog :visible="stepsVisible" title="免费获取积分" width="400px" @close="stepsVisible = false">
     <Wxapp></Wxapp>
+  </s-dialog>
+
+  <s-dialog :visible="mailVisible" title="邮箱绑定" width="400px" @close="mailVisible = false" :closeOnClickOverlay="false">
+    <div class="flex">
+      <a-input placeholder="请输入邮箱" button-text="发送"  v-model="sendMailAddress" search-button></a-input>
+      <a-button @click="handleSendMail" type="primary">发送</a-button>
+    </div>
+    <a-input placeholder="请输入发送的邮箱验证码" class="mt-l" v-model="sendYzm"></a-input>
+    <a-button type="primary" class="w-100 mt-l" @click="emailBindId">绑定邮箱</a-button>
+    <p class="text-m mt-m text-bold">*后续可能无法扫码登陆，防止权限丢失，请提前绑定邮箱</p>
   </s-dialog>
 </template>
 

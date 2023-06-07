@@ -15,6 +15,7 @@ export interface LoginData {
 
 const getUserProfile = async () => get<any>({ url: 'user/info' });
 const login = async (data: LoginData) => post<any>({ url: 'user/login', data });
+const mailLogin = async (data) => post<any>({ url: 'user/mailLogin', data });
 
 const logout = async () => post<LoginRes>({ url: 'user/logout' });
 
@@ -37,4 +38,6 @@ export const getDownLog = async (data) => post<any>({ url: 'user/getUserDownLog'
 
 export const getLoginStatus = async (data) => get<any>({url: 'wxappv1/wxApploginStatus?loginCode=' + data})
 
-export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert };
+export const handleBindEmail = async (data) => post<any>({ url: 'user/bindEmail', data })
+
+export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert, mailLogin };

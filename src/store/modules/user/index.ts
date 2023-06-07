@@ -4,7 +4,8 @@ import {
     logout as userLogout,
     getUserProfile,
     LoginData,
-    getUserNum
+    getUserNum,
+    mailLogin as mailLoginApi
 } from '@/api/user/index';
 import { setToken, clearToken } from '@/utils/auth';
 import { UserState } from './types'
@@ -74,6 +75,12 @@ export const useUserStore = defineStore('user', {
         // 异步登录并存储token
         async login(loginForm: LoginData) {
             const { data } = await userLogin(loginForm);
+            this.setInfo(data);
+            setToken(data?._id)
+            return data;
+        },
+        async mailLogin(loginForm) {
+            const { data } = await mailLoginApi(loginForm);
             this.setInfo(data);
             setToken(data?._id)
             return data;

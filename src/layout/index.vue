@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <s-dialog v-if="notice" :visible="visible" width="600px" title="站内公告" @close="close">
+  <s-dialog v-if="notice" :visible="visible" width="600px" title="站内公告" @close="visible = false">
     <p v-html="notice" style="line-height:22px">
     </p>
     <div slot="footer" class="footer">
@@ -26,7 +26,9 @@ const version = localStorage.getItem('_v')
 if (localStorage.getItem('token')) {
   getNoticeInfo().then(res => {
     if (res.data && res.data.info) {
-      visible.value = true
+      setTimeout(() => {
+        visible.value = true
+      }, 500);
       notice.value = res.data.info
       
       // 版本管理
