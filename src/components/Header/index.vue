@@ -205,7 +205,8 @@ const emailBindId = async() => {
     code: sendYzm.value
   })
   mailVisible.value = false
-  Message.success(res.data)
+  userStore.logout()
+  Message.success(res.data + '请重新登陆')
 }
 </script>
 
