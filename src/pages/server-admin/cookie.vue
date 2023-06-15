@@ -76,9 +76,10 @@
 
         <a-divider orientation="center">三方cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.otherCookie"  :key="i" :field="`cookie.${i}.value`" :label="`三方cookie${i + 1}`">
+          <span>{{ cookie.id }}</span>
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.code" placeholder="对应卡密"/>&nbsp;
-          <a-input v-model="cookie.api" placeholder="三方ID"/>
+          <a-input v-model="cookie.api" placeholder="三方ID" style="width: 80px"/>
           <a-switch v-model="cookie.isOpen"></a-switch>
           <a-button type="text" status="success" @click="getOtherAuth(cookie)">查看权限</a-button>
           <a-button type="text" status="danger" @click="delCookie(i, 'otherCookie')">删除</a-button>
