@@ -36,11 +36,6 @@ const paths = reactive({
       id: 1,
       text: ''
     }, {
-      name: '在线充值',
-      path: '/shop',
-      id: 3,
-      text: ''
-    }, {
       name: '使用帮助',
       path: '/help',
       id: 4,
@@ -71,13 +66,12 @@ const getUserNum = async () => {
 }
 if (!userStore.userIsLogin) {
   getUserNum()
-  // paths.list.push({
-  //   name: '站内活动',
-  //   path: 'https://docs.qq.com/doc/DTURGRkVZa0RiR0dP',
-  //   id: 5,
-  //   text: '',
-  //   target: '_blank'
-  // })
+  paths.list.push({
+      name: '在线充值',
+      path: '/shop',
+      id: 3,
+      text: ''
+    })
 }
 const login = async (type) => {
   loading.value = true
