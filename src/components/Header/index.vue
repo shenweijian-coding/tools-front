@@ -35,6 +35,11 @@ const paths = reactive({
       path: '/sucai',
       id: 1,
       text: ''
+    },{
+      name: '邀请送分',
+      path: '/invite',
+      id: 2,
+      text: '热'
     }, {
       name: '使用帮助',
       path: '/help',
@@ -67,11 +72,11 @@ const getUserNum = async () => {
 if (!userStore.userIsLogin) {
   getUserNum()
   paths.list.push({
-      name: '在线充值',
-      path: '/shop',
-      id: 3,
-      text: ''
-    })
+    name: '在线充值',
+    path: '/shop',
+    id: 3,
+    text: ''
+  })
 }
 const login = async (type) => {
   loading.value = true
