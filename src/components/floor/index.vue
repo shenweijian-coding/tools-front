@@ -1,6 +1,6 @@
 <template>
   <div class="floor">
-    <span>© 2022 小申同学。本站不存储任何资源，所下载的文件皆为网络搜集&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span>© 2022-2023 小申同学。本站不存储任何资源，所下载的文件皆为网络搜集&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     <a href="https://beian.miit.gov.cn/" target="_blank">冀ICP备2022009685号-1</a>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
-  <s-dialog :visible="visible" width="346px" @close="close" :closeOnClickOverlay="false">
-    <div style="text-align: center;"><a-tag color="black">支付完成权限发放成功会自动关闭弹窗，请勿手动刷新</a-tag>
+  <s-dialog :visible="visible" width="356px" @close="close" :closeOnClickOverlay="false">
+    <div style="text-align: center;"><a-tag color="red">扫码付款后，请等待本弹窗自动关闭，对应权限即可到账</a-tag>
     </div>
     <div class="pay-box">
       <img src="https://11885878.s21i.faiusr.com/4/ABUIABAEGAAglOvoiQYo2orj2QIwuwE4QA.png" class="img-alipay" alt="支付宝logo"/>

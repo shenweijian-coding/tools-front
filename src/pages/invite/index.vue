@@ -6,7 +6,7 @@ const userStore = useUserStore()
 
 const inviteData = reactive({
   inviteNum: 0,
-  inviteStr: '千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=未登录 登录就可免费下载，不花钱！',
+  inviteStr: '千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=未登录 众多设计师都在用！',
   loading: false,
   list: []
 })
@@ -19,7 +19,7 @@ const getInviteData = () => {
       createInviteData()
     } else {
       inviteData.inviteNum = res.data.inviteNum
-      inviteData.inviteStr = `千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 登录就可免费下载，不花钱！`
+      inviteData.inviteStr = `千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
     }
   }).finally(() => {
     inviteData.loading = false
@@ -30,7 +30,7 @@ const createInviteData = () => {
   inviteData.loading = true
   createInviteCode().then(res => {
     inviteData.inviteNum = res.data.inviteNum
-    inviteData.inviteStr = `千图千库包图众图等18网免费下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 登录就可免费下载，不花钱！`
+    inviteData.inviteStr = `千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
   }).finally(() => {
     inviteData.loading = false
   })

@@ -4,9 +4,8 @@
     style="height: 44px"
     placeholder="复制链接到此处，点击搜索，稍等片刻即可！"
     v-model="url"
-    :button-text="(time ? `等待${time}S` : '搜索')"
+    button-text="搜索"
     search-button
-    :disabled="!!time"
     @search="getPlay"
     size="large"/>
 </template>

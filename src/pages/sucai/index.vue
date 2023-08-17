@@ -243,7 +243,7 @@ const getCurDownUrl = async (item) => {
           href2.value = res.data.psd2
           downVisible.value = true
           options.list = []
-          disableSearch()
+          // disableSearch()
           // window.open(res.data.psd)
         }
       }
