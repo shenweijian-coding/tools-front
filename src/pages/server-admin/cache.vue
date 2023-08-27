@@ -65,7 +65,7 @@
       </a-form-item>
       <a-form-item label="类型:">
         <a-radio-group v-model="cacheForm.createForm.ext">
-          <a-radio v-for="it in ['.zip', '.rar', '.jpg', '.png', 'jpeg', '.mp3', '.mp4', '.eps']" :key="it" :value="it">{{ it }}</a-radio>
+          <a-radio v-for="it in ['.zip', '.rar', '.jpg', '.png', '.jpeg', '.mp3', '.mp4', '.eps', '.mov', '.gif']" :key="it" :value="it">{{ it }}</a-radio>
         </a-radio-group>
         <a-input v-model="cacheForm.createForm.ext" placeholder="类型" style="width: 120px"></a-input>
       </a-form-item>

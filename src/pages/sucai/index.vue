@@ -35,7 +35,7 @@ const downVisible = ref(false)
 //jiimi
 const pollingInfo = reactive({
   visible: false,
-  fileName:  ''
+  fileName: ''
 })
 // 视达虎课播放
 const shidahukeInfo = reactive({
@@ -136,7 +136,7 @@ const getDownUrl = async (url) => {
       if ([1, 2].includes(res.data.id) && !res.data.options) {
         shidahukeInfo.id = res.data.id
         shidahukeInfo.params = res.data
-        if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {          
+        if (res?.data?.psd.indexOf('m3u8') !== -1 || res?.data?.psd.indexOf('mp4') !== -1) {
           shidahukeInfo.visible = true
           setTimeout(() => {
             playInstance.value = new HlsJsPlayer({
@@ -153,7 +153,7 @@ const getDownUrl = async (url) => {
           downVisible.value = true
           href.value = res.data.psd
         }
-      } else {        
+      } else {
         if (res.data.options) {
           options.list = res.data.options
         } else {
@@ -162,9 +162,9 @@ const getDownUrl = async (url) => {
           //   zhongtuUrl.value = res.data.psd
           //   downVisible.value = true
           // } else {
-            downVisible.value = true
-            href2.value = res.data.psd2
-            href.value = res.data.psd
+          downVisible.value = true
+          href2.value = res.data.psd2
+          href.value = res.data.psd
           // }
         }
       }
@@ -227,7 +227,7 @@ const getCurDownUrl = async (item) => {
       if ([1, 2].includes(res.data.id)) {
         shidahukeInfo.id = res.data.id
         shidahukeInfo.params = res.data
-        if (res?.data?.psd.indexOf('m3u8') !== -1) {          
+        if (res?.data?.psd.indexOf('m3u8') !== -1) {
           shidahukeInfo.visible = true
           setTimeout(() => {
             playInstance.value = new HlsJsPlayer({
@@ -246,12 +246,12 @@ const getCurDownUrl = async (item) => {
         }
         options.list = []
 
-      } else {          
+      } else {
         if (res.data.options) {
           options.list = res.data.options
           Message.info('请重新点击分类下载按钮')
-        } else {        
-          handleUserNum() 
+        } else {
+          handleUserNum()
           href.value = res.data.psd
           href2.value = res.data.psd2
           downVisible.value = true
@@ -409,7 +409,7 @@ const handleUserNum = () => {
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
-          <Input @getPlay="getDownUrl" :loading="loading" class="app-search"/>
+          <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -418,9 +418,31 @@ const handleUserNum = () => {
           </span>
         </div>
       </div>
+
+      <!-- 轮播图 -->
+      <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner"  style="margin-top: 30px;">
+        <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
+          :auto-play="true" indicator-type="dot" show-arrow="hover">
+          <a-carousel-item v-if="it.img">
+            <a :href="it.url || '/'" target="_blank">
+              <img :src="it.img" :style="{ width: '100%' }" title="轮播图" />
+            </a>
+          </a-carousel-item>
+        </a-carousel>
+      </div>
+
+      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.q.url" type="warning">
+        {{ appStore.$state.webConfig?.q.text }}
+        <template #action>
+          <a-button size="small" type="text" status="" :href="appStore.$state.webConfig?.q.url"
+            target="_blank">查看常见问题（99%的问题）</a-button>
+        </template>
+      </a-alert>
+
       <div class="app-web-list" v-loading="listLoading">
         <a-row>
-          <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id" @click="showWebTip(it)">
+          <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id"
+            @click="showWebTip(it)">
             <a-tooltip>
               <template #content>
                 <template v-if="!userStore.userIsLogin">
@@ -430,7 +452,7 @@ const handleUserNum = () => {
                   <p class="text-m">站点使用说明：{{ it.desc }}</p>
                 </template>
                 <span v-else>请先登录</span>
-              </template >
+              </template>
               <div class="app-weblist-item cursor-pointer">
                 <div class="hidden item-logo sm:flex">
                   <img :src="it.webLogo ? it.webLogo : (it.url + '/favicon.ico')" :alt="it.name">
@@ -438,7 +460,12 @@ const handleUserNum = () => {
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
-                    <span :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{ !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ? userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum : (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) : '未登录' }}</span>
+                    <span
+                      :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{
+                        !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ?
+                          userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum :
+                          (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) :
+                        '未登录' }}</span>
                   </div>
                 </div>
               </div>
@@ -446,28 +473,6 @@ const handleUserNum = () => {
           </a-col>
         </a-row>
       </div>
-      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.q.url" type="warning">
-      {{ appStore.$state.webConfig?.q.text }}
-        <template #action>
-          <a-button size="small" type="primary" status="success" :href="appStore.$state.webConfig?.q.url" target="_blank">查看常见问题（99%的问题）</a-button>
-        </template>
-      </a-alert>
-    </div>
-    <!-- 轮播图 -->
-    <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner">
-      <a-carousel
-        v-for="it in appStore.$state.webConfig.banner"
-        :key="it.url"
-        class="flex-1 carousel-item"
-        :auto-play="true"
-        indicator-type="dot"
-        show-arrow="hover">
-        <a-carousel-item v-if="it.img">
-          <a :href="it.url || '/'" target="_blank">
-            <img :src="it.img" :style="{ width: '100%'}" title="轮播图"/>
-          </a>
-        </a-carousel-item>
-      </a-carousel>
     </div>
 
     <NumLack :visible="visible" @close="close" />
@@ -517,7 +522,8 @@ const handleUserNum = () => {
         <span style="display: flex;justify-content:right;align-items: center;">
           <a-button v-if="href2" @click="copyUrl('https:' + href2)" class="mr-2">复制通道2地址</a-button>
           <a-button @click="copyUrl(href)" type="outline" class="mr-2">复制下载地址</a-button>
-          <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0" @click="openNewPage(href2)">下载-通道2</a-button>
+          <a-button v-if="href2" class="mt-2" type="primary" status="success" style="margin:0"
+            @click="openNewPage(href2)">下载-通道2</a-button>
           &nbsp;
           <a-button class="mt-2" type="primary" style="margin:0" @click="openNewPage(href)">立即下载</a-button>
         </span>
@@ -525,21 +531,23 @@ const handleUserNum = () => {
     </s-dialog>
 
     <!-- 站点说明 -->
-    <s-dialog :visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="true" width="40%" @close="webList.webTipVisible = false">
-        <p>使用说明：{{ webList.currentShowTip.desc || '-' }}</p>
-        <template #footer>
-          <span class="flex align-center" style="justify-content:right;">
-            <a :href="webList.currentShowTip.url" target="_blank" referrerpolicy="no-referrer">
-              <a-button type="outline">跳转官网</a-button>
-            </a>&nbsp;
-            <a href="#/shop" referrerpolicy="no-referrer">
-              <a-button type="primary">开通权限</a-button>
-            </a>
-          </span>
-        </template>
+    <s-dialog :visible="webList.webTipVisible" :title="webList.currentShowTip.name" :closeOnClickOverlay="true"
+      width="40%" @close="webList.webTipVisible = false">
+      <p>使用说明：{{ webList.currentShowTip.desc || '-' }}</p>
+      <template #footer>
+        <span class="flex align-center" style="justify-content:right;">
+          <a :href="webList.currentShowTip.url" target="_blank" referrerpolicy="no-referrer">
+            <a-button type="outline">跳转官网</a-button>
+          </a>&nbsp;
+          <a href="#/shop" referrerpolicy="no-referrer">
+            <a-button type="primary">开通权限</a-button>
+          </a>
+        </span>
+      </template>
     </s-dialog>
 
-    <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link" @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
+    <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link"
+      @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
 
   </div>
 </template>
@@ -549,15 +557,22 @@ const handleUserNum = () => {
   width: 95%;
   max-width: 1300px;
   margin: 16px auto auto;
-  .carousel-item{
-    height: 160px;
-    &:nth-child(2){
+
+  .carousel-item {
+    height: 130px;
+    overflow: hidden;
+    border-radius: 8px;
+
+    &:nth-child(2) {
       margin: 0 12px;
     }
-    img{
-      object-fit: contain;
+
+    img {
+      height: 100%;
+      // object-fit: contain;
     }
   }
+
   .app-header-box {
     display: block;
     border-radius: 8px;
@@ -567,6 +582,7 @@ const handleUserNum = () => {
     background-size: cover;
     text-align: center;
     background-size: 600% 600%;
+
     .app-heade-title {
       color: #f0f1f5;
       font-size: 28px;
@@ -579,12 +595,14 @@ const handleUserNum = () => {
     }
 
     .app-header-input {
-      width: 96%;
+      // width: 96%;
       margin: auto;
-      max-width: 680px;
-      .app-search{
+
+      // max-width: 780px;
+      .app-search {
         margin: 12px 0;
       }
+
       .app-header-func {
         color: #eee;
         text-align: left;
@@ -602,7 +620,7 @@ const handleUserNum = () => {
   .app-web-list {
     width: 100%;
     max-width: 1400px;
-    margin:  10px auto 0;
+    margin: 22px auto 0;
 
     .app-weblist-item {
       background-color: hsla(0, 0%, 100%, 1);
@@ -617,6 +635,7 @@ const handleUserNum = () => {
       -webkit-transition: All .25s;
       transition: All .25s;
       margin: 4px 4px;
+
       &:hover {
         background-color: rgba(255, 255, 255, .8);
         border-radius: 4px;
@@ -776,5 +795,4 @@ const handleUserNum = () => {
       }
     }
   }
-}
-</style>
+}</style>
