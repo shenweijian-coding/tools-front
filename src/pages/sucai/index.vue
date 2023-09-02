@@ -423,15 +423,18 @@ const disableSearch =() => {
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
-        <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
+        <h1 class="app-heade-title">提供一站式素材资源导航服务</h1>
         <div class="app-header-input">
           <div class="app-header-func" v-if="!userStore.userIsLogin">
             常用功能：
             <span>
-              <router-link to="/shop">在线充值</router-link>
+              <router-link to="/shop">在线商店</router-link>
             </span>&nbsp;&nbsp;
             <span>
               <router-link to="/user?key=5">卡密激活</router-link>
+            </span>&nbsp;&nbsp;
+            <span>
+              <router-link to="/statement">《免责声明》</router-link>
             </span>
           </div>
           <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>

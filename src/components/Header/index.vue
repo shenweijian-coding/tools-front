@@ -31,21 +31,24 @@ const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
     {
-      name: '素材搜索',
+      name: '资源搜索',
       path: '/sucai',
       id: 1,
       text: ''
-    },{
+    },
+    {
       name: '邀请送分',
       path: '/invite',
       id: 2,
-      text: '热'
-    }, {
-      name: '使用帮助',
-      path: '/help',
-      id: 4,
       text: ''
-    }]
+    },
+    // {
+    //   name: '使用帮助',
+    //   path: '/help',
+    //   id: 4,
+    //   text: ''
+    // }
+  ]
 })
 const visible = ref(false);
 const stepsVisible = ref(false)
@@ -72,7 +75,7 @@ const getUserNum = async () => {
 if (!userStore.userIsLogin) {
   getUserNum()
   paths.list.push({
-    name: '在线充值',
+    name: '站内商店',
     path: '/shop',
     id: 3,
     text: ''

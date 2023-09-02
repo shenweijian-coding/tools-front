@@ -6,7 +6,7 @@ const userStore = useUserStore()
 
 const inviteData = reactive({
   inviteNum: 0,
-  inviteStr: '千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=未登录 众多设计师都在用！',
+  inviteStr: '20+网站素材极速下载 https://tools1998.top/#/sucai?f=未登录 众多设计师都在用！',
   loading: false,
   list: []
 })
@@ -19,7 +19,7 @@ const getInviteData = () => {
       createInviteData()
     } else {
       inviteData.inviteNum = res.data.inviteNum
-      inviteData.inviteStr = `千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
+      inviteData.inviteStr = `20+网站素材极速下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
     }
   }).finally(() => {
     inviteData.loading = false
@@ -30,7 +30,7 @@ const createInviteData = () => {
   inviteData.loading = true
   createInviteCode().then(res => {
     inviteData.inviteNum = res.data.inviteNum
-    inviteData.inviteStr = `千图千库包图众图等20+网素材下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
+    inviteData.inviteStr = `20+网站素材极速下载 https://tools1998.top/#/sucai?f=${res.data.inviteCode} 众多设计师都在用！`
   }).finally(() => {
     inviteData.loading = false
   })
@@ -58,7 +58,7 @@ if (!userStore.userIsLogin) {
       <div class="al-invite">您已经邀请{{ inviteData.inviteNum }}人</div>
       <div class="divone">
         <div class="wenan">
-          复制下方文字分享到设计QQ群，QQ空间、微信群、朋友圈、微博、贴吧、等社交平台，通过您的链接每成功注册1人，您即可获得200永久积分，奖励可进行累加，无上限。
+          复制下方文字分享到设计QQ群，QQ空间、微信群、朋友圈、微博、贴吧、等社交平台，通过您的链接每成功注册1人，您即可获得200积分，奖励可进行累加，无上限。
         </div>
         <div class="fuzhilj">
           <input type="" disabled id="data" :value="inviteData.inviteStr">

@@ -1,7 +1,7 @@
 <template>
   <div class="slide-box">
     <ul class="slide-list">
-      <li title="小程序送积分">
+      <li title="小程序">
         <a-popover position="left">
           <span>
             <icon-qrcode class="icon" />
@@ -12,7 +12,7 @@
           </template>
         </a-popover>
       </li>
-      <li title="拉进微信群">
+      <!-- <li title="拉进微信群">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
@@ -23,12 +23,12 @@
             <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2d1.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
-      </li>
-      <li title="微信公众号送卡密">
+      </li> -->
+      <li title="微信公众号">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
-            <span class="icon-tip">送卡密</span>
+            <span class="icon-tip">公众号</span>
           </span>
 
           <template #content>

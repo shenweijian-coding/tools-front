@@ -9,7 +9,7 @@
   </s-dialog>
   <router-view></router-view>
   <floor></floor>
-  <Slide></Slide>
+  <Slide></Slide> 
 </template>
 
 <script setup lang="ts">

@@ -26,6 +26,10 @@ const routes = [{
     {
       path: '/help',
       component: () => import('@/pages/help/index.vue')
+    },
+    {
+      path: '/statement',
+      component: () => import('@/pages/statement/index.vue')
     }
   ]
 }]

@@ -2,9 +2,9 @@
   <a-input-search
     :loading="loading"
     style="height: 44px"
-    placeholder="复制链接到此处，点击搜索，稍等片刻即可！"
+    placeholder="复制链接到此处，百度搜索一下"
     v-model="url"
-    button-text="搜索"
+    button-text="百度一下"
     search-button
     @search="getPlay"
     size="large"/>
