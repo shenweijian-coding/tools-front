@@ -1,24 +1,24 @@
 <template>
   <div class="shop-box" v-loading="loading">
-    <a-radio-group v-model="checkedValue">
+    <h2 class="text-bold">充值方式一【站内充值】</h2>
+    <a-radio-group v-model="checkedValue" class="mt-xl">
       <template v-for="item in goodList" :key="item.id">
-        <a-radio :value="item">
-          <template #radio="{ checked }">
-            <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
-              <div>
-                <div className="custom-radio-card-title">
-                  {{ item.title }}
+        <a-tooltip :content="item.desc">
+          <a-radio :value="item">
+            <template #radio="{ checked }">
+              <a-space align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
+                <div>
+                  <div className="custom-radio-card-title">
+                    {{ item.title }}
+                  </div>
                 </div>
-              </div>
-            </a-space>
-          </template>
-        </a-radio>
+              </a-space>
+            </template>
+          </a-radio>
+        </a-tooltip>
       </template>
     </a-radio-group>
-    <div class="shop-action">
-      <span class="lg:flex hidden">
-        <a-alert :show-icon="false">详情：{{ checkedValue.desc }}</a-alert>
-      </span>
+    <div class="shop-action mt-l">
       <span>
         <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
         <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -26,6 +26,21 @@
       </span>
     </div>
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
+  </div>
+  <div class="shop-box" v-loading="loading">
+    <h2 class="text-bold">其它充值方式【淘宝】</h2>
+    <p class="mt-10">支持精选主流 20+ 网站自助下载，以及可人工代下红动中国、昵图网、图行天下等网站素材（需要人工代下素材，备注遇建素材来的，可买一送一）</p>
+    <p class="mt-1">手机淘宝扫描下方二维码进入店铺或点击店铺名即可跳转PC店铺，超优惠</p>
+    <div class="flex mt-2">
+      <a v-for="(it, i) in taobao" :href="it.url" target="_blank" class="mt-2 text-center mr-10">
+        <a-popover title="">
+          <span class="text-center text-underline">店铺名：{{ it.title }}  二维码<icon-qrcode class="icon" /></span>
+          <template #content>
+            <img style="width: 140px;" :src="it.img" alt="">
+          </template>
+        </a-popover>
+      </a>
+    </div>
   </div>
   <tips></tips>
 </template>
@@ -36,9 +51,11 @@ import { createInvoice, checkInvoice } from '@api/home'
 import { useUserStore } from '@/store';
 import { Message } from '@arco-design/web-vue';
 import tips from './tips.vue'
+import { IconQrcode } from '@arco-design/web-vue/es/icon';
 const userStore = useUserStore()
 
 const goodList = ref([])
+const taobao = ref([])
 const loading = ref(false)
 const checkedValue = ref({})
 const visible = ref(false)
@@ -52,7 +69,8 @@ const getList = async () => {
   // }
   loading.value = true
   const res = await getGoodList()
-  goodList.value = res.data
+  goodList.value = res.data.list
+  taobao.value = res.data.taobao
   checkedValue.value = goodList.value[0]
   loading.value = false
 }
@@ -124,7 +142,7 @@ getList()
 
 .shop-box {
   display: flex;
-  min-height: 18.75rem;
+  // min-height: 16.75rem;
   width: 74%;
   box-sizing: border-box;
   padding: 1.25rem 2.5rem 1.25rem 2.5rem;
@@ -136,7 +154,7 @@ getList()
   backdrop-filter: blur(.625rem);
   border-radius: .625rem;
   -webkit-box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 6%);
-  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 2%);
+  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 0.1);
   flex-direction: column;
   justify-content: space-between;
 

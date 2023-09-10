@@ -12,5 +12,6 @@
 .tips-box {
   width: 74%;
   margin: 30px auto;
+  box-shadow: 0 .5rem 1.25rem 0 rgb(0 0 0 / 0.1);
 }
 </style>

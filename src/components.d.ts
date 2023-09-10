@@ -5,7 +5,6 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AAlert: typeof import('@arco-design/web-vue')['Alert']
     AButton: typeof import('@arco-design/web-vue')['Button']
     ACarousel: typeof import('@arco-design/web-vue')['Carousel']
     ACarouselItem: typeof import('@arco-design/web-vue')['CarouselItem']
@@ -28,6 +27,7 @@ declare module '@vue/runtime-core' {
     ATabPane: typeof import('@arco-design/web-vue')['TabPane']
     ATabs: typeof import('@arco-design/web-vue')['Tabs']
     ATag: typeof import('@arco-design/web-vue')['Tag']
+    ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     CheckDialog: typeof import('./components/check-dialog/index.vue')['default']
     Dialog: typeof import('./components/dialog/index.vue')['default']
     Floor: typeof import('./components/floor/index.vue')['default']

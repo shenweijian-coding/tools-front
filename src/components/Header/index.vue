@@ -187,6 +187,7 @@ const mailLogin = async () => {
 
   visible.value = false;
   loading.value = false
+  window.location.reload()
 }
 
 const mailVisible = ref(false)
