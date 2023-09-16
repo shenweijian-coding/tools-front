@@ -12,3 +12,6 @@ export const getWebList = async () => get<any>({ url: 'home/getWebList' })
 export const createInvoice = async (data: Object) => post<any>({ url: 'pay/createInvoice', data })
 
 export const checkInvoice = async (data: Object) => post<any>({ url: 'pay/checkInvoice', data })
+
+export const sendMail = async (data: Object) => post<any>({ url: 'home/sendMail', data })
+

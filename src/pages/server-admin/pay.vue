@@ -19,16 +19,17 @@
       <a-form-item label="卡密类型">
         <a-radio-group v-model="productInfo.createForm.type">
           <a-radio :value="1">时长卡</a-radio>
+          <a-radio :value="4">总站次数时长卡</a-radio>
           <a-radio :value="2">站点次数卡</a-radio>
           <a-radio :value="3">全站次数卡</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item v-if="productInfo.createForm.type !==3" label="生效站点">
+    <a-form-item v-if="[1,2].includes(productInfo.createForm.type)" label="生效站点">
       <a-checkbox-group v-model="productInfo.createForm.sites">
         <a-checkbox v-for="(o,key) in appStore.$state.webMap" :key="+key" :value="key">{{ o }}</a-checkbox>
       </a-checkbox-group>
     </a-form-item>
-    <div class="flex" v-if="productInfo.createForm.type ===1">
+    <div class="flex" v-if="[1,4].includes(productInfo.createForm.type)">
       <a-form-item label="可用时长(天)">
         <a-input-number v-model="productInfo.createForm.num"/>
       </a-form-item>
@@ -36,7 +37,7 @@
         <a-input-number v-model="productInfo.createForm.eNum"/>
       </a-form-item>
     </div>
-    <a-form-item label="可用积分" v-if="productInfo.createForm.type !==1">
+    <a-form-item label="可用积分" v-if="[2,3].includes(productInfo.createForm.type)">
       <a-input-number v-model="productInfo.createForm.num" style="width:200px"/>
     </a-form-item>
     <a-divider />
@@ -99,6 +100,9 @@ const createProduct = async () => {
   } else if (reqData.type === 3) {
     reqData.sites = []
     reqData.eNum = 0
+  } else if(reqData.type == 4) {
+    reqData.sites = Object.keys(appStore.$state.webMap)
+    reqData.selSiteNum = 0
   }
   reqData.pid = Math.floor(new Date().getTime() / 1000)
   await createProductApi(reqData)

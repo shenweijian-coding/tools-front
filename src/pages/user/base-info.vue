@@ -12,6 +12,9 @@
           <div class="info-row">加入时间<div class="spec">{{data.create_time}}</div>
           <a-divider />
           </div>
+          <div class="info-row">邮箱<div class="spec">{{data.email}}</div>
+          <a-divider />
+          </div>
           <div class="info-row">IP地址<div class="spec">{{data.ip}}</div>
           <a-divider />
           </div>

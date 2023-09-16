@@ -6,6 +6,8 @@ import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
 import { useAppStore } from '@/store';
 import selSites from './sel-sites.vue'
+import { sendMail } from '@api/home/index'
+
 import myVideo from './video.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -32,11 +34,15 @@ const paths = reactive({
       text: ''
     }]
 })
+var pattern = /^([0-9a-zA-Z_\.\-\u4e00-\u9fa5])+\@([0-9a-zA-Z_\.\-\])+\.([a-zA-Z]{2,8})$/;
 const loginVisible = ref(false);
 const videoVisible = ref(false)
+const sendMailAddress = ref()
+const disabledSendMail = ref(false)
+const sendYzm = ref()
+
 const loginInfo = reactive({
   cdkey: '',
-  loginType: 1 // 1是卡密登录 0是小程序登录
 })
 
 const openLogin = () => {
@@ -44,6 +50,41 @@ const openLogin = () => {
 }
 if (localStorage.getItem('cdkey')) {
   loginInfo.cdkey = localStorage.getItem('cdkey') || ''
+}
+// 发送邮箱
+const handleSendMail = async() => {
+  if(!sendMailAddress.value) {
+    Message.warning('请填写邮箱')
+    return
+  }
+  if(!pattern.test(sendMailAddress.value)) {
+    Message.warning('邮箱格式有误')
+    return
+  }
+  const res = await sendMail({ mail: sendMailAddress.value })
+  Message.success(res.data)
+  disabledSendMail.value = true
+  setTimeout(() => {
+    disabledSendMail.value = false
+  }, 10000);
+}
+const mailLogin = async () => {
+  if(!sendMailAddress.value || !sendYzm.value) {
+    Message.warning('请填写邮箱和验证码')
+    return
+  }
+  if(!pattern.test(sendMailAddress.value)) {
+    Message.warning('邮箱格式有误')
+    return
+  }
+  const res = await userStore.mailLogin({
+    mail: sendMailAddress.value,
+    code: sendYzm.value
+  })
+  Message.success('登录成功')
+
+  loginVisible.value = false;
+  loading.value = false
 }
 // 获取用户积分数量
 const getUserNum = async () => {
@@ -60,7 +101,7 @@ if (!userStore.userIsLogin) {
 }
 
 const login = async () => {
-  if (loginInfo.loginType && !loginInfo.cdkey) {
+  if (!loginInfo.cdkey) {
     Message.warning('请输入卡密！')
     return
   }
@@ -83,10 +124,6 @@ const close = () => {
 const logout = () => {
   userStore.logout()
   Message.success('退出成功')
-}
-// 切换登录
-const toggleLogin = () => {
-  loginInfo.loginType = loginInfo.loginType === 1 ? 0 : 1
 }
 </script>
 
@@ -116,7 +153,7 @@ const toggleLogin = () => {
                   <li class="flex items-center">
                     <template v-if="!userStore.userIsLogin">
                       <span class="flex items-center mr-2">
-                      <span>全站积分：{{ userStore.$state.num }}</span>
+                      <span>全站积分：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }}</span>
                     </span>
                     <a-divider direction="vertical"></a-divider>
                     </template>
@@ -148,15 +185,19 @@ const toggleLogin = () => {
   </header>
   <s-dialog :visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
     <!-- <a-button type="text" @click="toggleLogin">切换 卡密/微信扫码 登录</a-button> -->
-    <template v-if="loginInfo.loginType">
-      <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
-      <div class="get-code">
-        <a href="" class="">没有卡密，去获取→</a>
-      </div>
-    </template>
-    <!-- <template v-else>
-      <wxLogin></wxLogin>
-    </template> -->
+    <a-tabs default-active-key="1">
+      <a-tab-pane key="1" title="邮箱登陆">
+        <div class="flex">
+          <a-input placeholder="请输入邮箱" button-text="发送" v-model="sendMailAddress" search-button></a-input>
+          <a-button @click="handleSendMail" type="primary" :disabled="disabledSendMail">发送</a-button>
+        </div>
+        <a-input placeholder="请输入发送的邮箱验证码" class="mt-l" v-model="sendYzm"></a-input>
+        <a-button type="primary" class="w-100 mt-l" @click="mailLogin">登陆</a-button>
+      </a-tab-pane>
+      <a-tab-pane key="2" title="卡密登录">
+        <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
+      </a-tab-pane>
+    </a-tabs>
   </s-dialog>
   <!-- 自选站点 -->
   <sel-sites></sel-sites>

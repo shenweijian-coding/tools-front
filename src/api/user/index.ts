@@ -35,4 +35,7 @@ export const getLoginStatus = async (data) => get<any>({ url: 'wxappv1/wxApplogi
 
 export const activeSelAuth = async (data)=> post<any>({ url: 'user/activeSelAuth', data })
 
-export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert };
+const mailLogin = async (data) => post<any>({ url: 'user/mailLogin', data });
+
+
+export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert, mailLogin };
