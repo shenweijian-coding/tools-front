@@ -34,6 +34,10 @@ const routes = [{
     {
       path: '/help',
       component: () => import('@/pages/help/index.vue')
+    },
+    {
+      path: '/userproxy',
+      component: () => import('@/pages/userproxy/index.vue')
     }
   ]
 },

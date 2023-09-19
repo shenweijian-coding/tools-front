@@ -420,7 +420,7 @@ const handleUserNum = () => {
       </div>
 
       <!-- 轮播图 -->
-      <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner"  style="margin-top: 30px;">
+      <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner?.length"  style="margin-top: 30px;">
         <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
           :auto-play="true" indicator-type="dot" show-arrow="hover">
           <a-carousel-item v-if="it.img">
