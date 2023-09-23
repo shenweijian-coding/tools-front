@@ -58,6 +58,7 @@ axiosInstance.interceptors.request.use(
     const token = getToken();
     if (token) {
       config.headers.Authorization = token
+      config.headers.platform = 'pc'
     }
     return config
   },

@@ -271,9 +271,9 @@ const emailBindId = async() => {
   <s-dialog :visible="visible" width="300px" @close="close" title="">
     <div>
       <a-tabs default-active-key="1">
-        <a-tab-pane key="0" title="小程序登录">
+        <!-- <a-tab-pane key="0" title="小程序登录">
           <wxappLogin @login="visible = false"></wxappLogin>
-        </a-tab-pane>
+        </a-tab-pane> -->
 
         <a-tab-pane key="1" title="邮箱登陆">
           <div class="flex">
