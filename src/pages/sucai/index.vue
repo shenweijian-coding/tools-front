@@ -58,7 +58,8 @@ const baotuCheckInfo = reactive({
 })
 const webInfo = reactive({
   list: [],
-  ads: []
+  ads: [],
+  cx: null
 })
 const link = ref('')
 const options = reactive({
@@ -69,6 +70,7 @@ getInfo().then(res => {
   console.log(res)
   webInfo.list = res.data.webList
   webInfo.ads = res.data.ads
+  webInfo.cx = res.data.cx
   listLoading.value = false
   appStore.$patch({
     webList: res.data.webList
@@ -420,6 +422,9 @@ const disableSearch =() => {
 </script>
 
 <template>
+  <a v-if="webInfo.cx" :href="webInfo.cx.url" target="_blank">
+    <img :src="webInfo.cx.img" alt="全网素材免费解析年卡充值">
+  </a>
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
