@@ -150,7 +150,7 @@ const pwd2WxappConfirm = async (pwd) => {
   }
 }
 
-var pattern = /^([0-9a-zA-Z_\.\-\u4e00-\u9fa5])+\@([0-9a-zA-Z_\.\-\])+\.([a-zA-Z]{2,8})$/;
+var pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/;
 const sendMailAddress = ref()
 const sendYzm = ref()
 const disabledSendMail = ref(false)

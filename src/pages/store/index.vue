@@ -29,7 +29,7 @@
   </div>
   <div class="shop-box" v-loading="loading">
     <h2 class="text-bold">其它充值方式【淘宝】</h2>
-    <p class="mt-10">支持精选主流 20+ 网站自助下载，以及可人工代下红动中国、昵图网、图行天下等网站素材（需要人工代下素材，备注遇建素材来的，可买一送一）</p>
+    <p class="mt-10">支持精选主流 20+ 网站自助下载</p>
     <p class="mt-1">手机淘宝扫描下方二维码进入店铺或点击店铺名即可跳转PC店铺，超优惠</p>
     <div class="flex mt-2">
       <a v-for="(it, i) in taobao" :href="it.url" target="_blank" class="mt-2 text-center mr-10">
