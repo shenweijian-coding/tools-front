@@ -58,6 +58,7 @@ const baotuCheckInfo = reactive({
 })
 const webInfo = reactive({
   list: [],
+  list2: [],
   ads: [],
   cx: null
 })
@@ -69,6 +70,7 @@ listLoading.value = true
 getInfo().then(res => {
   console.log(res)
   webInfo.list = res.data.webList
+  webInfo.list2 = res.data.webList2
   webInfo.ads = res.data.ads
   webInfo.cx = res.data.cx
   listLoading.value = false
@@ -423,7 +425,7 @@ const disableSearch =() => {
 
 <template>
   <a v-if="webInfo.cx" :href="webInfo.cx.url" target="_blank">
-    <img :src="webInfo.cx.img" alt="全网素材免费解析年卡充值">
+    <img :src="webInfo.cx.img" alt="全网素材免费解析年卡充值" class="w-100">
   </a>
   <div class="page-design app-page appView">
     <div v-loading="loading">
@@ -470,7 +472,7 @@ const disableSearch =() => {
             <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
           </span>
         </div>
-        <a-divider style="opacity:0.5;margin:2px 0" v-if="!userStore.userIsLogin"></a-divider>
+        <a-divider v-if="!userStore.userIsLogin">24小时自助下载站点-网站内搜索</a-divider>
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
@@ -479,6 +481,22 @@ const disableSearch =() => {
                 <div class="item-info">
                   <div class="title">
                     {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分') }}]
+                  </div>
+                  <div class="tips">{{ it.webTips }}</div>
+                </div>
+              </div>
+            </a>
+          </a-col>
+        </a-row>
+        <a-divider v-if="!userStore.userIsLogin" type="double">人工代下支持站点-需联系微信</a-divider>
+        <a-row>
+          <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list2" :key="it.id">
+            <a :href="it.webUrl" target="_blank" title="点击跳转官网">
+              <div class="app-weblist-item shou">
+                <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
+                <div class="item-info">
+                  <div class="title">
+                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : it.webNum }}]
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
@@ -846,5 +864,8 @@ const disableSearch =() => {
       }
     }
   }
+}
+/deep/.arco-divider-text{
+  background-color: transparent;
 }
 </style>
