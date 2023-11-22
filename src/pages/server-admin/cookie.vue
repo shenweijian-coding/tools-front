@@ -71,6 +71,7 @@
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${i}.value`" :label="`官网cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>
           <a-input v-model="cookie.mark" placeholder="备注" style="width: 200px;"/>
+          <a-switch v-model="cookie.isOpen"></a-switch>
           &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
         </a-form-item>
         <a-button type="outline" @click="addCookie('cookie')" style="width: 160px">新增官网cookie</a-button>
