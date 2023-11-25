@@ -4,6 +4,8 @@ import { IResponse, ILogin, RequestOptions } from './type'
 import { API_BASE_URL } from '../../../../config/constant'
 import { getToken, TokenPrefix } from '@/utils/auth'
 import { Message } from '@arco-design/web-vue';
+import getBaseHeaders from '../../sign.js'
+
 // 如果请求话费了超过 `timeout` 的时间，请求将被中断
 axios.defaults.timeout = 30000
 // 表示跨域请求时是否需要使用凭证
@@ -54,6 +56,15 @@ axiosInstance.interceptors.response.use(
 // axios实例拦截请求
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+
+    const data = config.data
+    let headers = {}
+    if(data) {
+      headers = getBaseHeaders.getBaseHeaders(data)
+    }
+    
+
+    config = Object.assign(config, { headers });
     const token = getToken();
     if (token) {
       config.headers.Authorization = token
