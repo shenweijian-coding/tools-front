@@ -39,7 +39,7 @@
     <p>新增站点功能，增加的网站仅限对接的第三方支持的网站，添加的官网cookie是无法进行解析的，因为没有对接官网；</p>
   </div>
   <!-- cookie配置弹窗 -->
-  <s-dialog :visible="tableData.visible" width="50%" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
+  <s-dialog :visible="tableData.visible" width="60%" :title="tableData.currentCookie?.name || '新增'" @close="dialogClose">
     <div class="cookie-box">
       <a-form :model="tableData.currentCookie" auto-label-width>
         <a-divider orientation="center">基本配置</a-divider>
@@ -69,9 +69,10 @@
         <a-divider direction="vertical"></a-divider>
         <a-divider orientation="center">官网cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${i}.value`" :label="`官网cookie${i + 1}`">
-          <a-input v-model="cookie.value" placeholder="请复制cookie"/>
+          <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.mark" placeholder="备注" style="width: 200px;"/>
           <a-switch v-model="cookie.isOpen"></a-switch>
+          <div style="width: 100px;text-align: center;">{{ cookie.num || 0 }}</div>
           &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
         </a-form-item>
         <a-button type="outline" @click="addCookie('cookie')" style="width: 160px">新增官网cookie</a-button>

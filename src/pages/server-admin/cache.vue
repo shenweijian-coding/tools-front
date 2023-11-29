@@ -50,7 +50,7 @@
         search-button
         @search="autoWrite"/>
       </a-form-item>
-      <a-form-item label="类型" v-if="cacheForm.cacheOptions.length">
+      <a-form-item label="类型" v-if="cacheForm.cacheOptions.length > 1">
         <a-radio-group @change="cacheOptionChange">
           <a-radio v-for="(it,i) in cacheForm.cacheOptions" :value="i" :key="i">{{ it.text }}</a-radio>
         </a-radio-group>
@@ -95,7 +95,7 @@
 import { getCacheByWeb, deleteCacheApi, updateCache } from '@/api/admin/index'
 import { Message } from '@arco-design/web-vue';
 import { dateFormate } from '@/utils/index'
-import { getPngUrl } from '@api/sucai/index'
+import { getPngUrl, getSpecInfo } from '@api/sucai/index'
 
 const cacheForm = reactive({
   cacheWebList: [
@@ -116,6 +116,7 @@ const cacheForm = reactive({
     {name: '90设计',val: '90sheji'},
     {name: '图精灵',val: '616pic'},
     {name: '图品汇',val: '88tph'},
+    {name: '魔力设',val: '51mo'},
   ],
   form: {
     mark: '58pic',
@@ -123,7 +124,7 @@ const cacheForm = reactive({
     sc_id: '',
   },
   createForm: {
-    file: '/' + dateFormate() + '-',
+    file: '',
     ext: '',
     sc_id: '',
     type: '',
@@ -147,15 +148,7 @@ const search = () => {
 
 }
 
-const autoWrite = async() => {
-  if(!cacheForm.scUrl) {
-    return
-  }
-  const res = await getPngUrl({
-    url: cacheForm.scUrl
-  })
-  cacheForm.cacheOptions = res.data.options ? res.data.options : []
-}
+
 
 const cacheOptionChange = (index) => {
   const { mark, parentid, subid, type } = cacheForm.cacheOptions[index]
@@ -164,7 +157,29 @@ const cacheOptionChange = (index) => {
   cacheForm.createForm.subid = subid
   cacheForm.createForm.mark = mark
   cacheForm.createForm.file = cacheForm.createForm.file + mark + '_' + parentid
+  cacheForm.createForm.ext = '.zip'
+}
 
+const autoWrite = async() => {
+  if(!cacheForm.scUrl) {
+    return
+  }
+  cacheForm.createForm = {
+    file: '',
+    ext: '',
+    sc_id: '',
+    type: '',
+    subid: '0',
+    link: '',
+    mark: ''
+  }
+  const res = await getSpecInfo({
+    url: cacheForm.scUrl
+  })
+  cacheForm.cacheOptions = res.data.options ? res.data.options : []
+  if(res.data.options.length == 1) {
+    cacheOptionChange(0)
+  }
 }
 
 const getCacheInfo = async () => {
@@ -187,7 +202,7 @@ const close = () => {
   cacheForm.cacheOptions = []
   cacheForm.scUrl = ''
   cacheForm.createForm = {
-    file: '/' + dateFormate() + '-',
+    file: '',
     ext: '',
     sc_id: '',
     type: '',
@@ -205,6 +220,7 @@ const handleConfig = (row) => {
 const confirm = async () => {
   const res = await updateCache({
     ... cacheForm.createForm,
+    file: '/' + dateFormate() + '-' + cacheForm.createForm.file,
     isEdit: cacheForm.isEdit
   })
   console.log(res);
