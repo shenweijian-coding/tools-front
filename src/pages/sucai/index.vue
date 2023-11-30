@@ -171,6 +171,10 @@ const getDownUrl = async (url) => {
   }
 
 }
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+let currentSelDown = null
 const getCurDownUrl = async (item) => {
   try {
     loading.value = true
@@ -178,7 +182,8 @@ const getCurDownUrl = async (item) => {
       url: link.value,
       option: toRaw(item)
     })
-    
+    currentSelDown = item
+
     if (res.data && res.data.status) { // 校验状态
       if (res.data.status === -1) {
         visible.value = true
@@ -205,6 +210,9 @@ const getCurDownUrl = async (item) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
+      } else if(res.data.status === 1003) { // 重新解析
+        getCurDownUrl(currentSelDown)
+        await delay(8000)
       }
     }
 
@@ -259,6 +267,7 @@ const getCurDownUrl = async (item) => {
     loading.value = false
   }
 }
+
 const checkCode = async (downCode) => {
   const { data } = await checkInfo({ code: downCode })
   if (data.result) {
@@ -472,7 +481,7 @@ const disableSearch =() => {
             <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
           </span>
         </div>
-        <a-divider v-if="!userStore.userIsLogin">24小时自助下载站点-网站内搜索</a-divider>
+        <!-- <a-divider v-if="!userStore.userIsLogin">24小时自助下载站点-网站内搜索</a-divider> -->
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
