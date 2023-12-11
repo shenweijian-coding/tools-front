@@ -177,7 +177,11 @@ const getDownUrl = async (url) => {
   }
 
 }
-
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+let currentSelDown = null
+let repeatCount = 0
 const getCurDownUrl = async (item) => {
   try {
     loading.value = true
@@ -185,6 +189,9 @@ const getCurDownUrl = async (item) => {
       url: link.value,
       option: toRaw(item)
     })
+    console.log(res, '111');
+    currentSelDown = item
+
     // 验证
     if (res.data && res.data.status) { // 校验状态
       if (res.data.status === -1) {
@@ -212,6 +219,16 @@ const getCurDownUrl = async (item) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
+      } else if(res.data.status === 1003) { // 重新解析
+        if(repeatCount > 5) {
+          repeatCount = 0
+          Message.info('搜索失败')
+          return
+        }
+        repeatCount++
+        await delay(8000)
+        await getCurDownUrl(currentSelDown)
+        return
       }
     }
 

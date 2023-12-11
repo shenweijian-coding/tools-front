@@ -185,19 +185,19 @@ const logout = () => {
   </header>
   <s-dialog :visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
     <!-- <a-button type="text" @click="toggleLogin">切换 卡密/微信扫码 登录</a-button> -->
-    <a-tabs default-active-key="1">
-      <a-tab-pane key="1" title="邮箱登陆">
+    <!-- <a-tabs default-active-key="1"> -->
+      <!-- <a-tab-pane key="1" title="邮箱登陆">
         <div class="flex">
           <a-input placeholder="请输入邮箱" button-text="发送" v-model="sendMailAddress" search-button></a-input>
           <a-button @click="handleSendMail" type="primary" :disabled="disabledSendMail">发送</a-button>
         </div>
         <a-input placeholder="请输入发送的邮箱验证码" class="mt-l" v-model="sendYzm"></a-input>
         <a-button type="primary" class="w-100 mt-l" @click="mailLogin">登陆</a-button>
-      </a-tab-pane>
-      <a-tab-pane key="2" title="卡密登录">
+      </a-tab-pane> -->
+      <!-- <a-tab-pane key="2" title="卡密登录"> -->
         <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
-      </a-tab-pane>
-    </a-tabs>
+      <!-- </a-tab-pane> -->
+    <!-- </a-tabs> -->
   </s-dialog>
   <!-- 自选站点 -->
   <sel-sites></sel-sites>
