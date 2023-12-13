@@ -175,6 +175,8 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 let currentSelDown = null
+let repeatCount = 0
+
 const getCurDownUrl = async (item) => {
   try {
     loading.value = true
@@ -211,8 +213,15 @@ const getCurDownUrl = async (item) => {
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
       } else if(res.data.status === 1003) { // 重新解析
-        getCurDownUrl(currentSelDown)
+        if(repeatCount > 5) {
+          repeatCount = 0
+          Message.info('搜索失败')
+          return
+        }
+        repeatCount++
         await delay(8000)
+        await getCurDownUrl(currentSelDown)
+        return
       }
     }
 
