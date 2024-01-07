@@ -28,3 +28,6 @@ export const deleteCacheApi = async(data) => post({url: 'admin/deleteCacheByName
 export const updateCache = async(data) => post({url: 'admin/updateCache', data})
 // 获取第三方权限
 export const getOtherCookieApi = async (data) => post({ url: 'admin/getOtherAuth', data })
+
+export const getWebDownLog = async (data) => post({ url: 'admin/getWebDownLog', data })
+export const getAddressByIp = async (data) => get({ url: 'admin/getAddressByIp?ip=' + data })

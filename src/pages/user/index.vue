@@ -35,8 +35,18 @@ let downLogList = reactive({ info: [] });
 
 const activeKey = ref('1');
 
+const getDownList = async (page = 1) => {
+  loading.value = true
+  const res = await getDownLog({ page })
+  downLogList.info = res.data
+  loading.value = false
+}
+
 if (toRaw(router).currentRoute.value.query.key) {
   activeKey.value = toRaw(router).currentRoute.value.query.key || '1'
+  if(activeKey.value==2) {
+    getDownList()
+  }
 }
 
 (async () => {
@@ -59,12 +69,7 @@ const tabChange = async (type) => {
   loading.value = false
 }
 
-const getDownList = async (page = 1) => {
-  loading.value = true
-  const res = await getDownLog({ page })
-  downLogList.info = res.data
-  loading.value = false
-}
+
 </script>
 
 <style lang="less">

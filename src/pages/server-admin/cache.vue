@@ -13,7 +13,8 @@
     </a-form-item>
     <a-form-item>
       <a-space>
-        <a-button type="primary" @click="getCacheInfo">搜索</a-button>
+        <a-button type="primary" @click="() => pageChange()">搜索</a-button>
+        <a-button @click="reset">重置</a-button>
       </a-space>
     </a-form-item>
   </a-form>
@@ -192,7 +193,7 @@ const getCacheInfo = async () => {
 }
 getCacheInfo()
 
-const pageChange = (page) => {
+const pageChange = (page = 1) => {
   cacheForm.pagination.current = page
   getCacheInfo()
 }
@@ -233,5 +234,12 @@ const deleteCache = async (row) => {
   getCacheInfo()
   Message.success(res.msg)
 }
-
+const reset = () => {
+  cacheForm.form = {
+    mark: '58pic',
+    file: '',
+    sc_id: '',
+  },
+  pageChange()
+}
 </script>

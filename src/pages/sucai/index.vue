@@ -13,6 +13,7 @@ import SvgIcon from "@components/SvgIcon/index.vue"
 import polling from './polling.vue'
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
+import JSZip from 'jszip';
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -31,7 +32,10 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
-
+const editImgs = reactive({
+  imgs: [],
+  preview: ''
+})
 //jiimi
 const pollingInfo = reactive({
   visible: false,
@@ -277,6 +281,13 @@ const getCurDownUrl = async (item) => {
         }
       }
     }
+    if(res.data?.imgs?.imgs?.length) {
+      console.log(res.data.imgs);
+      setTimeout(() => {
+        editImgs.imgs = res.data.imgs.imgs
+        editImgs.preview = res.data.imgs.preview
+      }, 1000);
+    }
   } catch (error) {
 
   } finally {
@@ -418,6 +429,28 @@ const handleUserNum = () => {
     userStore.getUserNum()
   }, 1000)
 }
+
+const downloadZip = () => {
+// 创建一个JSZip实例
+const zip = new JSZip();
+
+// 循环遍历图片地址数组，将每个图片下载并添加到zip文件中
+Promise.all(editImgs.imgs.map(img => fetch(img.img)))
+  .then(responses => Promise.all(responses.map(res => res.blob())))
+  .then(blobs => {
+    blobs.forEach((blob, index) => {
+      zip.file(`image${index}.png`, blob);
+    });
+
+    // 生成zip文件并下载到本地
+    zip.generateAsync({ type: 'blob' }).then(content => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = 'images.zip';
+      link.click();
+    });
+  });
+}
 </script>
 
 <template>
@@ -436,24 +469,12 @@ const handleUserNum = () => {
         </div>
       </div>
 
-      <!-- 轮播图 -->
-      <div class="flex mt-l" v-if="appStore.$state.webConfig?.banner?.length"  style="margin-top: 30px;">
-        <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
-          :auto-play="true" indicator-type="dot" show-arrow="hover">
-          <a-carousel-item v-if="it.img">
-            <a :href="it.url || '/'" target="_blank">
-              <img :src="it.img" :style="{ width: '100%' }" title="轮播图" />
-            </a>
-          </a-carousel-item>
-        </a-carousel>
-      </div>
-
-      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.q.url" type="warning">
-        {{ appStore.$state.webConfig?.q.text }}
-        <template #action>
+      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.notice" type="info" title="">
+        <p v-html="appStore.$state.webConfig?.notice"></p>
+        <!-- <template #action>
           <a-button size="small" type="text" status="" :href="appStore.$state.webConfig?.q.url"
             target="_blank">查看常见问题（99%的问题）</a-button>
-        </template>
+        </template> -->
       </a-alert>
 
       <div class="app-web-list" v-loading="listLoading">
@@ -480,7 +501,7 @@ const handleUserNum = () => {
                     <span
                       :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{
                         !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ?
-                          userStore.$state.auth[it.id].eNum + '/' + userStore.$state.auth[it.id].initENum :
+                          '剩' + userStore.$state.auth[it.id].eNum + ' / 共' + userStore.$state.auth[it.id].initENum :
                           (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) :
                         '未登录' }}</span>
                   </div>
@@ -489,6 +510,18 @@ const handleUserNum = () => {
             </a-tooltip>
           </a-col>
         </a-row>
+      </div>
+
+            <!-- 轮播图 -->
+            <div class="flex mt-l" v-if="appStore.$state.webConfig.banner.some(o => o.img)"  style="margin-top: 30px;">
+        <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
+          :auto-play="true" indicator-type="dot" show-arrow="hover">
+          <a-carousel-item v-if="it.img">
+            <a :href="it.url || '/'" target="_blank">
+              <img :src="it.img" :style="{ width: '100%' }" title="轮播图" />
+            </a>
+          </a-carousel-item>
+        </a-carousel>
       </div>
     </div>
 
@@ -565,6 +598,25 @@ const handleUserNum = () => {
 
     <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link"
       @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
+
+    <s-dialog :visible="!!editImgs.imgs.length" title="源文件搜索失败，本次不扣次数，提供备选方案【不会使用ps可关闭此弹窗】" :closeOnClickOverlay="true" width="60%" @close="editImgs.imgs = []">
+      <p class="text-red text-l">由于千图官方风控，目前淘宝三方平台均不稳定或直接不可用，可以打包下载源文件的图层图片本地拼合而成 或 使用其他素材站找类似素材</p><br>
+      <div class="flex">
+        <div>
+          <div class="text-bold">原图</div>
+          <div>1. 下载所有图层图片至本地</div>
+          <div>2. 所有图片拖入PS，参考原图组合成品</div>
+          <div>3. 字体可使用 求字体 和 字魂网寻找类似字体</div>
+          <img :src="editImgs.preview" alt="" style="max-height: 500px;">
+        </div>
+        <div style="margin-left: 20px;background-color: #e1e1e1;">
+          <div class="text-bold">组成原图的{{editImgs.imgs.length}}张图层，均高清无水印 <a-button type="primary" @click="downloadZip">打包下载 {{editImgs.imgs.length}} 张图层原图</a-button></div><br>
+          <div class="flex flex-wrap" style="max-height: 500px; overflow-y: auto;" >
+            <img v-for="(item,index) in editImgs.imgs" :key="index" :src="item.img" alt="" :style="`height:${item.h>200 ? item.h/8 : item.h}px;width: ${item.w/4 >500 ? item.w/4 : item.w}px, margin: 10px;`">
+          </div>
+        </div>
+      </div>
+    </s-dialog>
 
   </div>
 </template>
@@ -651,7 +703,7 @@ const handleUserNum = () => {
       padding: 12px 16px;
       -webkit-transition: All .25s;
       transition: All .25s;
-      margin: 4px 4px;
+      margin: 8px 8px;
 
       &:hover {
         background-color: rgba(255, 255, 255, .8);

@@ -21,7 +21,13 @@ const paths = reactive({
       path: '/sucai',
       id: 1,
       text: ''
-    }, 
+    },
+    {
+      name: '下载记录',
+      path: '/user?key=2',
+      id: 2,
+      text: ''
+    },
     {
       name: '在线充值',
       path: '/shop',
@@ -132,7 +138,7 @@ const logout = () => {
     <div
       class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 bg-white/30 supports-backdrop-blur:bg-white/60">
       <div class="mx-auto max-w-8xl">
-        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0">
+        <div class="px-20 py-4 border-b border-slate-900/10 lg:px-18 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
             <a href="/" v-if="appStore.$state?.webConfig?.logo"><img class="h-8" :src="appStore.$state?.webConfig?.logo" alt="logo" /></a>
             <div class="relative flex items-center justify-between lg:w-full">
@@ -140,7 +146,7 @@ const logout = () => {
                 <ul class="flex space-x-14">
                   <template v-for="it in paths.list" :key="it.id">
                     <li class="ml-14"
-                      :class="curPath === it.path ? 'border-b-4 rounded-sm border-white text-white' : ''">
+                      :class="it.path.indexOf(curPath) !== -1  ? 'border-b-4 rounded-sm border-white text-white' : ''">
                       <router-link v-if="!it.target" :to="it.path" class="hover:text-white">{{it.name}}</router-link>
                       <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
                     </li>
