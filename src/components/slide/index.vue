@@ -1,5 +1,5 @@
 <template>
-  <div class="slide-box">
+  <div class="slide-box" v-if="false">
     <ul class="slide-list">
       <!-- <li title="小程序">
         <a-popover position="left">
@@ -12,7 +12,7 @@
           </template>
         </a-popover>
       </li> -->
-      <li title="拉进微信群">
+      <!-- <li title="拉进微信群">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
@@ -23,8 +23,8 @@
             <img src="https://pic.imgdb.cn/item/6300a79b16f2c2beb1ccc2d1.png" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
-      </li>
-      <li title="微信公众号">
+      </li> -->
+      <!-- <li title="微信公众号">
         <a-popover position="left">
           <span>
             <icon-scan class="icon" />
@@ -35,7 +35,7 @@
             <img src="https://pic1.imgdb.cn/item/6300a80616f2c2beb1ccf790.jpg" alt="二维码" style="width:200px;height:200px">
           </template>
         </a-popover>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>

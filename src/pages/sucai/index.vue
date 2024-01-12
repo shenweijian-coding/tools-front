@@ -12,6 +12,7 @@ import { useRoute } from 'vue-router'
 import { dateFormate } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import polling from './polling.vue'
+import JSZip from 'jszip';
 
 import 'xgplayer';
 import HlsJsPlayer from 'xgplayer-hls.js'; // M3U8格式
@@ -32,6 +33,10 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
+const editImgs = reactive({
+  imgs: [],
+  preview: ''
+})
 const limitTimer = reactive({
   timer: null,
   time: 0
@@ -270,6 +275,13 @@ const getCurDownUrl = async (item) => {
       }
       handleUserNum()
     }
+    if(res.data?.imgs?.imgs?.length) {
+      console.log(res.data.imgs);
+      setTimeout(() => {
+        editImgs.imgs = res.data.imgs.imgs
+        editImgs.preview = res.data.imgs.preview
+      }, 1000);
+    }
   } catch (error) {
 
   } finally {
@@ -438,7 +450,27 @@ const disableSearch =() => {
     }
   }, 1000);
 }
+const downloadZip = () => {
+// 创建一个JSZip实例
+const zip = new JSZip();
 
+// 循环遍历图片地址数组，将每个图片下载并添加到zip文件中
+Promise.all(editImgs.imgs.map(img => fetch(img.img)))
+  .then(responses => Promise.all(responses.map(res => res.blob())))
+  .then(blobs => {
+    blobs.forEach((blob, index) => {
+      zip.file(`image${index}.png`, blob);
+    });
+
+    // 生成zip文件并下载到本地
+    zip.generateAsync({ type: 'blob' }).then(content => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = 'images.zip';
+      link.click();
+    });
+  });
+}
 </script>
 
 <template>
@@ -475,19 +507,19 @@ const disableSearch =() => {
         <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
-            <span>永久积分：</span><span>{{ userStore.userNum >= 0 ? userStore.userNum : 0}}</span>
+            <span>总积分：</span><span>{{ userStore.userNum >= 0 ? userStore.userNum : 0}}</span>
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen1" style="width: 19px;" class="mr-2" />
-            <span>今日有效积分：</span><span>{{ userStore.eNum >= 0 ? userStore.eNum : '未赞助或已用完' }}</span>
+            <span>今日积分：</span><span>{{ userStore.eNum >= 0 ? userStore.eNum : '未赞助或已用完' }}</span>
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-time" style="width: 19px;" class="mr-2" />
-            <span>过期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '-' }}</span>
+            <span>到期时间：</span><span>{{ userStore.expireDate ? dateFormate(userStore.expireDate, false) : '-' }}</span>
           </span>
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-notice" style="width: 19px;" class="mr-2" />
-            <div>小程序{{ userStore.isSign ? '已签到' : '未签到' }}</div>
+            <div class="text-bold">支持正版，仅做学习，切勿商用，请及时删除</div>
           </span>
         </div>
         <!-- <a-divider v-if="!userStore.userIsLogin">24小时自助下载站点-网站内搜索</a-divider> -->
@@ -506,7 +538,7 @@ const disableSearch =() => {
             </a>
           </a-col>
         </a-row>
-        <a-divider v-if="!userStore.userIsLogin" type="double">人工代下支持站点-需联系微信</a-divider>
+        <a-divider v-if="!userStore.userIsLogin" type="double">下方站点需联系微信</a-divider>
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list2" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">
@@ -514,7 +546,7 @@ const disableSearch =() => {
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : it.webNum }}]
+                    {{ it.webName }} [{{ userStore.userIsLogin ? '' : it.webNum }}]
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
@@ -526,7 +558,7 @@ const disableSearch =() => {
     </div>
 
     <!-- 底部广告 -->
-    <div class="app-page-adb">
+    <div class="app-page-adb" v-if="!userStore.userIsLogin">
       <a-row :gutter="24">
         <a-col :lg="{ span: 6 }" :xs="{ span: 12 }" v-for="(item, i) in webInfo.ads" :key="i">
           <a-carousel class="app-ad-item" :auto-play="true" indicator-type="dot" show-arrow="hover" :move-speed="1000">
@@ -601,6 +633,20 @@ const disableSearch =() => {
     
     <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link" @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
 
+    <s-dialog :visible="!!editImgs.imgs.length" title="搜索失败，本次不扣次数，提供备选方案【不会使用ps可关闭此弹窗】" :closeOnClickOverlay="true" width="60%" @close="editImgs.imgs = []">
+      <div class="flex">
+        <div style="width: 50%;">
+          <div class="text-bold">原图</div>
+          <img :src="editImgs.preview" alt="" style="max-height: 500px;">
+        </div>
+        <div style="margin-left: 20px;background-color: #e1e1e1;">
+          <div class="text-bold">组成原图的{{editImgs.imgs.length}}张图层，均高清无水印 <a-button type="primary" @click="downloadZip">打包下载 {{editImgs.imgs.length}} 张图层原图</a-button></div><br>
+          <div class="flex flex-wrap" style="max-height: 500px; overflow-y: auto;" >
+            <img v-for="(item,index) in editImgs.imgs" :key="index" :src="item.img" alt="" :style="`height:${item.h>200 ? item.h/8 : item.h}px;width: ${item.w/4 >500 ? item.w/4 : item.w}px, margin: 10px;`">
+          </div>
+        </div>
+      </div>
+    </s-dialog>
   </div>
 </template>
 

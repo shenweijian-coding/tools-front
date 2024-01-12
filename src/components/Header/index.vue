@@ -36,12 +36,12 @@ const paths = reactive({
       id: 1,
       text: ''
     },
-    {
-      name: '邀请送分',
-      path: '/invite',
-      id: 2,
-      text: ''
-    },
+    // {
+    //   name: '邀请送分',
+    //   path: '/invite',
+    //   id: 2,
+    //   text: ''
+    // },
     // {
     //   name: '使用帮助',
     //   path: '/help',

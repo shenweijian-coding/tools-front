@@ -1,6 +1,6 @@
 <template>
   <div class="shop-box" v-loading="loading">
-    <h2 class="text-bold">充值方式一【站内充值】</h2>
+    <h2 class="text-bold">自愿赞助</h2>
     <a-radio-group v-model="checkedValue" class="mt-xl">
       <template v-for="item in goodList" :key="item.id">
         <a-tooltip :content="item.desc">
@@ -27,7 +27,7 @@
     </div>
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>
   </div>
-  <div class="shop-box" v-loading="loading">
+  <!-- <div class="shop-box" v-loading="loading">
     <h2 class="text-bold">其它充值方式【淘宝】</h2>
     <p class="mt-10">支持精选主流 20+ 网站自助下载</p>
     <p class="mt-1">手机淘宝扫描下方二维码进入店铺或点击店铺名即可跳转PC店铺，超优惠</p>
@@ -41,7 +41,7 @@
         </a-popover>
       </a>
     </div>
-  </div>
+  </div> -->
   <tips></tips>
 </template>
 <script setup lang="ts">
