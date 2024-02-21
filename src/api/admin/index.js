@@ -31,3 +31,7 @@ export const getOtherCookieApi = async (data) => post({ url: 'admin/getOtherAuth
 
 export const getWebDownLog = async (data) => post({ url: 'admin/getWebDownLog', data })
 export const getAddressByIp = async (data) => get({ url: 'admin/getAddressByIp?ip=' + data })
+
+export const addBlackIpApi = async(data) => post({ url: 'admin/addBlackIp', data })
+export const getQtWaitList = async() => get({ url: 'admin/getQtWaitList' })
+export const delQtWait = async(data) => post({ url: 'admin/delQtWait', data })

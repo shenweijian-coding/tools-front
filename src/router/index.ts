@@ -84,11 +84,20 @@ const routes = [{
         component: () => import('@/pages/server-admin/download.vue')
       },
       {
+        path: '/server-admin/qt',
+        title: '千T下载管理',
+        component: () => import('@/pages/server-admin/qt.vue')
+      },
+      {
         path: '/server-admin/other',
         title: '第三方API对接',
         component: () => import('@/pages/server-admin/otherInfo.vue')
       }
     ]
+  },
+  {
+    path: '/download',
+    component: () => import('@/pages/download/index.vue')
   }
 ]
 //导入生成的路由数据

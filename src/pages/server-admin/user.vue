@@ -42,6 +42,9 @@
             <a-form-item field="" label="全站积分">
               <a-input-number v-model="userInfo.tableData[0].num"></a-input-number>
             </a-form-item>
+            <a-form-item field="" label="禁用理由">
+              <a-input v-model="userInfo.tableData[0].blackReason"></a-input>
+            </a-form-item>
             <a-form-item field="" label="禁用账号">
               <a-switch v-model="userInfo.tableData[0].isBlack"/>
             </a-form-item>
@@ -109,9 +112,19 @@
     <div class="my-l">支付记录</div>
      <a-table :columns="userInfo.payCols" :data="userInfo.payInfo" />
   </div>
+  <div class="mt-m">
+    <div class="my-l">其他功能</div>
+    <a-input-search
+    style="width: 300px;"
+      placeholder="IP"
+      v-model="blackIp"
+      button-text="添加"
+      search-button
+      @search="addBlackIp"/>
+  </div>
 </template>
 <script setup>
-import { getUserById, updateUserInfo } from '@/api/admin/index.js'
+import { getUserById, updateUserInfo,addBlackIpApi } from '@/api/admin/index.js'
 import { webSiteMap } from '@/data-map/index.js'
 import { timeConvert, dateFormate } from '@/utils/index'
 import sDialog from '@/components/s-dialog/index.vue'
@@ -172,6 +185,12 @@ const save = async () => {
   Message.success(res.data)
   userInfo.editVisible = false
   getUserInfo()
+}
+const blackIp = ref('')
+const addBlackIp = () => {
+  addBlackIpApi({ blackIp: blackIp.value }).then(res => {
+    Message.success(res.data)
+  })
 }
 </script>
 <style lang="less" scoped>

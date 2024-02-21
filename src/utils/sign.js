@@ -8,7 +8,6 @@ export default {
         let timestamp = new Date().getTime();
         let nonceStr = Math.random().toString(36).substr(2);
         //生成前端签名
-        console.log(dataStr + '&timestamp=' + timestamp + '&nonce=' + nonceStr + '&url=' + urlStr);
         let signature = md5(dataStr + '&timestamp=' + timestamp + '&nonce=' + nonceStr + '&url=' + urlStr);
         let postBaseHeaders = {
             timestamp: timestamp,
