@@ -48,3 +48,9 @@ export function dateFormate(dateTime, timeflag) {
   }
   return result;
 };
+
+export function add(a, b) {
+  const precision = Math.max(a.toString().split('.')[1]?.length || 0, b.toString().split('.')[1]?.length || 0);
+  const multiplier = Math.pow(10, precision);
+  return (a * multiplier + b * multiplier) / multiplier;
+}

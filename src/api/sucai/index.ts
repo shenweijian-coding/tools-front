@@ -20,3 +20,4 @@ export const checkInfo = async (data: code) => post<any>({ url: 'user/check', da
 export const webCheck = async (data:code) => post<any>({ url: 'sucai/webCheck', data})
 
 export const getSpecInfo = async(data) => post<any>({ url: 'sucai/getSpecInfo', data})
+export const getPendData = async() => get<any>({ url: 'sucai/getPendData'})

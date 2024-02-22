@@ -2,13 +2,13 @@
 import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
-import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
+import { getPngUrl, getInfo, checkInfo, webCheck, getPendData } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
 import { useUserStore, useAppStore } from '@/store';
 import { useRoute } from 'vue-router'
-import { dateFormate } from '@/utils/index'
+import { dateFormate, add } from '@/utils/index'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import polling from './polling.vue'
 import 'xgplayer';
@@ -65,7 +65,18 @@ const webList = reactive({
 const options = reactive({
   list: []
 })
+const progress = reactive({
+  visible: false,
+  step: ['素材链接识别中ing', '链接识别成功，为xxx', '正在对接数据中心'],
+  timer: null,
+  currentPercent: 0,
+  currentStep: 0,
+  completeStep: []
+})
 
+const pendDownData = reactive({
+  list: []
+})
 const link = ref('')
 // let link = ''
 
@@ -92,6 +103,21 @@ setTimeout(() => {
     localStorage.setItem('fr', query.value.f)
   }
 });
+
+// 下载动画处理程序
+function animation() {
+  progress.timer = setInterval(() => {
+    if(progress.currentPercent>=1) {
+      if(progress.step[progress.currentStep]) {
+        progress.completeStep.unshift(progress.step[progress.currentStep])
+      }
+      progress.currentStep += 1
+      progress.currentPercent = 0
+    }else {
+      progress.currentPercent =  add(progress.currentPercent, 0.05)
+    }
+  }, 500);
+}
 
 const getDownUrl = async (url) => {
   try {
@@ -223,8 +249,8 @@ const getCurDownUrl = async (item) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
-      } else if(res.data.status === 1003) { // 重新解析
-        if(repeatCount > 5) {
+      } else if (res.data.status === 1003) { // 重新解析
+        if (repeatCount > 5) {
           repeatCount = 0
           Message.info('搜索失败')
           return
@@ -281,7 +307,7 @@ const getCurDownUrl = async (item) => {
         }
       }
     }
-    if(res.data?.imgs?.imgs?.length) {
+    if (res.data?.imgs?.imgs?.length) {
       console.log(res.data.imgs);
       setTimeout(() => {
         editImgs.imgs = res.data.imgs.imgs
@@ -431,35 +457,44 @@ const handleUserNum = () => {
 }
 
 const downloadZip = () => {
-// 创建一个JSZip实例
-const zip = new JSZip();
+  // 创建一个JSZip实例
+  const zip = new JSZip();
 
-// 循环遍历图片地址数组，将每个图片下载并添加到zip文件中
-Promise.all(editImgs.imgs.map(img => fetch(img.img)))
-  .then(responses => Promise.all(responses.map(res => res.blob())))
-  .then(blobs => {
-    blobs.forEach((blob, index) => {
-      zip.file(`image${index}.png`, blob);
-    });
+  // 循环遍历图片地址数组，将每个图片下载并添加到zip文件中
+  Promise.all(editImgs.imgs.map(img => fetch(img.img)))
+    .then(responses => Promise.all(responses.map(res => res.blob())))
+    .then(blobs => {
+      blobs.forEach((blob, index) => {
+        zip.file(`image${index}.png`, blob);
+      });
 
-    // 生成zip文件并下载到本地
-    zip.generateAsync({ type: 'blob' }).then(content => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(content);
-      link.download = 'images.zip';
-      link.click();
+      // 生成zip文件并下载到本地
+      zip.generateAsync({ type: 'blob' }).then(content => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = 'images.zip';
+        link.click();
+      });
     });
-  });
 }
+function getPendingSucai() {
+  setInterval(() => {    
+    getPendData().then(res =>{
+      console.log(res);
+      pendDownData.list = res.data
+    })
+  }, 20000);
+}
+getPendingSucai()
 </script>
 
 <template>
   <div class="app-page appView" v-loading="loading">
     <div>
       <div class="app-header-box">
-        <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
+        <!-- <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1> -->
         <div class="app-header-input">
-          <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div>
+          <!-- <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div> -->
           <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
           <span v-if="options.list.length">
             <a-space class="mt-2">
@@ -468,6 +503,37 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
             </a-space>
           </span>
         </div>
+      </div>
+
+      <!-- 下载素材待处理列表 -->
+      <div v-if="pendDownData.list.length" class="bg-white p-l">
+        <span class="text-bold">不支持直接下载的素材会显示在此处，待云端处理完成，您即可点击下载，一般需要5-20分钟，您可以继续搜索其它素材</span>
+        <a-table :data="pendDownData.list" :pagination="false" size="mini" bordered class="mt-m" :height="10">
+          <template #columns>
+            <a-table-column title="等待下载地址" data-index="url" align="center">
+              <template #cell="{ record }">
+                <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{ record.url.replace('https://www.58pic.com', '') }}</a>
+              </template>
+            </a-table-column>
+            <a-table-column title="提交时间" data-index="time" align="center">
+              <template #cell="{ record }">
+                {{ dateFormate(record.time / 1000, 1) }}
+              </template>
+            </a-table-column>
+            <a-table-column title="状态" data-index="name" align="center">
+              <template #cell="{ record }">
+                <div class="flex jc-center">
+                  <div style="width: 14px;height: 14px;border-radius: 50%;background-color: orange"></div>
+                </div>
+              </template>
+            </a-table-column>
+            <a-table-column title="操作" align="center">
+              <template #cell="{ record }">
+                <a-button type="text" @click="getDownUrl({ value: record.url })" size="mini">立即下载</a-button>
+              </template>
+            </a-table-column>
+          </template>
+        </a-table>
       </div>
 
       <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.notice" type="info" title="">
@@ -513,8 +579,8 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
         </a-row>
       </div>
 
-            <!-- 轮播图 -->
-            <div class="flex mt-l" v-if="appStore.$state.webConfig.banner.some(o => o.img)"  style="margin-top: 30px;">
+      <!-- 轮播图 -->
+      <div class="flex mt-l" v-if="appStore.$state.webConfig.banner.some(o => o.img)" style="margin-top: 30px;">
         <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
           :auto-play="true" indicator-type="dot" show-arrow="hover">
           <a-carousel-item v-if="it.img">
@@ -600,7 +666,8 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
     <polling v-if="pollingInfo.visible" :visible="pollingInfo.visible" :file="pollingInfo.fileName" :url="link"
       @close="pollingInfo.visible = false" @complete="handleUserNum"></polling>
 
-    <s-dialog :visible="!!editImgs.imgs.length" title="源文件搜索失败，本次不扣次数，提供备选方案【不会使用ps可关闭此弹窗】" :closeOnClickOverlay="true" width="60%" @close="editImgs.imgs = []">
+    <s-dialog :visible="!!editImgs.imgs.length" title="源文件搜索失败，本次不扣次数，提供备选方案【不会使用ps可关闭此弹窗】" :closeOnClickOverlay="true"
+      width="60%" @close="editImgs.imgs = []">
       <p class="text-red text-l">由于千图官方风控，目前淘宝三方平台均不稳定或直接不可用，可以打包下载源文件的图层图片本地拼合而成 或 使用其他素材站找类似素材</p><br>
       <div class="flex">
         <div>
@@ -611,12 +678,21 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
           <img :src="editImgs.preview" alt="" style="max-height: 500px;">
         </div>
         <div style="margin-left: 20px;background-color: #e1e1e1;">
-          <div class="text-bold">组成原图的{{editImgs.imgs.length}}张图层，均高清无水印 <a-button type="primary" @click="downloadZip">打包下载 {{editImgs.imgs.length}} 张图层原图</a-button></div><br>
-          <div class="flex flex-wrap" style="max-height: 500px; overflow-y: auto;" >
-            <img v-for="(item,index) in editImgs.imgs" :key="index" :src="item.img" alt="" :style="`height:${item.h>200 ? item.h/8 : item.h}px;width: ${item.w/4 >500 ? item.w/4 : item.w}px, margin: 10px;`">
+          <div class="text-bold">组成原图的{{ editImgs.imgs.length }}张图层，均高清无水印 <a-button type="primary"
+              @click="downloadZip">打包下载 {{ editImgs.imgs.length }} 张图层原图</a-button></div><br>
+          <div class="flex flex-wrap" style="max-height: 500px; overflow-y: auto;">
+            <img v-for="(item, index) in editImgs.imgs" :key="index" :src="item.img" alt=""
+              :style="`height:${item.h > 200 ? item.h / 8 : item.h}px;width: ${item.w / 4 > 500 ? item.w / 4 : item.w}px, margin: 10px;`">
           </div>
         </div>
       </div>
+    </s-dialog>
+    <s-dialog :visible="progress.visible" width="50%" title="下载处理中">
+      <a-progress stroke-width="16" :percent="progress.currentPercent" size="large" :show-text="false"/>
+      <p v-if="progress.step[progress.currentStep]" class="text-bold">【{{ progress.step[progress.currentStep] }}】</p>
+      <ul>
+        <li v-for="item in progress.completeStep" key="item" style="line-height: 26px;">{{ item }}[已完成]</li>
+      </ul>
     </s-dialog>
 
   </div>
