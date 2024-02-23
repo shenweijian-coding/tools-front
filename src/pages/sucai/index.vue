@@ -75,7 +75,8 @@ const progress = reactive({
 })
 
 const pendDownData = reactive({
-  list: []
+  list: [],
+  timer: null
 })
 const link = ref('')
 // let link = ''
@@ -119,6 +120,19 @@ function animation() {
   }, 500);
 }
 
+function getPendingSucai(tag) {
+  const func = () => {
+    getPendData().then(res =>{
+      pendDownData.list = res.data
+      if(pendDownData.list.every(o => o.is_down)) {
+        clearInterval(pendDownData.timer)
+      }
+    })
+  }
+  if(tag) { func() }
+  pendDownData.timer = setInterval(func, 20000);
+}
+
 const getDownUrl = async (url) => {
   try {
     zhongtuUrl.value = ''
@@ -152,6 +166,11 @@ const getDownUrl = async (url) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
+      } else if(res.data.status === 1003) {
+        Message.info(res.data.msg)
+        clearInterval(pendDownData.timer)
+        getPendingSucai(1)
+        return
       }
     }
 
@@ -477,18 +496,7 @@ const downloadZip = () => {
       });
     });
 }
-function getPendingSucai() {
-  // let timer = setInterval(() => {  
-    getPendData().then(res =>{
-      console.log(res);
-      pendDownData.list = res.data
-      if(pendDownData.list.every(o => o.is)) {
-        clearInterval(timer)
-      }
-    })
-  // }, 20000);
-}
-getPendingSucai()
+getPendingSucai(1)
 </script>
 
 <template>
@@ -510,7 +518,7 @@ getPendingSucai()
 
       <!-- 下载素材待处理列表 -->
       <div v-if="pendDownData.list.length" class="bg-white p-l">
-        <span>【仅千图】不支持直接下载的素材会显示在此处，待云端处理完成，您即可点击下载，一般5-20分钟，您可以继续搜索其它素材</span>
+        <span>千图部分素材不支持直接下载，待云端处理完成，您即可重新搜索，一般5-20分钟，您可以继续搜索其它素材（下方列表会定时清理）</span>
         <a-table :data="pendDownData.list" :pagination="false" size="mini" bordered class="mt-m" :height="10">
           <template #columns>
             <a-table-column title="等待下载地址" data-index="url" align="center">
@@ -518,15 +526,15 @@ getPendingSucai()
                 <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{ record.url }}</a>
               </template>
             </a-table-column>
-            <a-table-column title="提交时间" data-index="time" align="center">
+            <!-- <a-table-column title="是否" data-index="time" align="center">
               <template #cell="{ record }">
                 {{ dateFormate(record.time / 1000, 1) }}
               </template>
-            </a-table-column>
-            <a-table-column title="操作" align="center">
+            </a-table-column> -->
+            <a-table-column title="预计可下载时间" align="center">
               <template #cell="{ record }">
-                <span v-if="Date.now() - 16 * 60000 < +record.time">预计 {{ dateFormate(+record.time/1000 + 16 * 60, 1) }} 可下载</span>
-                <a-button type="text" @click="getDownUrl({ value: record.url })" size="mini" :disabled="Date.now() - 16 * 60000 < +record.time">点我立即下载</a-button>
+                <span v-if="!record.is_down">预计{{ dateFormate(+record.time/1000 + 16 * 60, 1).slice(0,-3) }} 后可下载（若可下载会实时在此提示）</span>
+                <a-button v-else type="text" @click="getDownUrl({ value: record.url })" size="mini">点我立即下载</a-button>
               </template>
             </a-table-column>
           </template>

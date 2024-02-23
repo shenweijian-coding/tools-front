@@ -33,5 +33,6 @@ export const getWebDownLog = async (data) => post({ url: 'admin/getWebDownLog', 
 export const getAddressByIp = async (data) => get({ url: 'admin/getAddressByIp?ip=' + data })
 
 export const addBlackIpApi = async(data) => post({ url: 'admin/addBlackIp', data })
-export const getQtWaitList = async() => get({ url: 'admin/getQtWaitList' })
+export const getQtWaitList = async(data) => post({ url: 'admin/getQtWaitList', data })
 export const delQtWait = async(data) => post({ url: 'admin/delQtWait', data })
+export const signQtWait = async(data) => post({ url: 'admin/signQtWait', data })
