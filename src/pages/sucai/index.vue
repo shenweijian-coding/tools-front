@@ -478,12 +478,15 @@ const downloadZip = () => {
     });
 }
 function getPendingSucai() {
-  setInterval(() => {    
+  // let timer = setInterval(() => {  
     getPendData().then(res =>{
       console.log(res);
       pendDownData.list = res.data
+      if(pendDownData.list.every(o => o.is)) {
+        clearInterval(timer)
+      }
     })
-  }, 20000);
+  // }, 20000);
 }
 getPendingSucai()
 </script>
@@ -507,12 +510,12 @@ getPendingSucai()
 
       <!-- 下载素材待处理列表 -->
       <div v-if="pendDownData.list.length" class="bg-white p-l">
-        <span class="text-bold">不支持直接下载的素材会显示在此处，待云端处理完成，您即可点击下载，一般需要5-20分钟，您可以继续搜索其它素材</span>
+        <span>【仅千图】不支持直接下载的素材会显示在此处，待云端处理完成，您即可点击下载，一般5-20分钟，您可以继续搜索其它素材</span>
         <a-table :data="pendDownData.list" :pagination="false" size="mini" bordered class="mt-m" :height="10">
           <template #columns>
             <a-table-column title="等待下载地址" data-index="url" align="center">
               <template #cell="{ record }">
-                <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{ record.url.replace('https://www.58pic.com', '') }}</a>
+                <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{ record.url }}</a>
               </template>
             </a-table-column>
             <a-table-column title="提交时间" data-index="time" align="center">
@@ -520,16 +523,10 @@ getPendingSucai()
                 {{ dateFormate(record.time / 1000, 1) }}
               </template>
             </a-table-column>
-            <a-table-column title="状态" data-index="name" align="center">
-              <template #cell="{ record }">
-                <div class="flex jc-center">
-                  <div style="width: 14px;height: 14px;border-radius: 50%;background-color: orange"></div>
-                </div>
-              </template>
-            </a-table-column>
             <a-table-column title="操作" align="center">
               <template #cell="{ record }">
-                <a-button type="text" @click="getDownUrl({ value: record.url })" size="mini">立即下载</a-button>
+                <span v-if="Date.now() - 16 * 60000 < +record.time">预计 {{ dateFormate(+record.time/1000 + 16 * 60, 1) }} 可下载</span>
+                <a-button type="text" @click="getDownUrl({ value: record.url })" size="mini" :disabled="Date.now() - 16 * 60000 < +record.time">点我立即下载</a-button>
               </template>
             </a-table-column>
           </template>
