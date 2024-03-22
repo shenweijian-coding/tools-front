@@ -124,9 +124,9 @@ function getPendingSucai(tag) {
   const func = () => {
     getPendData().then(res =>{
       pendDownData.list = res.data
-      if(pendDownData.list.every(o => o.is_down)) {
-        clearInterval(pendDownData.timer)
-      }
+      // if(pendDownData.list.every(o => o.is_down)) {
+      //   clearInterval(pendDownData.timer)
+      // }
     })
   }
   if(tag) { func() }
@@ -169,7 +169,7 @@ const getDownUrl = async (url) => {
       } else if(res.data.status === 1003) {
         Message.info(res.data.msg)
         clearInterval(pendDownData.timer)
-        getPendingSucai(1)
+        // getPendingSucai(1)
         return
       }
     }
@@ -295,6 +295,7 @@ const getCurDownUrl = async (item) => {
         shidahukeInfo.params = res.data
         if (res?.data?.psd.indexOf('m3u8') !== -1) {
           shidahukeInfo.visible = true
+          shidahukeInfo.playUrl = decodeURIComponent(res.data.psd).split('url=')[1]
           setTimeout(() => {
             playInstance.value = new HlsJsPlayer({
               id: 'mse',
@@ -496,14 +497,17 @@ const downloadZip = () => {
       });
     });
 }
-getPendingSucai(1)
+// getPendingSucai(1)
+onUnmounted(() => {
+  clearInterval(pendDownData.timer)
+})
 </script>
 
 <template>
   <div class="app-page appView" v-loading="loading">
     <div>
       <div class="app-header-box">
-        <!-- <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1> -->
+        <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
           <!-- <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div> -->
           <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
@@ -626,6 +630,7 @@ getPendingSucai(1)
       <div>
         <div id="mse"></div>
         <a-divider></a-divider>
+        <span>视频地址：<a :href="shidahukeInfo.playUrl" target="_blank">{{ shidahukeInfo.playUrl }}</a></span>
       </div>
     </s-dialog>
 
