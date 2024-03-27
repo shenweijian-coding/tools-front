@@ -14,11 +14,14 @@ import { ConfigCompressPlugin } from './compress'
 import { ConfigPagesPlugin } from './pages'
 import { ConfigLayoutsPlugin } from './layouts'
 import { ConfigRestartPlugin } from './restart'
+import { ConfigObfuscator } from './obfuscator'
 
 export function createVitePlugins(isBuild: boolean) {
   const vitePlugins: (Plugin | Plugin[])[] = [
     // vue支持
     vue(),
+    //加密
+    ConfigObfuscator(),
     // JSX支持
     vueJsx(),
     // 自动按需引入组件
