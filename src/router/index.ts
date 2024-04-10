@@ -9,29 +9,32 @@ const routes = [{
   redirect: 'sucai',
   component: () => import('@/layout/index.vue'),
   children: [{
-      path: '/sucai',
-      component: () => import('@/pages/sucai/index.vue')
-    }, {
-      path: '/user',
-      component: () => import('@/pages/user/index.vue')
-    },
-    {
-      path: '/invite',
-      component: () => import('@/pages/invite/index.vue')
-    },
-    {
-      path: '/shop',
-      component: () => import('@/pages/store/index.vue')
-    },
-    {
-      path: '/help',
-      component: () => import('@/pages/help/index.vue')
-    },
-    {
-      path: '/statement',
-      component: () => import('@/pages/statement/index.vue')
-    }
+    path: '/sucai',
+    component: () => import('@/pages/sucai/index.vue')
+  }, {
+    path: '/user',
+    component: () => import('@/pages/user/index.vue')
+  },
+  {
+    path: '/invite',
+    component: () => import('@/pages/invite/index.vue')
+  },
+  {
+    path: '/shop',
+    component: () => import('@/pages/store/index.vue')
+  },
+  {
+    path: '/help',
+    component: () => import('@/pages/help/index.vue')
+  },
+  {
+    path: '/statement',
+    component: () => import('@/pages/statement/index.vue')
+  },
   ]
+}, {
+  path: '/font',
+  component: () => import('@/pages/font/index.vue')
 }]
 //导入生成的路由数据
 const router = createRouter({

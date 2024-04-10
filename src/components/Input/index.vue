@@ -1,10 +1,10 @@
 <template>
   <a-input-search
     :loading="loading"
-    style="height: 44px"
-    placeholder="复制链接到此处，百度搜索一下"
+    style="height: 44px;border: 1px solid #eceff7"
+    :placeholder="placeholder"
     v-model="url"
-    button-text="百度一下"
+    :button-text="btnText"
     search-button
     @search="getPlay"
     size="large"/>
@@ -18,6 +18,14 @@ const props = defineProps({
   },
   time: {
     type: Number
+  },
+  placeholder: {
+    type: String,
+    default: '复制链接到此处，百度搜索一下'
+  },
+  btnText: {
+    type: String,
+    default: '百度一下'
   }
 })
 const emit = defineEmits(['getPlay'])
