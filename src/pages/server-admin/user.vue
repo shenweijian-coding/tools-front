@@ -48,6 +48,9 @@
             <a-form-item field="" label="禁用账号">
               <a-switch v-model="userInfo.tableData[0].isBlack"/>
             </a-form-item>
+            <a-form-item field="" label="使用千图">
+              <a-switch v-model="userInfo.tableData[0].isUseQt"/>
+            </a-form-item>
             <a-form-item field="" label="开启管理员">
               <a-switch v-model="userInfo.tableData[0].isAdmin"/>
             </a-form-item>

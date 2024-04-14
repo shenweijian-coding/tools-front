@@ -221,7 +221,7 @@ const handleConfig = (row) => {
 const confirm = async () => {
   const res = await updateCache({
     ... cacheForm.createForm,
-    file: '/' + dateFormate() + '-' + cacheForm.createForm.file,
+    file: cacheForm.createForm.file,
     isEdit: cacheForm.isEdit
   })
   console.log(res);
