@@ -3,11 +3,12 @@
     <div class="text-l text-bold">充值方式一</div>
     <a-divider />
     <div class="">
-      <a-input placeholder="请输入卡密：XXXX-XXXX-XXXX" style="width: 40%;" v-model="code"></a-input>
+      <a-input placeholder="请输入卡密：XXXX-XXXX-XXXX" style="width: 40%;" v-model="code" disabled></a-input>
       <a-button type="primary" @click="active" class="ml-m" :disabled="!code">激活</a-button>
     </div>
     <div class="mt-m">
       <p class="code-tips">卡密说明：激活成功后立即失效，无法重复使用；卡密兑现的积分可以进行累加,不会重置；</p>
+      <p class="text-red">暂不支持续费兑换，请重新登陆后使用</p>
     </div>
   </div>
 

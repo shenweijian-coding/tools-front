@@ -86,7 +86,7 @@ const getWebList = () => {
   try {
     listLoading.value = true
     webList.list.length || getInfo().then(res => {
-      webList.list = res.data
+      webList.list = res.data.sort((a,b)=> a.sort - b.sort)
       listLoading.value = false
     })
   } catch (error) {
@@ -509,7 +509,7 @@ onUnmounted(() => {
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
         <div class="app-header-input">
-          <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div>
+          <!-- <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div> -->
           <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
           <span v-if="options.list.length">
             <a-space class="mt-2">

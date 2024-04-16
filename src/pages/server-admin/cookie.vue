@@ -29,7 +29,7 @@
       <a-table-column title="编辑" align="center" width="100">
         <template #cell="{ record }">
           <a-button type="text" @click="editWeb(record)">编辑</a-button>
-          <a-button type="text" @click="deleteWeb(record)">删除</a-button>
+          <!-- <a-button type="text" @click="deleteWeb(record)">删除</a-button> -->
         </template>
       </a-table-column>
     </template>
@@ -66,11 +66,15 @@
         <a-form-item label="是否开启解析">
           <a-switch v-model="tableData.currentCookie.isRun"/>
         </a-form-item>
+        <a-form-item label="是否关闭官网cookie">
+          <a-switch v-model="tableData.currentCookie.isNoUse"/>
+        </a-form-item>
         <a-divider direction="vertical"></a-divider>
         <a-divider orientation="center">官网cookie</a-divider>
         <a-form-item v-for="(cookie,i) in tableData.currentCookie.cookie"  :key="i" :field="`cookie.${i}.value`" :label="`官网cookie${i + 1}`">
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.mark" placeholder="备注" style="width: 200px;"/>
+          <a-input v-if="tableData.currentCookie?.id ==5" v-model="cookie.ip" placeholder="备注" style="width: 160px;"/>
           <a-switch v-model="cookie.isOpen"></a-switch>
           <div style="width: 100px;text-align: center;">{{ cookie.num || 0 }}</div>
           &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
