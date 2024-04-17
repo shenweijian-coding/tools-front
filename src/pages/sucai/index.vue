@@ -2,7 +2,7 @@
 import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
-import { getPngUrl, getInfo, checkInfo, webCheck } from '@api/sucai/index'
+import { getPngUrl, getInfo, checkInfo, webCheck, getPendData } from '@api/sucai/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
 import NumLack from '@/components/NumLack/index.vue'
@@ -34,7 +34,7 @@ const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
 const currentTime = ref(Math.floor(new Date().getTime() / 1000))
-setInterval(() => {
+let pendTimer = setInterval(() => {
   currentTime.value = Math.floor(new Date().getTime() / 1000)
 }, 5000);
 const editImgs = reactive({
@@ -102,13 +102,15 @@ function getPendingSucai(tag) {
   const func = () => {
     getPendData().then(res => {
       pendDownData.list = res.data
-      // if(pendDownData.list.every(o => o.is_down)) {
-      //   clearInterval(pendDownData.timer)
-      // }
+      console.log(pendDownData.list.every(o => o.is_down), 'pendDownData.list.every(o => o.is_down');
+      if(pendDownData.list.every(o => o.is_down)) {
+        console.log('111清除一下');
+        clearInterval(pendDownData.timer)
+      }
     })
   }
   if (tag) { func() }
-  pendDownData.timer = setInterval(func, 20000);
+  pendDownData.timer = setInterval(func, 30000);
 }
 const getDownUrl = async (url) => {
   try {
@@ -1001,7 +1003,7 @@ getPendingSucai(1)
   position: absolute;
   right: 0;
   bottom: 0;
-
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   .title {
     padding: 14px 20px;
   }

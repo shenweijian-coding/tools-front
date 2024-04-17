@@ -14,7 +14,7 @@ import { ConfigCompressPlugin } from './compress'
 import { ConfigPagesPlugin } from './pages'
 import { ConfigLayoutsPlugin } from './layouts'
 import { ConfigRestartPlugin } from './restart'
-import { ConfigObfuscator } from './obfuscator'
+// import { ConfigObfuscator } from './obfuscator'
 
 export function createVitePlugins(isBuild: boolean) {
   const vitePlugins: (Plugin | Plugin[])[] = [
