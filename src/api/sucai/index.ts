@@ -18,3 +18,4 @@ export const getPathByfile = async (file, url) => get<any>({ url: 'sucai/getPath
 export const checkInfo = async (data: code) => post<any>({ url: 'user/check', data })
 
 export const webCheck = async (data:code) => post<any>({ url: 'sucai/webCheck', data})
+export const getPendData = async() => get<any>({ url: 'sucai/getPendData'})

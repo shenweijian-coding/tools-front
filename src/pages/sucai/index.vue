@@ -33,6 +33,10 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
+const currentTime = ref(Math.floor(new Date().getTime() / 1000))
+setInterval(() => {
+  currentTime.value = Math.floor(new Date().getTime() / 1000)
+}, 5000);
 const editImgs = reactive({
   imgs: [],
   preview: ''
@@ -71,6 +75,10 @@ const link = ref('')
 const options = reactive({
   list: []
 })
+const pendDownData = reactive({
+  list: [],
+  timer: null
+})
 listLoading.value = true
 getInfo().then(res => {
   console.log(res)
@@ -90,6 +98,18 @@ setTimeout(() => {
     localStorage.setItem('fr', query.value.f)
   }
 });
+function getPendingSucai(tag) {
+  const func = () => {
+    getPendData().then(res => {
+      pendDownData.list = res.data
+      // if(pendDownData.list.every(o => o.is_down)) {
+      //   clearInterval(pendDownData.timer)
+      // }
+    })
+  }
+  if (tag) { func() }
+  pendDownData.timer = setInterval(func, 20000);
+}
 const getDownUrl = async (url) => {
   try {
     zhongtuUrl.value = ''
@@ -123,6 +143,11 @@ const getDownUrl = async (url) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
+      } else if (res.data.status === 1003) {
+        Message.info(res.data.msg)
+        clearInterval(pendDownData.timer)
+        getPendingSucai(1)
+        return
       }
     }
     // 返回了 filename 说明是轮询下载
@@ -471,6 +496,8 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
     });
   });
 }
+getPendingSucai(1)
+
 </script>
 
 <template>
@@ -647,6 +674,43 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
         </div>
       </div>
     </s-dialog>
+        <!-- 离线下载任务进度 -->
+        <div class="bg-white offine-box" v-if="pendDownData.list.length">
+      <div class="title">离线下载任务进度(一般需5-15分钟可下)<br>
+        <span class="mini-title">仅千图部分素材采用云端下载，下载完成您可直接搜索下载</span>
+      </div>
+      <div class="link-box">
+        <div class="link-box-centent">
+          <ul v-if="pendDownData.list.length">
+            <li v-for="(item, index) in pendDownData.list" :key="item.time" class="flex sucai-item">
+              <!-- <div>{{ index + 1 }}、</div> -->
+              <div class="sucai-left">
+                <img :src="item.info.img" alt="" class="sucai-img">
+              </div>
+              <div class="sucai-right">
+                <a :href="item.url" class="sucai-title" target="_blank">{{ item.info.title }}</a>
+                <div v-if="!item.is_down">
+                  <a-progress 
+                    :percent="((currentTime - Math.floor(+item.time / 1000)) / 900)">
+                    <template v-slot:text="scope" >
+                      进度 {{(scope.percent * 100).toFixed(2)}}%
+                    </template>
+                  </a-progress>
+                  <div class="sucai-tips">云端离线中，100%后可直接下载</div>
+                </div>
+                  
+                <!-- <div v-else class="text-green">云端离线完成，可搜索下载</div> -->
+                <div  v-else class="mt-l">
+                  <a-button type="primary" @click="getDownUrl({ value: item.url })" size="mini">立即下载</a-button>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+          <div v-else class="text-center"><a-empty class="mt-l"/></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -931,5 +995,57 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
 }
 /deep/.arco-divider-text{
   background-color: transparent;
+}
+.offine-box {
+  width: 374px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  .title {
+    padding: 14px 20px;
+  }
+
+  .mini-title {
+    font-size: 12px;
+  }
+
+  .link-box {
+    height: 500px;
+    background-color: rgb(250, 250, 250);
+    padding: 14px;
+
+    .link-box-centent {
+      .sucai-right {
+        width: 300px;
+        margin-left: 4px;
+
+        .sucai-tips {
+          font-size: 12px;
+        }
+      }
+
+      overflow-y: auto;
+
+      .sucai-item {
+        width: 100%;
+        margin: 14px 6px;
+      }
+
+      background-color: #fff;
+      height: 100%;
+      border: 1px dashed #88949d;
+
+      .sucai-img {
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .sucai-title {
+        color: blue;
+      }
+    }
+  }
 }
 </style>

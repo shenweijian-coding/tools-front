@@ -52,6 +52,9 @@ body {
 .text-red {
   color: red;
 }
+.text-green{
+  color: green;
+}
 .text-l {
   font-size: 18px;
 }
