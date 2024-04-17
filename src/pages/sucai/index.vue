@@ -32,10 +32,14 @@ const checkVisible = ref(false)
 const zhongtuUrl = ref('')
 const playInstance = ref('')
 const downVisible = ref(false)
+const currentTime = ref(Math.floor(new Date().getTime() / 1000))
 const editImgs = reactive({
   imgs: [],
   preview: ''
 })
+setInterval(() => {
+  currentTime.value = Math.floor(new Date().getTime() / 1000)
+}, 5000);
 //jiimi
 const pollingInfo = reactive({
   visible: false,
@@ -86,7 +90,7 @@ const getWebList = () => {
   try {
     listLoading.value = true
     webList.list.length || getInfo().then(res => {
-      webList.list = res.data.sort((a,b)=> a.sort - b.sort)
+      webList.list = res.data.sort((a, b) => a.sort - b.sort)
       listLoading.value = false
     })
   } catch (error) {
@@ -108,28 +112,28 @@ setTimeout(() => {
 // 下载动画处理程序
 function animation() {
   progress.timer = setInterval(() => {
-    if(progress.currentPercent>=1) {
-      if(progress.step[progress.currentStep]) {
+    if (progress.currentPercent >= 1) {
+      if (progress.step[progress.currentStep]) {
         progress.completeStep.unshift(progress.step[progress.currentStep])
       }
       progress.currentStep += 1
       progress.currentPercent = 0
-    }else {
-      progress.currentPercent =  add(progress.currentPercent, 0.05)
+    } else {
+      progress.currentPercent = add(progress.currentPercent, 0.05)
     }
   }, 500);
 }
 
 function getPendingSucai(tag) {
   const func = () => {
-    getPendData().then(res =>{
+    getPendData().then(res => {
       pendDownData.list = res.data
       // if(pendDownData.list.every(o => o.is_down)) {
       //   clearInterval(pendDownData.timer)
       // }
     })
   }
-  if(tag) { func() }
+  if (tag) { func() }
   pendDownData.timer = setInterval(func, 20000);
 }
 
@@ -166,10 +170,10 @@ const getDownUrl = async (url) => {
         return
       } else if (res.data.status === 1000) { // 爬虫校验
         checkVisible.value = true
-      } else if(res.data.status === 1003) {
+      } else if (res.data.status === 1003) {
         Message.info(res.data.msg)
         clearInterval(pendDownData.timer)
-        // getPendingSucai(1)
+        getPendingSucai(1)
         return
       }
     }
@@ -201,6 +205,7 @@ const getDownUrl = async (url) => {
         } else {
           downVisible.value = true
           href.value = res.data.psd
+          window.open(res.data.psd)
         }
       } else {
         if (res.data.options) {
@@ -214,6 +219,8 @@ const getDownUrl = async (url) => {
           downVisible.value = true
           href2.value = res.data.psd2
           href.value = res.data.psd
+          window.open(res.data.psd)
+
           // }
         }
       }
@@ -497,7 +504,7 @@ const downloadZip = () => {
       });
     });
 }
-// getPendingSucai(1)
+getPendingSucai(1)
 onUnmounted(() => {
   clearInterval(pendDownData.timer)
 })
@@ -521,13 +528,14 @@ onUnmounted(() => {
       </div>
 
       <!-- 下载素材待处理列表 -->
-      <div v-if="pendDownData.list.length" class="bg-white p-l">
+      <div v-if="false" class="bg-white p-l">
         <span>千图部分素材不支持直接下载，待云端处理完成，您即可重新搜索，一般5-20分钟，您可以继续搜索其它素材（下方列表会定时清理）</span>
         <a-table :data="pendDownData.list" :pagination="false" size="mini" bordered class="mt-m" :height="10">
           <template #columns>
             <a-table-column title="等待下载地址" data-index="url" align="center">
               <template #cell="{ record }">
-                <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{ record.url }}</a>
+                <a class="cursor-pointer" :href="record.url" target="_blank" rel="noreferrer" style="color: blue;">{{
+    record.url }}</a>
               </template>
             </a-table-column>
             <!-- <a-table-column title="是否" data-index="time" align="center">
@@ -537,7 +545,8 @@ onUnmounted(() => {
             </a-table-column> -->
             <a-table-column title="预计可下载时间" align="center">
               <template #cell="{ record }">
-                <span v-if="!record.is_down">预计{{ dateFormate(+record.time/1000 + 16 * 60, 1).slice(0,-3) }} 后可下载（若可下载会实时在此提示）</span>
+                <span v-if="!record.is_down">预计{{ dateFormate(+record.time / 1000 + 16 * 60, 1).slice(0, -3) }}
+                  后可下载（若可下载会实时在此提示）</span>
                 <a-button v-else type="text" @click="getDownUrl({ value: record.url })" size="mini">点我立即下载</a-button>
               </template>
             </a-table-column>
@@ -576,10 +585,10 @@ onUnmounted(() => {
                     <span>{{ it.name }}</span>&nbsp;
                     <span
                       :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{
-                        !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ?
-                          '剩' + userStore.$state.auth[it.id].eNum + ' / 共' + userStore.$state.auth[it.id].initENum :
-                          (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) :
-                        '未登录' }}</span>
+    !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ?
+      '剩' + userStore.$state.auth[it.id].eNum + ' / 共' + userStore.$state.auth[it.id].initENum :
+      (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) :
+      '未登录' }}</span>
                   </div>
                 </div>
               </div>
@@ -698,13 +707,49 @@ onUnmounted(() => {
       </div>
     </s-dialog>
     <s-dialog :visible="progress.visible" width="50%" title="下载处理中">
-      <a-progress stroke-width="16" :percent="progress.currentPercent" size="large" :show-text="false"/>
+      <a-progress stroke-width="16" :percent="progress.currentPercent" size="large" :show-text="false" />
       <p v-if="progress.step[progress.currentStep]" class="text-bold">【{{ progress.step[progress.currentStep] }}】</p>
       <ul>
         <li v-for="item in progress.completeStep" key="item" style="line-height: 26px;">{{ item }}[已完成]</li>
       </ul>
     </s-dialog>
+    <!-- 离线下载任务进度 -->
+    <div class="bg-white offine-box" v-if="pendDownData.list.length">
+      <div class="title">离线下载任务进度(一般需5-15分钟可下)<br>
+        <span class="mini-title">仅千图部分素材采用云端下载，下载完成您可直接搜索下载</span>
+      </div>
+      <div class="link-box">
+        <div class="link-box-centent">
+          <ul v-if="pendDownData.list.length">
+            <li v-for="(item, index) in pendDownData.list" :key="item.time" class="flex sucai-item">
+              <!-- <div>{{ index + 1 }}、</div> -->
+              <div class="sucai-left">
+                <img :src="item.info.img" alt="" class="sucai-img">
+              </div>
+              <div class="sucai-right">
+                <a :href="item.url" class="sucai-title" target="_blank">{{ item.info.title }}</a>
+                <div v-if="!item.is_down">
+                  <a-progress 
+                    :percent="((currentTime - Math.floor(+item.time / 1000)) / 900)">
+                    <template v-slot:text="scope" >
+                      进度 {{(scope.percent * 100).toFixed(2)}}%
+                    </template>
+                  </a-progress>
+                  <div class="sucai-tips">云端离线中，100%后可直接下载</div>
+                </div>
+                  
+                <!-- <div v-else class="text-green">云端离线完成，可搜索下载</div> -->
+                <div  v-else class="mt-l">
+                  <a-button type="primary" @click="getDownUrl({ value: item.url })" size="mini">立即下载</a-button>
+                </div>
 
+              </div>
+            </li>
+          </ul>
+          <div v-else class="text-center"><a-empty class="mt-l"/></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -951,4 +996,58 @@ onUnmounted(() => {
       }
     }
   }
-}</style>
+}
+
+.offine-box {
+  width: 374px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  .title {
+    padding: 14px 20px;
+  }
+
+  .mini-title {
+    font-size: 12px;
+  }
+
+  .link-box {
+    height: 500px;
+    background-color: rgb(250, 250, 250);
+    padding: 14px;
+
+    .link-box-centent {
+      .sucai-right {
+        width: 300px;
+        margin-left: 4px;
+
+        .sucai-tips {
+          font-size: 12px;
+        }
+      }
+
+      overflow-y: auto;
+
+      .sucai-item {
+        width: 100%;
+        margin: 14px 6px;
+      }
+
+      background-color: #fff;
+      height: 100%;
+      border: 1px dashed #88949d;
+
+      .sucai-img {
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .sucai-title {
+        color: blue;
+      }
+    }
+  }
+}
+</style>
