@@ -31,6 +31,10 @@ const routes = [{
     path: '/statement',
     component: () => import('@/pages/statement/index.vue')
   },
+  {
+    path: '/plugin',
+    component: () => import('@/pages/plugin/index.vue')
+  },
   ]
 }, {
   path: '/font',

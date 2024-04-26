@@ -567,7 +567,7 @@ getPendingSucai(1)
             </a>
           </a-col>
         </a-row>
-        <a-divider v-if="!userStore.userIsLogin" type="double">下方站点需联系微信</a-divider>
+        <a-divider v-if="!userStore.userIsLogin && webInfo.list2.length" type="double">下方站点需联系微信</a-divider>
         <a-row>
           <a-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="it in webInfo.list2" :key="it.id">
             <a :href="it.webUrl" target="_blank" title="点击跳转官网">

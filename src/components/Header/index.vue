@@ -36,6 +36,12 @@ const paths = reactive({
       id: 1,
       text: ''
     },
+    {
+      name: '书签插件',
+      path: '/plugin',
+      id: 3,
+      text: '推荐'
+    }
     // {
     //   name: '邀请送分',
     //   path: '/invite',
