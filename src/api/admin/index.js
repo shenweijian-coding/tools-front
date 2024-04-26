@@ -36,3 +36,5 @@ export const addBlackIpApi = async(data) => post({ url: 'admin/addBlackIp', data
 export const getQtWaitList = async(data) => post({ url: 'admin/getQtWaitList', data })
 export const delQtWait = async(data) => post({ url: 'admin/delQtWait', data })
 export const signQtWait = async(data) => post({ url: 'admin/signQtWait', data })
+
+export const sucaiIsCache = async(data) => post({ url: 'sucai/sucaiIsCache', data})

@@ -9,6 +9,11 @@
             <a :href="record.url" target="_blank" rel="noreferrer">{{ record.url }}</a>
           </template>
         </a-table-column>
+        <a-table-column title="图片" data-index="url" align="center">
+          <template #cell="{ record }">
+            <a-image width="200" :height="60" :src="record.info.img" fit="scale-down"></a-image>
+          </template>
+        </a-table-column>
         <a-table-column title="提交时间" data-index="time" align="center">
           <template #cell="{ record }">
             {{ dateFormate(record.time / 1000, 1) }}
@@ -17,8 +22,9 @@
         <a-table-column title="用户ID" data-index="userId" align="center"></a-table-column>
         <a-table-column title="是否超15分钟" data-index="name" align="center">
           <template #cell="{ record }">
-            <a-tag v-if="Date.now() - 16 * 60000 > +record.time" color="green">是</a-tag>
+            <a-tag v-if="Date.now() - 16 * 60000 > +record.time || record.is_down" color="green">是</a-tag>
             <a-tag v-else color="red">否</a-tag>
+            <span>{{ record?.isCache ? '已缓存' : '' }}</span>
           </template>
         </a-table-column>
         <a-table-column title="操作" align="center">
@@ -34,7 +40,7 @@
   </div>
 </template>
 <script setup>
-import { getQtWaitList, delQtWait, signQtWait } from "@/api/admin/index";
+import { getQtWaitList, delQtWait, signQtWait, sucaiIsCache } from "@/api/admin/index";
 import { timeConvert, dateFormate } from '@/utils/index'
 import { getPngUrl } from '@api/sucai/index'
 import { Message } from '@arco-design/web-vue';
@@ -47,7 +53,18 @@ const state = reactive({
 
 function getTableData(page) {
   getQtWaitList({page}).then(res => {
+    res.data.list.forEach(item => {
+      item.sc_id = item.url.match(/\d{8}/) ? item.url.match(/\d{8}/)[0] : 0
+    })
     state.tableData = res.data.list
+
+    sucaiIsCache({ mark: '58pic', ids: state.tableData.map(o => o.sc_id)}).then(res => {
+      if(res.data.length) {
+        res.data.forEach(item => {
+          (state.tableData.find(o => o.sc_id == item.sc_id)).isCache = true
+        })
+      }
+    })
     state.total = res.data.total
     state.current = res.data.current
   })
