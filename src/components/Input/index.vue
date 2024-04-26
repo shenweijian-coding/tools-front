@@ -37,6 +37,14 @@ const getPlay = () => {
   }}
   emit('getPlay', url)
 }
+
+// 处理黄蜂链接
+const href = window.location.href
+const hfUrl = href.match(/url=(\S*)/)?.[1] // 匹配链接
+if (hfUrl) {
+  url.value = hfUrl
+  getPlay()
+}
 </script>
 <style>
 .arco-input-append button{
