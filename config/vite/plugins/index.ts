@@ -21,7 +21,7 @@ export function createVitePlugins(isBuild: boolean) {
     // vue支持
     vue(),
     //加密
-    ConfigObfuscator(),
+    // ConfigObfuscator(),
     // JSX支持
     vueJsx(),
     // 自动按需引入组件
