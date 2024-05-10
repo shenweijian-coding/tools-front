@@ -1,22 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" class="[--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] js-focus-visible dark" data-js-focus-visible>
+<html
+  lang="en"
+  class="[--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] js-focus-visible dark"
+  data-js-focus-visible
+>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>全网素材免费解析下载-开发工具站</title>
+    <meta name="referrer" content="never" />
+    <meta
+      name="keywords"
+      content="遇见素材,遇建素材,素材,解析,素材解析,素材下载,图片解析,图片下载,音乐解析,音乐下载,视频解析,视频下载,文档解析,文档下载,办公文档,素材解析下载"
+    />
+    <meta
+      name="description"
+      content="提供千图网免费下载包图网免费下载摄图网免费下载千库网免费下载虎课网免费下载熊猫办公免费下载抖音快手哔哩哔哩免费解析下载全网素材解析下载"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="renderer" content="webkit" />
+    <meta name="author" content="xiaoshen" />
+    <meta name="copyright" content="xiaoshen" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>全网素材免费解析下载-开发工具站</title>
-  <meta name="referrer" content="never">
-  <meta name="keywords" content="遇见素材,遇建素材,素材,解析,素材解析,素材下载,图片解析,图片下载,音乐解析,音乐下载,视频解析,视频下载,文档解析,文档下载,办公文档,素材解析下载">
-  <meta name="description" content="提供千图网免费下载包图网免费下载摄图网免费下载千库网免费下载虎课网免费下载熊猫办公免费下载抖音快手哔哩哔哩免费解析下载全网素材解析下载">
-  <meta name="robots" content="index,follow">
-  <meta name="renderer" content="webkit">
-  <meta name="author" content="xiaoshen">
-  <meta name="copyright" content="xiaoshen">
-</head>
-
-<body class="antialiased bg-white text-slate-500 dark:text-slate-400">
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script> 
-</body>
+  <body class="antialiased bg-white text-slate-500 dark:text-slate-400">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+    <script type="text/javascript">
+      function show_runtime() {
+        window.setTimeout('show_runtime()', 1000)
+        X = new Date('5/10/2022 00:00:00')
+        Y = new Date()
+        T = Y.getTime() - X.getTime()
+        M = 24 * 60 * 60 * 1000
+        a = T / M
+        A = Math.floor(a)
+        b = (a - A) * 24
+        B = Math.floor(b)
+        c = (b - B) * 60
+        C = Math.floor((b - B) * 60)
+        D = Math.floor((c - C) * 60)
+        runtime_span.innerHTML = '本站勉强运行 ' + A + '天' + B + '小时' + C + '分' + D + '秒'
+      }
+      show_runtime()
+    </script>
+  </body>
 </html>
