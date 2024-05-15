@@ -77,7 +77,8 @@ const options = reactive({
 })
 const pendDownData = reactive({
   list: [],
-  timer: null
+  timer: null,
+  isOpen: true
 })
 listLoading.value = true
 getInfo().then(res => {
@@ -102,9 +103,7 @@ function getPendingSucai(tag) {
   const func = () => {
     getPendData().then(res => {
       pendDownData.list = res.data
-      console.log(pendDownData.list.every(o => o.is_down), 'pendDownData.list.every(o => o.is_down');
       if(pendDownData.list.every(o => o.is_down)) {
-        console.log('111清除一下');
         clearInterval(pendDownData.timer)
       }
     })
@@ -678,10 +677,16 @@ getPendingSucai(1)
     </s-dialog>
         <!-- 离线下载任务进度 -->
         <div class="bg-white offine-box" v-if="pendDownData.list.length">
-      <div class="title">离线下载任务进度(一般需5-15分钟可下)<br>
-        <span class="mini-title">仅千图部分素材采用云端下载，下载完成您可直接搜索下载</span>
+          <div class="title flex jc-between">
+      <span>
+        离线下载任务进度
+      </span>
+      <span class="cursor-pointer offine-close" @click="pendDownData.isOpen = !pendDownData.isOpen">
+        {{pendDownData.isOpen ? '折叠' : '展开'}}
+      </span>
+        <!-- <span class="mini-title">仅千图部分素材采用云端下载，下载完成您可直接搜索下载</span> -->
       </div>
-      <div class="link-box">
+      <div class="link-box" v-show="pendDownData.isOpen">
         <div class="link-box-centent">
           <ul v-if="pendDownData.list.length">
             <li v-for="(item, index) in pendDownData.list" :key="item.time" class="flex sucai-item">
@@ -693,12 +698,13 @@ getPendingSucai(1)
                 <a :href="item.url" class="sucai-title" target="_blank">{{ item.info.title }}</a>
                 <div v-if="!item.is_down">
                   <a-progress 
-                    :percent="((currentTime - Math.floor(+item.time / 1000)) / 900)">
+                    :percent="((currentTime - Math.floor(+item.time / 1000)) / 900)" style="width: 90%;">
                     <template v-slot:text="scope" >
-                      进度 {{(scope.percent * 100).toFixed(2)}}%
+                      进度{{(scope.percent * 100).toFixed(2)}}%
                     </template>
                   </a-progress>
                   <div class="sucai-tips">云端离线中，100%后可直接下载</div>
+                  <div class="sucai-tips">一般5-15分钟完成</div>
                 </div>
                   
                 <!-- <div v-else class="text-green">云端离线完成，可搜索下载</div> -->
@@ -1049,5 +1055,8 @@ getPendingSucai(1)
       }
     }
   }
+}
+.offine-close{
+  color: blue;
 }
 </style>

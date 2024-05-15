@@ -31,7 +31,7 @@ const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
     {
-      name: '资源搜索',
+      name: '素材导航',
       path: '/sucai',
       id: 1,
       text: ''

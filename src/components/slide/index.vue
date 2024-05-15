@@ -46,7 +46,7 @@ import { IconScan, IconUser, IconQrcode } from '@arco-design/web-vue/es/icon';
 <style lang="less" scoped>
 .slide-box {
   width: 48px;
-  height: 220px;
+  height: 100px;
   padding: 12px 0;
   top: 20%;
   right: 0;
