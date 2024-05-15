@@ -4,6 +4,7 @@
     <p v-html="notice" style="line-height:22px">
     </p>
     <div slot="footer" class="footer">
+      <a-checkbox v-model="isOk" @change="checkboxChange">知道了，不再弹出</a-checkbox>
       <a-button type="primary" size="mini" @click="handleRead">我知道了</a-button>
     </div>
   </s-dialog>
@@ -22,10 +23,14 @@ import sDialog from '@/components/s-dialog/index.vue'
 const notice = ref('')
 const visible = ref(false)
 const version = localStorage.getItem('_v')
+const isOk = ref(false)
 
 if (localStorage.getItem('token')) {
   getNoticeInfo().then(res => {
-    if (res.data && res.data.info) {
+    const isnotice = localStorage.getItem('nonotice')
+    console.log(isnotice, '111');
+    
+    if (res.data && res.data.info && !isnotice) {
       setTimeout(() => {
         visible.value = true
       }, 500);
@@ -41,6 +46,9 @@ if (localStorage.getItem('token')) {
 }
 const handleRead = () => {
   visible.value = false
+}
+const checkboxChange = (val) => {
+  window.localStorage.setItem('nonotice', val)
 }
 const close = () => {
 

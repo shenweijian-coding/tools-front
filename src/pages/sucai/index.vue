@@ -109,7 +109,7 @@ function getPendingSucai(tag) {
     })
   }
   if (tag) { func() }
-  pendDownData.timer = setInterval(func, 30000);
+  //pendDownData.timer = setInterval(func, 30000);
 }
 const getDownUrl = async (url) => {
   try {
