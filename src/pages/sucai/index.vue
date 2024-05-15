@@ -131,6 +131,9 @@ const getDownUrl = async (url) => {
           setTimeout(() => {
             sheji90check()
           });
+        } else if(res.data.id == 27) {
+          webSiteCheckVisible.value = true
+          webSiteCheckInfo.imgUrl = res.data.handle
         } else if (res.data.id === 5) { // 包图验证
           console.log('baotu');
           baotuCheckVisible.value = true
