@@ -11,7 +11,7 @@
 
       <a-form-item label="选择套餐">
         <a-select v-model="createInfo.searchForm.pid" placeholder="选择套餐" style="width: 300px">
-          <a-option v-for="o of createInfo.prodList" :value="o.pid" :label="o.name + o.memo" :key="o.pid"/>
+          <a-option v-for="o of createInfo.prodList" :value="o.pid" :label="o.name + o.memo + '-'+o.money + '元/个'" :key="o.pid"/>
         </a-select>
       </a-form-item>
 
@@ -19,8 +19,11 @@
         <a-input-number v-model="createInfo.searchForm.number" :style="{width:'180px'}" placeholder="请输入" mode="button" :min="1"/>
       </a-form-item>
 
+      <div class="text-red text-bold mb-4" v-if="deductPrice">预计消费：{{deductPrice}}元</div>
       <a-form-item label="">
-        <a-button type="primary" @click="handleCreateCode">生成卡密</a-button>
+        <a-popconfirm content="确定生成？" @ok="handleCreateCode">
+          <a-button type="primary">生成卡密</a-button>
+        </a-popconfirm>
       </a-form-item>
 
     </a-form>
@@ -41,6 +44,13 @@ const createInfo = reactive({
 
 })
 
+const deductPrice = computed(() => {
+  const product = createInfo.prodList.find(o => o.pid == createInfo.searchForm.pid)
+  if(product) {
+    return ((product.money || 0) * createInfo.searchForm.number).toFixed(2)
+  }
+  return 0
+})
 const getInitData = async () => {
   getProduct({ type: createInfo.searchForm.type }).then(res => {
     createInfo.prodList = res.data

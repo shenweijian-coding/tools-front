@@ -8,3 +8,5 @@ export const getBalance = async (data) => get({ url: 'proxy/getBalance' })
 
 // 获取卡密列表
 export const getCodeList = async(data) => post({ url: 'proxy/getCodeList', data })
+export const saveBanner = async(data) => post({ url: 'proxy/saveConfig', data })
+export const updateUserBlack = async(data) => post({ url: 'proxy/updateUserBlack', data })
