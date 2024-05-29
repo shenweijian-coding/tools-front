@@ -135,7 +135,7 @@ function getPendingSucai(tag) {
     })
   }
   if (tag) { func() }
-  // pendDownData.timer = setInterval(func, 30000);
+  pendDownData.timer = setInterval(func, 30000);
 }
 
 const getDownUrl = async (url) => {
@@ -505,7 +505,9 @@ const downloadZip = () => {
       });
     });
 }
-getPendingSucai(1)
+onMounted(() => {
+  getPendingSucai(1)
+})
 onUnmounted(() => {
   clearInterval(pendDownData.timer)
 })
@@ -1021,7 +1023,9 @@ onUnmounted(() => {
   }
 
   .link-box {
-    height: 500px;
+    position: relative;
+    z-index: 999;
+    height: 30%;
     background-color: rgb(250, 250, 250);
     padding: 14px;
 
