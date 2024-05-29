@@ -3,9 +3,9 @@
     <a-form :model="createInfo.searchForm" auto-label-width>
       <a-form-item label="套餐类型">
         <a-radio-group type="button" v-model="createInfo.searchForm.type" @change="getInitData">
-          <a-radio :value="1">自选套餐</a-radio>
-          <a-radio :value="2">多网套餐</a-radio>
-          <a-radio :value="3">积分套餐</a-radio>
+          <a-radio :value="1">自选套餐（时间卡-每天每网x次）</a-radio>
+          <a-radio :value="4">多网套餐（时间卡-共计x次）</a-radio>
+          <a-radio :value="3">积分套餐（次数卡-共计x次）</a-radio>
         </a-radio-group>
       </a-form-item>
 
