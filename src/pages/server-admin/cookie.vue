@@ -75,6 +75,7 @@
           <a-input v-model="cookie.value" placeholder="请复制cookie"/>&nbsp;
           <a-input v-model="cookie.mark" placeholder="备注" style="width: 200px;"/>
           <a-input v-if="tableData.currentCookie?.id ==5" v-model="cookie.ip" placeholder="备注" style="width: 160px;"/>
+          <a-input v-if="tableData.currentCookie?.id ==5" v-model="cookie.token" placeholder="token" style="width: 160px;"/>
           <a-switch v-model="cookie.isOpen"></a-switch>
           <div style="width: 100px;text-align: center;">{{ cookie.num || 0 }}</div>
           &nbsp;<a-button type="text" status="danger" @click="delCookie(i, 'cookie')">删除</a-button>
