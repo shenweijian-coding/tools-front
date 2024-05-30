@@ -1022,7 +1022,9 @@ getPendingSucai(1)
   }
 
   .link-box {
-    height: 500px;
+    position: relative;
+    z-index: 999;
+    height: 30%;
     background-color: rgb(250, 250, 250);
     padding: 14px;
 
