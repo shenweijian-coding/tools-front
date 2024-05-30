@@ -4,6 +4,9 @@
        <a-tab-pane key="1" title="卡密管理">
          <codeMange></codeMange>
        </a-tab-pane>
+       <a-tab-pane key="4" title="用户管理">
+         <userInfo></userInfo>
+       </a-tab-pane>
        <a-tab-pane key="2" title="卡密生成">
          <createCode></createCode>
        </a-tab-pane>
@@ -55,6 +58,7 @@
 <script setup>
 import createCode from './components/createCode.vue'
 import codeMange from './components/codeMange.vue'
+import userInfo from './components/userInfo.vue'
 import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { getBalance, saveBanner } from '@api/admin/proxy.js'
