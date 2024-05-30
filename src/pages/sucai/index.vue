@@ -1025,7 +1025,7 @@ onUnmounted(() => {
   .link-box {
     position: relative;
     z-index: 999;
-    height: 30%;
+    max-height: 500px;
     background-color: rgb(250, 250, 250);
     padding: 14px;
 
