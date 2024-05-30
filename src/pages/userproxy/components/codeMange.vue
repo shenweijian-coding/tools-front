@@ -41,7 +41,8 @@
           <template #cell="{ record }">
             <a-button type="text" v-if="record.status == 2" @click="handleOpenCode(record)">启用</a-button>
             <a-button type="text" v-if="record.status == 1" :disabled="!record.status" @click="handleCodeIsUse(record)">禁用</a-button>
-            <a-button type="text" :disabled="!record.status" @click="handleDownload(record)">查看下载记录</a-button>
+            <!-- <a-button type="text" v-if="record.status == 1" :disabled="!record.status" @click="openUserInfo(record)">查看信息</a-button> -->
+            <!-- <a-button type="text" :disabled="!record.status" @click="handleDownload(record)">查看下载记录</a-button> -->
           </template>
         </a-table-column>
       </template>
@@ -126,6 +127,9 @@ const handleCodeIsUse = (row) => {
   codeInfo.disableInfo.currentRow = row
 
   codeInfo.disableVisible = true
+}
+const openUserInfo = (row) => {
+  
 }
 const handleSave = (row) => {
   updateUserBlack({ code: codeInfo.disableInfo.currentRow.code, isBlack: codeInfo.disableInfo.isBlack, blackReason: codeInfo.disableInfo.blackReason}).then(res => {
