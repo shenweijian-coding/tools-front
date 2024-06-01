@@ -6,6 +6,7 @@
         <a-radio :value="4">时长卡（总站次数）</a-radio>
         <a-radio :value="2">站点次数卡</a-radio>
         <a-radio :value="3">全站次数卡</a-radio>
+        <a-radio :value="5">全站次数卡[过期时间]</a-radio>
       </a-radio-group>
     </a-form-item>
     <a-form-item label="卡密:">
@@ -30,7 +31,8 @@
         <a-tag v-if="record.type == 1" color="#7816ff">时长卡（分站次数）</a-tag>
         <a-tag v-else-if="record.type == 4" color="#A8BB91">时长卡（总站次数）</a-tag>
         <a-tag v-else-if="record.type == 2" color="#00b42a">站点次数卡</a-tag>
-        <a-tag v-else color="#0fc6c2">全站次数卡</a-tag>
+        <a-tag v-else-if="record.type == 3" color="#0fc6c2">全站次数卡</a-tag>
+        <a-tag v-else-if="record.type == 5" color="#0fc6c2">全站次数卡[过期]</a-tag>
       </template>
     </a-table-column>
     <a-table-column title="权限" data-index="num" align="center">
@@ -58,7 +60,7 @@
     </a-table-column>
   </template>
   </a-table>
-  <s-dialog :visible="accodeInfo.createVisible" width="50%" title="新建卡密" @close="close">
+  <s-dialog :visible="accodeInfo.createVisible" width="60%" title="新建卡密" @close="close">
     <a-form v-if="!accodeInfo.createResult.length" :model="accodeInfo.createForm" auto-label-width>
       <a-form-item label="卡密类型">
         <a-radio-group v-model="accodeInfo.createForm.type">
@@ -66,15 +68,16 @@
           <a-radio :value="4">时长卡（总站次数）</a-radio>
           <a-radio :value="2">站点次数卡</a-radio>
           <a-radio :value="3">全站次数卡</a-radio>
+          <a-radio :value="5">全站次数卡[过期时间]</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="激活方式" v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.type !==4">
+    <a-form-item label="激活方式" v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.type !==4&& accodeInfo.createForm.type !==5">
       <a-radio-group v-model="accodeInfo.createForm.activeMethod">
         <a-radio :value="1">用户自选</a-radio>
         <a-radio :value="2">固定站点</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1 && accodeInfo.createForm.type != 3 && accodeInfo.createForm.type != 4">
+    <a-form-item label="自选几网" v-if="accodeInfo.createForm.activeMethod == 1 && accodeInfo.createForm.type != 3 && accodeInfo.createForm.type != 4&& accodeInfo.createForm.type !==5">
       <a-input-number v-model="accodeInfo.createForm.selSiteNum" :min="1" :max="Object.keys(appStore.$state?.webMap).length" style="width: 200px;"/>
     </a-form-item>
     <a-form-item v-if="accodeInfo.createForm.type !==3 && accodeInfo.createForm.activeMethod == 2" label="生效站点">
@@ -91,8 +94,11 @@
         <a-input-number v-model="accodeInfo.createForm.eNum" :min="1"/>
       </a-form-item>
     </div>
-    <a-form-item label="可用积分" v-if="accodeInfo.createForm.type ===3 || accodeInfo.createForm.type === 2">
+    <a-form-item label="可用积分" v-if="accodeInfo.createForm.type ===3 || accodeInfo.createForm.type === 2 || accodeInfo.createForm.type === 5">
       <a-input-number v-model="accodeInfo.createForm.num" style="width:200px" :min="1"/>
+    </a-form-item>
+    <a-form-item label="过期天数" v-if="accodeInfo.createForm.type === 5">
+      <a-input-number v-model="accodeInfo.createForm.numDead" style="width:200px" :min="1"/>
     </a-form-item>
     <a-form-item label="生成数量">
       <a-input-number v-model="accodeInfo.createForm.createNum" style="width:200px" :min="1"/>
@@ -140,7 +146,8 @@ const accodeInfo = reactive({
     type: 1,
     num: 30,
     activeMethod: 1,
-    selSiteNum: 1
+    selSiteNum: 1,
+    numDead: 1
   },
   createResult: []
 })
@@ -182,9 +189,10 @@ const close = () => {
 }
 
 const createAccode = async () => {
-  let { type, num, eNum, createNum, sites, activeMethod, selSiteNum } = accodeInfo.createForm
+  let { type, num, eNum, createNum, sites, activeMethod, selSiteNum, numDead } = accodeInfo.createForm
   if (type === 1 && activeMethod == 2) {
     selSiteNum = 0
+    numDead = 0
     if (!sites ||  !sites.length) {
       Message.warning('未选择激活网站')
       return
@@ -192,6 +200,7 @@ const createAccode = async () => {
   } else if (type === 2 && activeMethod == 2) {
     selSiteNum = 0
     eNum = 0
+    numDead = 0
     if (!sites || !sites.length) {
       Message.warning('未选择激活网站')
       return
@@ -200,7 +209,9 @@ const createAccode = async () => {
     sites = []
     eNum = 0
     selSiteNum = 0
+    numDead = 0
   } else if ((type === 1 || type === 2) && activeMethod == 1) {
+    numDead = 0
     if (!selSiteNum) {
       Message.warning('请输入自选数量')
       return
@@ -208,8 +219,13 @@ const createAccode = async () => {
   } else if(type == 4) {
     sites = Object.keys(appStore.$state.webMap)
     selSiteNum = 0
+    numDead = 0
+  } else if(type == 5) {
+    sites = []
+    eNum = 0
+    selSiteNum = 0
   }
-  const res = await createAccodeApi({ type, num, eNum, createNum, sites, selSiteNum })
+  const res = await createAccodeApi({ type, num, eNum, createNum, sites, selSiteNum, numDead })
   let str = ''
   res.data.forEach(it => {
     str += it.code + '\n'

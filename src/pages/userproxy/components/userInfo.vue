@@ -13,7 +13,7 @@
 
     <div class="p-2" v-if="Object.keys(userInfo.info).length">
       <div>账号是否正常：<a-tag :color="userInfo.info.isBlack ? 'red' : 'green'">{{ userInfo.info.isBlack ? '停用' : '正常' }}</a-tag></div>
-      <div class="mb-2">全站通用次数：{{ userInfo.info.num && userInfo.info.num >= 0 ? userInfo.info.num : 0 }}</div>
+      <div class="mb-2">全站通用次数：{{ userInfo.info.num && userInfo.info.num >= 0 ? userInfo.info.num : 0 }}（过期时间 {{userInfo.info.numDeadDate}}）</div>
       <template v-if="userInfo.info.auth && Object.keys(userInfo.info.auth).length">
         <div v-for="(item,prop) in userInfo.info.auth" :key="prop" class="flex mb-1" >
           <div style="width: 100px">{{ appStore.$state?.webMap?.[prop] }}</div>
@@ -110,7 +110,12 @@ const getUserInfo =() => {
     }
   })
 }
-
+const reset = () => {
+  userInfo.searchForm.code = ''
+  userInfo.info = {}
+  userInfo.tableData = []
+  getInfo()
+}
 const getInfo = () => {
   console.log(userInfo.searchForm.code);
   if(!userInfo.searchForm.code) {
@@ -118,4 +123,11 @@ const getInfo = () => {
   }
   getUserInfo()
 }
+const fastSearch = (code) => {
+  userInfo.searchForm.code = code
+  getUserInfo()
+}
+defineExpose({
+  fastSearch
+})
 </script>

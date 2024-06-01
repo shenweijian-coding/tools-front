@@ -159,7 +159,9 @@ const logout = () => {
                   <li class="flex items-center">
                     <template v-if="!userStore.userIsLogin">
                       <span class="flex items-center mr-2">
-                      <span>全站积分：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }}</span>
+                      <span>剩余次数：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }} 次
+                        <span v-if="userStore.$state.numDeadDate">（过期时间：{{ userStore.$state.numDeadDate ? userStore.$state.numDeadDate : '' }}）</span>
+                      </span>
                     </span>
                     <a-divider direction="vertical"></a-divider>
                     </template>
