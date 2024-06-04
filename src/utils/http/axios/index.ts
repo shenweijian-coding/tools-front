@@ -16,7 +16,7 @@ axios.defaults.withCredentials = false
 axios.defaults.headers.post['Access-Control-Allow-Origin-Type'] = '*'
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_BASEURL+'',
+  baseURL: '/',
   // transformRequest: [
   //   function (data) {
   //     //由于使用的 form-data传数据所以要格式化
