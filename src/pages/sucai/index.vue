@@ -720,7 +720,7 @@ onUnmounted(() => {
     <div class="bg-white offine-box" v-if="pendDownData.list.length">
       <div class="title flex jc-between">
       <span>
-        离线下载任务进度
+        离线下载进度【仅迁图部分素材采用离线】
       </span>
       <span class="cursor-pointer offine-close" @click="pendDownData.isOpen = !pendDownData.isOpen">
         {{pendDownData.isOpen ? '折叠' : '展开'}}
@@ -744,8 +744,8 @@ onUnmounted(() => {
                       进度{{(scope.percent * 100).toFixed(2)}}%
                     </template>
                   </a-progress>
-                  <div class="sucai-tips">云端离线中，100%后可直接下载</div>
-                  <div class="sucai-tips">一般5-15分钟完成</div>
+                  <div class="sucai-tips">云端离线中，100%后可搜索下载</div>
+                  <div class="sucai-tips">一般5-15分钟，等待时间可提交其它素材</div>
                 </div>
                   
                 <!-- <div v-else class="text-green">云端离线完成，可搜索下载</div> -->
@@ -1011,9 +1011,10 @@ onUnmounted(() => {
 .offine-box {
   width: 374px;
   position: absolute;
-  right: 0;
+  z-index: 999;
+  left: 0;
   bottom: 0;
-
+  box-shadow: #88949d;
   .title {
     padding: 14px 20px;
   }
@@ -1025,11 +1026,14 @@ onUnmounted(() => {
   .link-box {
     position: relative;
     z-index: 999;
-    max-height: 500px;
+    height: 40vh;
     background-color: rgb(250, 250, 250);
     padding: 14px;
 
     .link-box-centent {
+      max-height: 500px;
+      overflow-y: auto;
+
       .sucai-right {
         width: 300px;
         margin-left: 4px;
@@ -1038,9 +1042,6 @@ onUnmounted(() => {
           font-size: 12px;
         }
       }
-
-      overflow-y: auto;
-
       .sucai-item {
         width: 100%;
         margin: 14px 6px;

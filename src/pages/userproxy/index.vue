@@ -1,11 +1,11 @@
 <template>
     <div class="proxy-box">
-      <a-tabs type="card-gutter" size="large" lazy-load @change="tabChange">
+      <a-tabs :active-key="state.activeTab" type="card-gutter" size="large" @change="tabChange">
        <a-tab-pane key="1" title="卡密管理">
-         <codeMange></codeMange>
+         <codeMange @getUserInfo="getUserInfo" ref="codeInfoRef"></codeMange>
        </a-tab-pane>
        <a-tab-pane key="4" title="用户管理">
-         <userInfo></userInfo>
+         <userInfo ref="userInfoRef"></userInfo>
        </a-tab-pane>
        <a-tab-pane key="2" title="卡密生成">
          <createCode></createCode>
@@ -47,6 +47,9 @@
         <div class="ml-2 mb-2 text-bold">网站背景</div>
         <a-input placeholder="网站背景，仅支持输入URL，网上找图" v-model="state.bgImg"></a-input>
         <div class="my-4"></div>
+        <div class="ml-2 mb-2 text-bold">淘宝购买地址</div>
+        <a-input placeholder="淘宝链接，用户无权限时会提示" v-model="state.carmiAddress"></a-input>
+        <div class="my-4"></div>
         <div class="ml-2 mb-2 text-bold">网站logo</div>
         <a-input placeholder="网站logo、显示左上角" v-model="state.logo"></a-input>
         <a-button type="primary my-2" @click="saveConfig">保存配置</a-button>
@@ -63,17 +66,21 @@ import { reactive } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { getBalance, saveBanner } from '@api/admin/proxy.js'
 
+const userInfoRef = ref(null)
+const codeInfoRef = ref(null)
 const payInfo = reactive({
   money: 1,
 })
 const balance = ref(0)
 
 const state = reactive({
+  activeTab: '1',
   banner: [{ img: '', url: '' }, { img: '', url: '' }, { img: '', url: '' }],
   logo: '',
   notice: '',
   footer: '',
-  bgImg: ''
+  bgImg: '',
+  carmiAddress: ''
 })
 const submitPay = () => {
   if(!payInfo.money) {
@@ -92,17 +99,27 @@ const handleGetBalance = () => {
     state.notice = res.data.notice
     state.bgImg = res.data.bgImg
     state.footer = res.data.footer
+    state.carmiAddress = res.data.carmiAddress
   })
 }
 const tabChange = (tab) =>{
+  state.activeTab = tab
   if(tab == 3 || tab == 5) {
     handleGetBalance()
+  } else if(tab == 1) {
+    codeInfoRef.value.getTableData()
   }
 }
 const saveConfig = () => {
-  saveBanner({ banner: state.banner,logo: state.logo, notice: state.notice, footer: state.footer, bgImg: state.bgImg }).then(res => {
+  saveBanner({ banner: state.banner,logo: state.logo, notice: state.notice, footer: state.footer, bgImg: state.bgImg, carmiAddress: state.carmiAddress }).then(res => {
     Message.success('操作成功')
   })
+}
+const getUserInfo = (code) => {
+  state.activeTab = '4'
+  // setTimeout(() => {
+    userInfoRef.value && userInfoRef.value.fastSearch(code)
+  // }, 1000);
 }
 </script>
 
