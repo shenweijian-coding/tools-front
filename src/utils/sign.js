@@ -21,7 +21,9 @@ export default {
         const newkey = Object.keys(obj).sort();
         let newObj = {};
         for (let i = 0; i < newkey.length; i++) {
-            newObj[newkey[i]] = obj[newkey[i]];
+            if(obj[newkey[i]] != undefined || obj[newkey[i]] != null) {
+                newObj[newkey[i]] = obj[newkey[i]];
+            }
         }
         return newObj;
     },
