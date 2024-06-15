@@ -14,6 +14,14 @@
             <a-image width="200" :height="60" :src="record.info.img" fit="scale-down"></a-image>
           </template>
         </a-table-column>
+        <a-table-column title="类型" data-index="url" align="center">
+          <template #cell="{ record }">
+            <a-tag v-if="record.info.type == 1" color="#7816ff">免费</a-tag>
+            <a-tag v-if="record.info.type == 2" color="#7816ff">vip</a-tag>
+            <a-tag v-if="record.info.type == 3" color="#7816ff">限免</a-tag>
+            <a-tag v-if="record.info.type == 4" color="#7816ff">企业</a-tag>
+          </template>
+        </a-table-column>
         <a-table-column title="提交时间" data-index="time" align="center">
           <template #cell="{ record }">
             {{ dateFormate(record.time / 1000, 1) }}

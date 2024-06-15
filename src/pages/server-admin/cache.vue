@@ -118,6 +118,8 @@ const cacheForm = reactive({
     {name: '图精灵',val: '616pic'},
     // {name: '图品汇',val: '88tph'},
     {name: '魔力设',val: '51mo'},
+    {name: '花瓣网',val: 'huaban'},
+    {name: '红动中国',val: 'redocn'},
   ],
   form: {
     mark: '58pic',
