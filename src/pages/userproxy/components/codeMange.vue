@@ -53,6 +53,9 @@
               @click="handleCodeIsUse(record)">禁用</a-button>
             <!-- <a-button type="text" v-if="record.status == 1" :disabled="!record.status" @click="openUserInfo(record)">查看信息</a-button> -->
             <a-button type="text" :disabled="!record.status" @click="handleDownload(record)">查看详情</a-button>
+            <a-popconfirm content="确定退卡吗？若无下载记录：则退全部余额；有下载记录：按照下载数0.2/次扣除后退余额，成功后卡密将删除 无法正常使用" @ok="handleReplace(record)">
+              <a-button type="text">退卡</a-button>
+            </a-popconfirm>
           </template>
         </a-table-column>
       </template>
@@ -84,7 +87,8 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { getCodeList, updateUserBlack, getProduct } from '@api/admin/proxy.js'
+import { getCodeList, updateUserBlack, getProduct, replaceCodeToNew } from '@api/admin/proxy.js'
+import { Message } from '@arco-design/web-vue'
 
 const emit = defineEmits(['getUserInfo'])
 const codeInfo = reactive({
@@ -198,6 +202,13 @@ const getAllData = () => {
 }
 const handleDownload = (record) => {
   emit('getUserInfo', record.code)
+}
+// 置换新卡
+const handleReplace = (record) => {
+  replaceCodeToNew({ code: record.code }).then(res => {
+    getTableData()
+    Message.success(res.data);
+  })
 }
 const close = () => {
   codeInfo.createResult = ''
