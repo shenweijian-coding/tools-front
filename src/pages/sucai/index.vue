@@ -91,6 +91,9 @@ const getWebList = () => {
   try {
     listLoading.value = true
     webList.list.length || getInfo().then(res => {
+      // if(userStore.$state?.auth?.27 || userStore.$state?.auth?.28) {
+      //   // webList.list
+      // }
       webList.list = res.data.sort((a, b) => a.sort - b.sort)
       listLoading.value = false
     })

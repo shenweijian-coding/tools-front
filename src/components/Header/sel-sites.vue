@@ -2,7 +2,7 @@
   <s-dialog :visible="!!userStore.$state.selSiteNum" :title="'请自选' + userStore.$state.selSiteNum +'网'" width="40%" :closeOnClickOverlay="false" >
     <a-checkbox-group :model-value="activeSites" @change="sitesChange">
       <template v-for="(name, id) in appStore.$state.webMap" :key="id">
-        <a-checkbox v-if="![14,18,25].includes(+id)" :value="id">{{ name }}</a-checkbox>
+        <a-checkbox v-if="![14,18,25,27,28].includes(+id)" :value="id">{{ name }}</a-checkbox>
       </template>
     </a-checkbox-group>
     <template #footer>
