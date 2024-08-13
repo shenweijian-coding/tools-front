@@ -511,9 +511,9 @@ getPendingSucai(1)
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
-        <h1 class="app-heade-title">提供一站式素材资源导航服务</h1>
+        <h1 class="app-heade-title">提供一站式素材网站导航服务</h1>
         <div class="app-header-input">
-          <div class="app-header-func" v-if="!userStore.userIsLogin">
+          <!-- <div class="app-header-func" v-if="!userStore.userIsLogin">
             常用功能：
             <span>
               <router-link to="/shop">在线商店</router-link>
@@ -524,7 +524,7 @@ getPendingSucai(1)
             <span>
               <router-link to="/statement">《免责声明》</router-link>
             </span>
-          </div>
+          </div> -->
           <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
@@ -561,7 +561,7 @@ getPendingSucai(1)
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} [{{ userStore.userIsLogin ? '正常使用' : (it.webNum + '积分') }}]
+                    {{ it.webName }} {{ userStore.userIsLogin ? '' : `[${it.webNum}分]` }}
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
