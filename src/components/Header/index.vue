@@ -36,6 +36,12 @@ const paths = reactive({
       id: 1,
       text: ''
     },
+    {
+      name: '字体世界',
+      path: '/fonts',
+      id: 5,
+      text: '推荐'
+    }
     // {
     //   name: '书签插件',
     //   path: '/plugin',
@@ -81,7 +87,7 @@ const getUserNum = async () => {
 if (!userStore.userIsLogin) {
   getUserNum()
   paths.list.push({
-    name: '站内商店',
+    name: '赞助本站',
     path: '/shop',
     id: 3,
     text: ''
