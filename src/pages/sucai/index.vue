@@ -3,6 +3,7 @@ import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
 import { getPngUrl, getInfo, checkInfo, webCheck, getPendData } from '@api/sucai/index'
+import { getAddress } from '@api/user/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import NumLack from '@/components/NumLack/index.vue'
 import sDialog from '@/components/s-dialog/index.vue'
@@ -85,6 +86,16 @@ const pendDownData = reactive({
 })
 const link = ref('')
 // let link = ''
+
+if(!userStore.userAddress) {
+    getAddress().then(res => {
+        if(res.data) {
+          userStore.setInfo({
+                address: res.data
+            })
+        }
+    })
+}
 
 // 获取网站列表
 const getWebList = () => {
@@ -517,7 +528,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-page appView" v-loading="loading">
+  <div class="app-page appView" v-loading="loading" v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
     <div>
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>

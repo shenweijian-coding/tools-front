@@ -8,4 +8,5 @@ export interface UserState {
     isSign: Boolean;
     adNum: Number;
     selSiteNum: Number;
+    address:String
 }

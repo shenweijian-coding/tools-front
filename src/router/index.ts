@@ -16,6 +16,9 @@ const routes = [{
       path: '/sucai',
       component: () => import('@/pages/sucai/index.vue')
     }, {
+      path: '/59TEG',
+      component: () => import('@/pages/sucai/index.vue')
+    }, {
       path: '/user',
       component: () => import('@/pages/user/index.vue')
     },

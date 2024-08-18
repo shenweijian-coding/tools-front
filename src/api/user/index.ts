@@ -37,5 +37,6 @@ export const activeSelAuth = async (data)=> post<any>({ url: 'user/activeSelAuth
 
 const mailLogin = async (data) => post<any>({ url: 'user/mailLogin', data });
 
+export const getAddress = async () => get<any>({ url: 'user/getAddress' })
 
 export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert, mailLogin };

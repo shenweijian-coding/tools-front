@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="shop-box" v-loading="loading" v-if="goodInfo.goodList.length">
+  <div class="shop-box" v-loading="loading" v-if="goodInfo.goodList.length && userStore.userAddress.indexOf('上海') == -1">
     <div class="text-l text-bold">充值方式二</div>
     <a-divider />
     <div class="">

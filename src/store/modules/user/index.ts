@@ -18,7 +18,8 @@ export const useUserStore = defineStore('user', {
         isSign: false,
         adNum: 0,
         auth: [],
-        selSiteNum: 0
+        selSiteNum: 0,
+        address: ''
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -26,6 +27,9 @@ export const useUserStore = defineStore('user', {
         },
         userIsLogin(state: UserState): boolean {
             return !state._id
+        },
+        userAddress(state) {
+            return state.address
         },
         userNum(state: UserState): Number {
             return state.num

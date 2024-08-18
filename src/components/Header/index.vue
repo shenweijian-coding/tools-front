@@ -33,11 +33,6 @@ const paths = reactive({
       path: '/shop',
       id: 3,
       text: ''
-    }, {
-      name: '书签插件',
-      path: '/plugin',
-      id: 4,
-      text: ''
     }]
 })
 var pattern = /^([0-9a-zA-Z_\.\-\u4e00-\u9fa5])+\@([0-9a-zA-Z_\.\-\])+\.([a-zA-Z]{2,8})$/;
