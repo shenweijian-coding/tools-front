@@ -8,11 +8,11 @@
             <div class="spec">{{ data._id }}</div>
             <a-divider />
           </div>
-          <div class="info-row">
+          <!-- <div class="info-row">
             是否关注公众号
             <div class="spec">{{data.is_fans ? '已关注' : '未关注'}}</div>
             <a-divider />
-          </div>
+          </div> -->
           <div class="info-row">
             加入时间
             <div class="spec">{{timeConvert(+data.create_time)}}</div>

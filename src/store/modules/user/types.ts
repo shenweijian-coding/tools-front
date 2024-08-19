@@ -12,5 +12,6 @@ export interface UserState {
     isLoginAgain: Boolean;
     adNum: Number;
     eNum: Number;
-    expireDate: any
+    expireDate: any,
+    address: String
 }

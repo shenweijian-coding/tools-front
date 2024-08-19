@@ -1,5 +1,5 @@
 <template>
-  <div class="shop-box" v-loading="loading">
+  <div v-if="userStore.userAddress.indexOf('上海') == -1" class="shop-box" v-loading="loading">
     <h2 class="text-bold">自愿赞助</h2>
     <a-radio-group v-model="checkedValue" class="mt-xl">
       <template v-for="item in goodList" :key="item.id">
@@ -42,7 +42,7 @@
       </a>
     </div>
   </div> -->
-  <tips></tips>
+  <tips v-if="userStore.userAddress.indexOf('上海') == -1"></tips>
 </template>
 <script setup lang="ts">
 import { getGoodList } from '@api/home';
@@ -148,7 +148,7 @@ getList()
   padding: 1.25rem 2.5rem 1.25rem 2.5rem;
   background-color: #fff;
   position: relative;
-  margin: 20px auto 0;
+  margin: 0px auto 0;
   background-color: hsla(0, 0%, 100%, .78);
   -webkit-backdrop-filter: blur(.625rem);
   backdrop-filter: blur(.625rem);

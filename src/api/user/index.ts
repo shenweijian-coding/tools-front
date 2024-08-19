@@ -40,4 +40,6 @@ export const getLoginStatus = async (data) => get<any>({url: 'wxappv1/wxApplogin
 
 export const handleBindEmail = async (data) => post<any>({ url: 'user/bindEmail', data })
 
+export const getAddress = async () => get<any>({ url: 'user/getAddress' })
+
 export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert, mailLogin };

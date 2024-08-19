@@ -3,6 +3,7 @@ import Input from '@/components/Input/index.vue'
 import { getDownFile, getHukeFile } from '@api/play'
 
 import { getPngUrl, getInfo, checkInfo, webCheck, getPendData } from '@api/sucai/index'
+import { getAddress } from '@api/user/index'
 import { Message, Modal } from '@arco-design/web-vue';
 import CheckDialog from '@/components/check-dialog/index.vue'
 import NumLack from '@/components/NumLack/index.vue'
@@ -81,6 +82,21 @@ const pendDownData = reactive({
   isOpen: true
 })
 listLoading.value = true
+const { query } = toRaw(route)
+
+if(!userStore.userAddress && !query.value.able) {
+    getAddress().then(res => {
+        if(res.data) {
+          userStore.setInfo({
+                address: res.data
+            })
+        }
+    })
+}else {
+  userStore.setInfo({
+      address: '中国'
+  })
+}
 getInfo().then(res => {
   console.log(res)
   webInfo.list = res.data.webList
@@ -112,6 +128,10 @@ function getPendingSucai(tag) {
   pendDownData.timer = setInterval(func, 30000);
 }
 const getDownUrl = async (url) => {
+  if(!url.value) {{
+    Message.warning('输入框不能为空')
+    return
+  }}
   try {
     zhongtuUrl.value = ''
     loading.value = true
@@ -505,9 +525,9 @@ getPendingSucai(1)
 </script>
 
 <template>
-  <a v-if="webInfo.cx" :href="webInfo.cx.url" target="_blank">
+  <!-- <a v-if="webInfo.cx" :href="webInfo.cx.url" target="_blank">
     <img :src="webInfo.cx.img" alt="全网素材免费解析年卡充值" class="w-100">
-  </a>
+  </a> -->
   <div class="page-design app-page appView">
     <div v-loading="loading">
       <div class="app-header-box">
@@ -525,7 +545,7 @@ getPendingSucai(1)
               <router-link to="/statement">《免责声明》</router-link>
             </span>
           </div> -->
-          <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
+          <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time" v-if="userStore.userAddress.indexOf('上海') == -1"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -534,8 +554,8 @@ getPendingSucai(1)
           </span>
         </div>
       </div>
-      <div class="app-web-list" v-loading="listLoading">
-        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
+      <div v-if="(userStore.userNum >= 0 || userStore.eNum>=0)" class="app-web-list" v-loading="listLoading">
+        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin && userStore.userAddress.indexOf('上海') == -1">
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
             <span>总积分：</span><span>{{ userStore.userNum >= 0 ? userStore.userNum : 0}}</span>
@@ -561,7 +581,7 @@ getPendingSucai(1)
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} {{ userStore.userIsLogin ? '' : `[${it.webNum}分]` }}
+                    {{ it.webName }}[{{ it.webNum }}]
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>

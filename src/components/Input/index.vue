@@ -31,10 +31,6 @@ const props = defineProps({
 const emit = defineEmits(['getPlay'])
 const url = ref('')
 const getPlay = () => {
-  if(!url.value) {{
-    Message.warning('输入框不能为空')
-    return
-  }}
   emit('getPlay', url)
 }
 

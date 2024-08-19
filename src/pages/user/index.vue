@@ -5,14 +5,12 @@
       <a-tab-pane key="1" title="基本信息">
         <BaseInfo :data="data.info" />
       </a-tab-pane>
-      <a-tab-pane key="2" title="下载记录">
-        <!-- 下载记录 -->
+      <!-- <a-tab-pane key="2" title="下载记录">
         <DownLog :data="downLogList.info" @pageChange="getDownList"/>
-      </a-tab-pane>
-      <a-tab-pane key="3" title="赞助记录">
-        <!-- 赞助记录 -->
+      </a-tab-pane> -->
+      <!-- <a-tab-pane key="3" title="赞助记录">
         <Spon :payInfo="payInfo.info"></Spon>
-      </a-tab-pane>
+      </a-tab-pane> -->
       <a-tab-pane key="5" title="卡密激活">
         <!-- 卡密兑现 -->
         <CodeCash></CodeCash>

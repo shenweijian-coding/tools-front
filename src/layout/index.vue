@@ -26,6 +26,7 @@ const version = localStorage.getItem('_v')
 const isOk = ref(false)
 
 if (localStorage.getItem('token')) {
+  
   getNoticeInfo().then(res => {
     const isnotice = localStorage.getItem('nonotice')
     console.log(isnotice, '111');

@@ -6,7 +6,7 @@ const userStore = useUserStore(pinia)
 
 const routes = [{
   path: '/',
-  redirect: 'sucai',
+  redirect: 'fonts',
   component: () => import('@/layout/index.vue'),
   children: [{
     path: '/sucai',
@@ -30,6 +30,10 @@ const routes = [{
   {
     path: '/statement',
     component: () => import('@/pages/statement/index.vue')
+  },
+  {
+    path: '/templates',
+    component: () => import('@/pages/templates/index.vue')
   },
   {
     path: '/plugin',

@@ -5,7 +5,8 @@ import {
     getUserProfile,
     LoginData,
     getUserNum,
-    mailLogin as mailLoginApi
+    mailLogin as mailLoginApi,
+    getAddress
 } from '@/api/user/index';
 import { setToken, clearToken } from '@/utils/auth';
 import { UserState } from './types'
@@ -23,7 +24,8 @@ export const useUserStore = defineStore('user', {
         adNum: 0,
         eNum: 0,
         expireDate: 0,
-        isLoginAgain: false
+        isLoginAgain: false,
+        address: ''
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -33,6 +35,9 @@ export const useUserStore = defineStore('user', {
         },
         userIsLogin(state: UserState): boolean {
             return !state._id
+        },
+        userAddress(state) {
+            return state.address
         },
         userNum(state: UserState): Number {
             return state.num

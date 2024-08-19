@@ -9,8 +9,9 @@ import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import wxappLogin from '../wxapp-login/index.vue'
-import { pwd2Wxapp, handleBindEmail } from '@api/user/index'
+import { pwd2Wxapp, handleBindEmail, getAddress } from '@api/user/index'
 import { sendMail } from '@api/home/index'
+
 // const appStore = useAppStore()
 const userStore = useUserStore()
 // const theme = computed(() => {
@@ -30,6 +31,12 @@ const loading = ref(false)
 const curPath = ref((toRaw(useRoute()).path))
 const paths = reactive({
   list: [
+   {
+      name: '字体世界',
+      path: '/fonts',
+      id: 5,
+      text: '推荐'
+    },
     {
       name: '素材导航',
       path: '/sucai',
@@ -37,10 +44,10 @@ const paths = reactive({
       text: ''
     },
     {
-      name: '字体世界',
-      path: '/fonts',
-      id: 5,
-      text: '推荐'
+      name: '资源广场',
+      path: '/templates',
+      id: 2,
+      text: ''
     }
     // {
     //   name: '书签插件',
@@ -84,7 +91,7 @@ const getUserNum = async () => {
     }
   }, 200);
 }
-if (!userStore.userIsLogin) {
+if (!userStore.userIsLogin && userStore.userAddress && userStore.userAddress.indexOf('上海') == -1) {
   getUserNum()
   paths.list.push({
     name: '赞助本站',
@@ -226,9 +233,9 @@ const emailBindId = async() => {
 </script>
 
 <template>
-  <header class="antialiased bg-white Male text-slate-500">
+  <header class="antialiased bg-white Male text-slate-500 general_header">
     <div
-      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 bg-white/95 supports-backdrop-blur:bg-white/60">
+      class="header-body sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 bg-white/95 supports-backdrop-blur:bg-white/60">
       <div class="mx-auto max-w-8xl">
         <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
@@ -236,7 +243,7 @@ const emailBindId = async() => {
               to="/"
               class="mr-3 flex-none w-[2.0625rem] md:w-auto leading-6 dark:text-slate-200"
             > -->
-            <a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>
+            <!--<a href="/"><img class="h-8" src="@/assets/images/logo.png" alt="logo" /></a>-->
             <!-- </router-link> -->
             <div class="relative flex items-center justify-between lg:w-full">
               <nav class="hidden text-sm font-semibold leading-6 text-slate-700 lg:flex">
@@ -264,9 +271,9 @@ const emailBindId = async() => {
                           <a-doption>
                             <router-link to="/user">个人中心</router-link>
                           </a-doption>
-                          <a-doption>
+                          <!-- <a-doption>
                             <router-link to="/shop">在线充值</router-link>
-                          </a-doption>
+                          </a-doption> -->
                           <a-doption @click="logout">退出账号</a-doption>
                         </template>
                       </a-dropdown>
@@ -280,6 +287,7 @@ const emailBindId = async() => {
       </div>
     </div>
   </header>
+  <div class="header-blank"></div>
   <s-dialog :visible="visible" width="300px" @close="close" title="">
     <div>
       <a-tabs default-active-key="1">
@@ -344,5 +352,26 @@ const emailBindId = async() => {
       color: #e2e8f0;
     }
   }
+}
+.general_header {
+    width: 100vw;
+    height: 60px;
+    position: fixed;
+    background-color: hsla(0, 0%, 100%, .89);
+    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, .12);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, .12);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    z-index: 99;
+    .header-body{
+      justify-content: space-between;
+      max-width: 1600px;
+      margin: auto;
+      height: 100%;
+    }
+}
+.header-blank {
+    height: 68px;
 }
 </style>
