@@ -87,18 +87,18 @@ const pendDownData = reactive({
 const link = ref('')
 // let link = ''
 
-const { query } = toRaw(route)
+// const { query } = toRaw(route)
 
-if(!userStore.userAddress && !query.value.able) {
-    getAddress().then(res => {
-        if(res.data) {
-          userStore.setInfo({
-                address: res.data
-            })
-        }
-    })
-}else {
-  userStore.setInfo({
+// if(!userStore.userAddress && !query.value.able) {
+//     getAddress().then(res => {
+//         if(res.data) {
+//           userStore.setInfo({
+//                 address: res.data
+//             })
+//         }
+//     })
+// }else {
+//   userStore.setInfo({
       address: '中国'
   })
 }
@@ -534,7 +534,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-page appView" v-loading="loading" v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
+  <div class="app-page appView" v-loading="loading">
     <div>
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>

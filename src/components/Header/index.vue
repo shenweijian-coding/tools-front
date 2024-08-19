@@ -47,7 +47,8 @@ const loginInfo = reactive({
 })
 
 const openLogin = () => {
-  loginVisible.value = true;
+  // loginVisible.value = true;
+  window.location.replace('/#/login')
 }
 if (localStorage.getItem('cdkey')) {
   loginInfo.cdkey = localStorage.getItem('cdkey') || ''
