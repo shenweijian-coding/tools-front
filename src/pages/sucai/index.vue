@@ -87,7 +87,9 @@ const pendDownData = reactive({
 const link = ref('')
 // let link = ''
 
-if(!userStore.userAddress) {
+const { query } = toRaw(route)
+
+if(!userStore.userAddress && !query.value.able) {
     getAddress().then(res => {
         if(res.data) {
           userStore.setInfo({
@@ -95,6 +97,10 @@ if(!userStore.userAddress) {
             })
         }
     })
+}else {
+  userStore.setInfo({
+      address: '中国'
+  })
 }
 
 // 获取网站列表
