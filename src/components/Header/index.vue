@@ -37,18 +37,18 @@ const paths = reactive({
       id: 5,
       text: '推荐'
     },
-    {
-      name: '素材导航',
-      path: '/sucai',
-      id: 1,
-      text: ''
-    },
-    {
-      name: '资源广场',
-      path: '/templates',
-      id: 2,
-      text: ''
-    }
+    // {
+    //   name: '素材导航',
+    //   path: '/sucai',
+    //   id: 1,
+    //   text: ''
+    // },
+    // {
+    //   name: '资源广场',
+    //   path: '/templates',
+    //   id: 2,
+    //   text: ''
+    // }
     // {
     //   name: '书签插件',
     //   path: '/plugin',
@@ -80,6 +80,17 @@ const openLogin = () => {
 if (localStorage.getItem('accode')) {
   accode.value = localStorage.getItem('accode') || ''
 }
+
+if(!userStore.userAddress) {
+    getAddress().then(res => {
+        if(res.data) {
+          userStore.setInfo({
+                address: res.data
+            })
+        }
+    })
+}
+
 // 获取用户积分数量
 const getUserNum = async () => {
   await userStore.getUserNum()
@@ -91,14 +102,22 @@ const getUserNum = async () => {
     }
   }, 200);
 }
-if (!userStore.userIsLogin && userStore.userAddress && userStore.userAddress.indexOf('上海') == -1) {
-  getUserNum()
+if (userStore.userAddress && userStore.userAddress.indexOf('北京') == -1) {
   paths.list.push({
-    name: '赞助本站',
-    path: '/shop',
-    id: 3,
+    name: '素材导航',
+    path: '/sucai',
+    id: 1,
     text: ''
   })
+  if(!userStore.userIsLogin) {
+    getUserNum()
+    paths.list.push({
+      name: '赞助本站',
+      path: '/shop',
+      id: 3,
+      text: ''
+    })
+  }
 }
 const login = async (type) => {
   loading.value = true

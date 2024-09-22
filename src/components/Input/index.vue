@@ -21,7 +21,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '复制链接到此处，百度搜索一下'
+    default: '百度搜索一下'
   },
   btnText: {
     type: String,

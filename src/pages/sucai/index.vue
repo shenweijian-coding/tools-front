@@ -82,9 +82,7 @@ const pendDownData = reactive({
   isOpen: true
 })
 listLoading.value = true
-const { query } = toRaw(route)
-
-if(!userStore.userAddress && !query.value.able) {
+if(!userStore.userAddress) {
     getAddress().then(res => {
         if(res.data) {
           userStore.setInfo({
@@ -92,11 +90,11 @@ if(!userStore.userAddress && !query.value.able) {
             })
         }
     })
-}else {
-  userStore.setInfo({
-      address: '中国'
-  })
 }
+if(userStore.userAddress && userStore.userAddress.indexOf('上海') !=-1) {
+  window.location.replace('/#/fonts')
+}
+
 getInfo().then(res => {
   console.log(res)
   webInfo.list = res.data.webList
@@ -108,13 +106,19 @@ getInfo().then(res => {
     webList: res.data.webList
   })
 })
+const { query } = toRaw(route)
 // 被邀请的逻辑
-setTimeout(() => {
-  const { query } = toRaw(route)
-  if (query.value.f) {
-    localStorage.setItem('fr', query.value.f)
-  }
-});
+if (query.value.f) {
+  localStorage.setItem('fr', query.value.f)
+}
+
+
+if(query.value.pass) {
+  userStore.setInfo({
+    address: '中国'
+  })
+  window.reload()
+}
 function getPendingSucai(tag) {
   const func = () => {
     getPendData().then(res => {
@@ -126,6 +130,9 @@ function getPendingSucai(tag) {
   }
   if (tag) { func() }
   pendDownData.timer = setInterval(func, 30000);
+}
+if(!userStore.userIsLogin) {
+  getPendingSucai()
 }
 const getDownUrl = async (url) => {
   if(!url.value) {{
@@ -520,7 +527,6 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
     });
   });
 }
-getPendingSucai(1)
 
 </script>
 
@@ -528,7 +534,7 @@ getPendingSucai(1)
   <!-- <a v-if="webInfo.cx" :href="webInfo.cx.url" target="_blank">
     <img :src="webInfo.cx.img" alt="全网素材免费解析年卡充值" class="w-100">
   </a> -->
-  <div class="page-design app-page appView">
+  <div class="page-design app-page appView" v-if="userStore.userAddress.indexOf('上海') == -1">
     <div v-loading="loading">
       <div class="app-header-box">
         <h1 class="app-heade-title">提供一站式素材网站导航服务</h1>
@@ -545,7 +551,7 @@ getPendingSucai(1)
               <router-link to="/statement">《免责声明》</router-link>
             </span>
           </div> -->
-          <Input @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time" v-if="userStore.userAddress.indexOf('上海') == -1"/>
+          <Input v-if="!userStore.userIsLogin" @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -554,8 +560,8 @@ getPendingSucai(1)
           </span>
         </div>
       </div>
-      <div v-if="(userStore.userNum >= 0 || userStore.eNum>=0)" class="app-web-list" v-loading="listLoading">
-        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin && userStore.userAddress.indexOf('上海') == -1">
+      <div v-if="userStore.userAddress.indexOf('上海') == -1" class="app-web-list" v-loading="listLoading">
+        <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />
             <span>总积分：</span><span>{{ userStore.userNum >= 0 ? userStore.userNum : 0}}</span>
@@ -581,7 +587,7 @@ getPendingSucai(1)
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }}[{{ it.webNum }}]
+                    {{ it.webName }} {{ !userStore.userIsLogin ? `[${it.webNum}]` : '' }}
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
@@ -597,7 +603,7 @@ getPendingSucai(1)
                 <div class="hidden item-logo sm:flex"><img :src="it.webLogo" :alt="it.webName"></div>
                 <div class="item-info">
                   <div class="title">
-                    {{ it.webName }} [{{ userStore.userIsLogin ? '' : it.webNum }}]
+                    {{ it.webName }} [{{ !userStore.userIsLogin ? it.webNum : '' }}]
                   </div>
                   <div class="tips">{{ it.webTips }}</div>
                 </div>
