@@ -102,7 +102,7 @@ const getUserNum = async () => {
     }
   }, 200);
 }
-if (userStore.userAddress && userStore.userAddress.indexOf('北京') == -1) {
+if (userStore.userAddress && userStore.userAddress.indexOf('上海') == -1) {
   paths.list.push({
     name: '素材导航',
     path: '/sucai',

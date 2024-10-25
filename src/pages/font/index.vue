@@ -3,26 +3,31 @@
     <div class="left">
       
     </div>
-    <div class="main">
+    <div class="main" v-loading="loading">
       <div class="input-box">
         <h1>百万字体24小时自助搜索下载</h1>
-        <Input placeholder="第一步：输入字体名后 点击后面的搜索按钮" btnText="搜索字体" @getPlay="getFonts"/>
+        <Input placeholder="输入字体名（尽可能全）， 点击后面的搜索按钮" btnText="搜索字体" @getPlay="getFonts"/>
       </div>
       <div class="text-input-yulan" v-if="fontState.fonts?.length">
-        <Input placeholder="第二步：可以输入需要预览的文字进行对照" btnText="预览字体" @getPlay="previewFonts"/>
+        <a-input-search v-model="previewFont" placeholder="可以输入需要预览的文字进行对照" search-button @search="previewFonts" button-text="预览" allow-clear/>
       </div>
-      <ul class="font-box">
+      <ul class="font-box mt-2">
         <li v-for="(item,index) in fontState.fonts" :key="index" class="font-item">
-          <div class="flex align-center jc-between">
-            <p>{{ item.family }}、{{ item.font_style }}、{{ item.language }}</p>
-            <a-button type="outline" size="mini" @click="handleDownFont(item)">下载{{ item.file_type }}</a-button>
+          <div>{{ item.family }}
+            <a-tag color="purple" size="small">{{ item.font_style }}</a-tag>&nbsp;
+            <a-tag color="#7816ff" size="small">{{ item.language }}</a-tag>&nbsp;
+            <a-tag color="#0fc6c2" size="small">{{ item.file_type }}</a-tag>
           </div>
-          <img v-if="item.image" :src="'data:image/png;base64,' + item.image"/>
-          <img v-else src="https://www.qiuziti.com/image/common/def_preview.png"/>
+          <div class="flex align-center jc-between mt-2">
+            <img v-if="item.image" :src="'data:image/png;base64,' + item.image"/>
+            <img v-else src="https://www.qiuziti.com/image/common/def_preview.png"/>
+            <a-button shape="round" @click="handleDownFont(item)">下载字体</a-button>
+          </div>
         </li>
       </ul>
-      <div class="pagination">
-        <a-pagination v-if="fontState.total" :current="fontState.current" :total="fontState.total" size="large" :page-size="10" @change="pageChange"/>
+      <div class="pagination" v-if="fontState.total == 10">
+        最多显示10条，请搜索具体的字体名称
+        <!-- <a-pagination v-if="fontState.total" :current="fontState.current" :total="fontState.total" size="large" :page-size="10" @change="pageChange"/> -->
       </div>
     </div>
     <div class="right">
@@ -39,17 +44,16 @@
       <div v-if="fontState.currentFontObj">
         <!-- <div>字体名称：{{ fontState.currentFontObj.family }}</div> -->
         <div>
-          预览图：
+          <div class="mb-2">预览图</div>
           <img v-if="fontState.currentFontObj.image" :src="'data:image/png;base64,' + fontState.currentFontObj.image"/>
           <img v-else src="https://www.qiuziti.com/image/common/def_preview.png"/>
-
         </div>
 
         <div class="flex" style="margin-top: 20px;text-align: right;">
-          <a-input placeholder="请输入淘宝购买的兑换码" button-text="确认无疑，开始下载" v-model="fontState.code" search-button></a-input>
-          <a-button @click="downFile" type="primary" :loading="fontState.loading">确认无疑，开始下载</a-button>
+          <a-input placeholder="请输入淘宝购买的兑换码" button-text="开始下载" v-model="fontState.code" search-button></a-input>
+          <a-button @click="downFile" type="primary" :loading="fontState.loading">开始下载</a-button>
         </div>
-        <div class="tips">Tips: 兑换码需在淘宝购买，24小时自动发，无需人工，每次下载都需兑换码</div>
+        <div class="tips mt-2">Tips: 兑换码需在淘宝购买，24小时自动发，无需人工，每次下载都需兑换码</div>
       </div>
     </s-dialog>
 
@@ -72,6 +76,8 @@ const fontState = reactive({
   loading: false,
   codeInfo: null
 })
+const loading = ref(false)
+const previewFont = ref('')
 
 const getFontImage = (text, fontIds) => {
   getFontBase64({
@@ -86,6 +92,8 @@ const getFontImage = (text, fontIds) => {
 }
 
 const searchFonts = () => {
+  previewFont.value = ''
+  loading.value = true
   getFontsByName({
     fontName: fontState.currentFont,
     page: fontState.current,
@@ -93,7 +101,10 @@ const searchFonts = () => {
   }).then(res => {
     fontState.fonts = res.data.list
     fontState.total = res.data.total
+    loading.value = false
     // getFontImage(fontState.fonts.map(font => font.font_id))
+  }).catch(err => {
+    loading.value = false
   })
 }
 
@@ -103,8 +114,8 @@ const getFonts = (font) => {
   searchFonts()
 }
 
-const previewFonts = (text) => {
-  getFontImage(text.value, fontState.fonts.map(font => font.font_id))
+const previewFonts = () => {
+  getFontImage(previewFont.value, fontState.fonts.map(font => font.font_id))
 }
 
 const pageChange = (page) => {
@@ -176,7 +187,7 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   .main{
-    width: 40%;
+    width: 55%;
     max-width: 600px;
     margin: 0 auto;
     height:100%;
@@ -189,10 +200,10 @@ onMounted(() => {
     }
     .font-item{
       border: 1px solid #f5f5f5;
-      padding: 4px 10px;
+      padding: 10px;
       background: #fff;
       &:hover{
-        border: 1px solid #165dff;
+        border: 1px solid purple;
       }
     }
     .pagination{
@@ -203,11 +214,11 @@ onMounted(() => {
     }
   }
   .left{
-    width: 30%;
+    width: 20%;
   }
   .right{
-    padding: 30px;
-    width: 30%;
+    // padding: 30px;
+    width: 20%;
   }
 }
   .input-box{
@@ -220,7 +231,8 @@ onMounted(() => {
     margin-bottom: 20px;
   }
   .tips{
-    color: red;
+    color: gray;
+    // font-weight: bold;
     margin-top: 12px;
     font-size: 12px;
   }
