@@ -34,7 +34,7 @@
       <a-table-column title="直链" data-index="link" align="center"></a-table-column>
       <a-table-column title="操作" align="center">
       <template #cell="{ record }">
-        <!-- <a-button type="text" @click="handleConfig(record)">编辑</a-button> -->
+        <a-button type="text" @click="handleConfig(record)">编辑</a-button>
         <a-button type="text" @click="deleteCache(record)">删除</a-button>
       </template>
     </a-table-column>
@@ -66,7 +66,7 @@
       </a-form-item>
       <a-form-item label="类型:">
         <a-radio-group v-model="cacheForm.createForm.ext">
-          <a-radio v-for="it in ['.zip', '.rar', '.jpg', '.png', '.jpeg', '.mp3', '.mp4', '.eps', '.mov', '.gif']" :key="it" :value="it">{{ it }}</a-radio>
+          <a-radio v-for="it in ['.zip', '.rar', '.jpg', '.png', '.jpeg', '.mp3', '.mp4', '.eps', '.mov', '.gif', '.ttf', '.otf']" :key="it" :value="it">{{ it }}</a-radio>
         </a-radio-group>
         <a-input v-model="cacheForm.createForm.ext" placeholder="类型" style="width: 120px"></a-input>
       </a-form-item>
@@ -238,7 +238,7 @@ const deleteCache = async (row) => {
 }
 const reset = () => {
   cacheForm.form = {
-    mark: '58pic',
+    mark: cacheForm.form.mark,
     file: '',
     sc_id: '',
   },

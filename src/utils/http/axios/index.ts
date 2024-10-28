@@ -15,7 +15,7 @@ axios.defaults.withCredentials = false
 axios.defaults.headers.post['Access-Control-Allow-Origin-Type'] = '*'
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://tools1998.top:4000',
+  baseURL: 'http://tools1998.top:3000',
   // baseURL: '/api',
   // transformRequest: [
   //   function (data) {
