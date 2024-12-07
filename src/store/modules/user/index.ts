@@ -6,7 +6,8 @@ import {
     LoginData,
     getUserNum,
     mailLogin as mailLoginApi,
-    getAddress
+    getAddress,
+    handleIsShow
 } from '@/api/user/index';
 import { setToken, clearToken } from '@/utils/auth';
 import { UserState } from './types'
@@ -25,7 +26,8 @@ export const useUserStore = defineStore('user', {
         eNum: 0,
         expireDate: 0,
         isLoginAgain: false,
-        address: ''
+        address: '',
+        is_show: false
     }),
     getters: {
         userProfile(state: UserState): UserState {
@@ -97,6 +99,11 @@ export const useUserStore = defineStore('user', {
             clearToken();
             // 路由表重置
             // location.reload();
+        },
+        async isShow() {
+            handleIsShow().then(res => {
+                this.setInfo({ is_show: !!res.data })
+            })
         }
     }
 })

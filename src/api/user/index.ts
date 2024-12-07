@@ -42,4 +42,6 @@ export const handleBindEmail = async (data) => post<any>({ url: 'user/bindEmail'
 
 export const getAddress = async () => get<any>({ url: 'user/getAddress' })
 
+export const handleIsShow = async () => get<any>({ url: 'user/isShow' })
+
 export { getUserProfile, login, logout, getUserNum, getBindWxapp, getUserPayInfo, codeConvert, mailLogin };

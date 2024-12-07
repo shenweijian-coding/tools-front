@@ -13,5 +13,6 @@ export interface UserState {
     adNum: Number;
     eNum: Number;
     expireDate: any,
-    address: String
+    address: String,
+    is_show: Boolean
 }

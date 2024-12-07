@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userStore.userAddress.indexOf('上海') == -1" class="shop-box" v-loading="loading">
+  <div class="shop-box" v-loading="loading">
     <h2 class="text-bold">自愿赞助</h2>
     <a-radio-group v-model="checkedValue" class="mt-xl">
       <template v-for="item in goodList" :key="item.id">

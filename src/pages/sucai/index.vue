@@ -91,7 +91,7 @@ if(!userStore.userAddress) {
         }
     })
 }
-if(userStore.userAddress && userStore.userAddress.indexOf('上海') !=-1) {
+if(userStore.is_show && userStore.userAddress.indexOf('上海') !=-1) {
   window.location.replace('/#/fonts')
 }
 
@@ -551,7 +551,7 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
               <router-link to="/statement">《免责声明》</router-link>
             </span>
           </div> -->
-          <Input v-if="!userStore.userIsLogin" @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
+          <Input v-if="!userStore.userIsLogin && userStore.is_show" @getPlay="getDownUrl" :loading="loading" :time="limitTimer.time"/>
           <span v-if="options.list.length">
             <a-space class="mt-2">
               <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
@@ -560,7 +560,7 @@ Promise.all(editImgs.imgs.map(img => fetch(img.img)))
           </span>
         </div>
       </div>
-      <div v-if="userStore.userAddress.indexOf('上海') == -1" class="app-web-list" v-loading="listLoading">
+      <div v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.is_show" class="app-web-list" v-loading="listLoading">
         <div class="flex justify-around hidden pl-4 pr-4 mb-3 text-sm lg:flex" v-if="!userStore.userIsLogin">
           <span class="flex items-center justify-center">
             <SvgIcon name="svg-jifen2" style="width: 18px;" class="mr-2" />

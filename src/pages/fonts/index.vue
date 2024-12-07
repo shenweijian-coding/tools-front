@@ -5,9 +5,13 @@
     </div>
 
     <template v-if="state.list.length">
-      <div v-for="item in state.list" :key="item._id" class="list-font flex jc-between box-shadow">
-        <span>{{ item.fontName }} - 40积分</span>
-        <a-button shape="round" @click="download(item)">下载字体</a-button>
+      <div v-for="(item,index) in state.list" :key="item._id" class="list-font flex jc-between box-shadow flex-col">
+        <div class="flex jc-between">
+          <span>{{ item.fontName }} - 40积分<span style="font-size: 12px;color: grey;">(来自网络搜集，若纰漏了您的字体，可联系右侧删除字体)</span></span>
+          
+          <a-button shape="round" @click="download(item)">下载字体</a-button>
+        </div>
+        <img :src="`http://s3xy67004uga.xiaomiqiu.com/get-image?imageName=${state.imgs[index].file.split('.')[0]}.png`" alt="" style="height: 100px;width: 50%;">
       </div>
       <div class="bg-white flex jc-center ai-center py-4 box-shadow">
         <a-pagination :total="state.total" simple :page-size="10" @change="pageChange"/>
@@ -38,6 +42,7 @@ const getList = (page = 1, name) => {
   getFontList({page,searchName: name}).then(res => {    
     state.list = res.data.list
     state.total = res.data.total
+    state.imgs = res.data.imgs
     state.loading = false
   }).catch(err => {
     state.loading = false
@@ -68,7 +73,6 @@ onMounted(() => {
 
 .list-font {
   width: 100%;
-  height: 62px;
   border-radius: 12px;
   background-color: #FFFFFF;
   margin-bottom: 20px;

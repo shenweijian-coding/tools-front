@@ -9,7 +9,7 @@ import { Message } from '@arco-design/web-vue';
 import Wxapp from '@/components/wxapp/index.vue'
 import SvgIcon from "@components/SvgIcon/index.vue"
 import wxappLogin from '../wxapp-login/index.vue'
-import { pwd2Wxapp, handleBindEmail, getAddress } from '@api/user/index'
+import { pwd2Wxapp, handleBindEmail, getAddress, handleIsShow } from '@api/user/index'
 import { sendMail } from '@api/home/index'
 
 // const appStore = useAppStore()
@@ -102,13 +102,18 @@ const getUserNum = async () => {
     }
   }, 200);
 }
-if (userStore.userAddress && userStore.userAddress.indexOf('上海') == -1) {
-  paths.list.push({
-    name: '素材导航',
-    path: '/sucai',
-    id: 1,
-    text: ''
-  })
+
+userStore.isShow().then(res => {
+  if(res.data) {
+    paths.list.push({
+      name: '素材导航',
+      path: '/sucai',
+      id: 1,
+      text: ''
+    })
+  }
+})
+if (true) {
   if(!userStore.userIsLogin) {
     getUserNum()
     paths.list.push({
