@@ -22,7 +22,7 @@
       <span>
         <span class="order-amount" v-if="checkedValue.price">￥{{ checkedValue.price }}</span>
         <span style="text-decoration:line-through;">￥{{ checkedValue.price * 2 }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a-button type="primary" style="width: 12.5rem;" @click="spon">立即赞助</a-button>
+        <a-button type="primary" style="width: 12.5rem;" @click="spon" v-if="userStore.user_is_show">立即赞助</a-button>
       </span>
     </div>
     <sponDialog :orderInfo="orderInfo" :visible="visible" :payStatus="payStatus" @close="close"></sponDialog>

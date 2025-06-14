@@ -43,6 +43,9 @@ export const useUserStore = defineStore('user', {
         },
         userNum(state: UserState): Number {
             return state.num
+        },
+        user_is_show(state: UserState): Boolean {
+            return state.is_show
         }
     },
     actions: {
@@ -101,9 +104,9 @@ export const useUserStore = defineStore('user', {
             // location.reload();
         },
         async isShow() {
-            handleIsShow().then(res => {
-                this.setInfo({ is_show: !!res.data })
-            })
+            const res = await handleIsShow()
+            this.setInfo({ is_show: !!res.data })
+            return res
         }
     }
 })

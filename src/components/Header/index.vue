@@ -104,6 +104,8 @@ const getUserNum = async () => {
 }
 
 userStore.isShow().then(res => {
+  console.log('执行了吗', res);
+  
   if(res.data) {
     paths.list.push({
       name: '素材导航',
