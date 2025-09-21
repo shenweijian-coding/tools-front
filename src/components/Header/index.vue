@@ -129,43 +129,43 @@ const logout = () => {
 </script>
 
 <template>
-  <header class="antialiased Male text-slate-500">
+  <header class="antialiased Male text-slate-500 flex justify-center bg-gray-100">
     <div
-      class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 bg-white/30 supports-backdrop-blur:bg-white/60">
+      class="sticky top-0 z-40 w-4/5 backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 ">
       <div class="mx-auto max-w-8xl">
         <div class="px-20 py-4 border-b border-slate-900/10 lg:px-18 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
             <a href="/" v-if="appStore.$state?.webConfig?.logo"><img class="h-8" :src="appStore.$state?.webConfig?.logo" alt="logo" /></a>
             <div class="relative flex items-center justify-between lg:w-full">
-              <nav class="hidden text-sm font-semibold leading-6 text-white/80 lg:flex">
-                <ul class="flex space-x-14">
+              <nav class="hidden text-sm font-semibold leading-6 text-black lg:flex">
+                <ul class="flex">
                   <template v-for="it in paths.list" :key="it.id">
-                    <li class="ml-14"
-                      :class="it.path.indexOf(curPath) !== -1  ? 'border-b-4 rounded-sm border-white text-white' : ''">
-                      <router-link v-if="!it.target" :to="it.path" class="hover:text-white">{{it.name}}</router-link>
+                    <li class="mr-14"
+                      :class="it.path.indexOf(curPath) !== -1  ? 'border-b-4 rounded-sm border-blue-500 text-blue-500' : ''">
+                      <router-link v-if="!it.target" :to="it.path" class="hover:text-blue-500">{{it.name}}</router-link>
                       <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
                     </li>
                   </template>
                   <!-- <li class="ml-14 hover:text-white cursor-pointer" @click="videoVisible = true">视频教程</li> -->
                 </ul>
               </nav>
-              <nav class="text-sm font-semibold leading-6 text-white dark:text-slate-200">
+              <nav class="text-sm font-semibold leading-6 text-black dark:text-slate-200">
                 <ul class="flex space-x-10">
                   <li class="flex items-center">
                     <template v-if="!userStore.userIsLogin">
                       <span class="flex items-center mr-2">
-                      <span>剩余次数：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }} 次
+                      <span class="text-gray-700">剩余次数：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }} 次
                         <span v-if="userStore.$state.numDeadDate">（过期时间：{{ userStore.$state.numDeadDate ? userStore.$state.numDeadDate : '' }}）</span>
                       </span>
                     </span>
                     <a-divider direction="vertical"></a-divider>
                     </template>
-                    <span v-if="userStore.userIsLogin" @click="openLogin" class="cursor-pointer text-white/80 hover:text-white">
+                    <span v-if="userStore.userIsLogin" @click="openLogin" class="cursor-pointer text-black hover:blue-500">
                       登录
                     </span>
                     <span v-else class="flex items-center">
                       <a-dropdown trigger="hover">
-                        <span class="cursor-pointer hover:text-white text-white/80">用户中心</span>
+                        <span class="cursor-pointer hover:text-blue text-black">用户中心</span>
                         <template #content>
                           <a-doption>
                             <router-link to="/user">个人中心</router-link>

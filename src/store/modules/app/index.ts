@@ -45,7 +45,10 @@ export const useAppStore = defineStore(
             },
             setBgImg() {
                 if (this.$state.webConfig?.bgImg) {
-                    document.body.style.backgroundImage = "url(" + this.$state.webConfig?.bgImg + ")"
+                    document.getElementsByClassName('app-header-box')[0].style.backgroundImage = "url(" + this.$state.webConfig?.bgImg + ")"
+                    document.getElementsByClassName('app-header-box')[0].style.backgroundRepeat = "no-repeat"
+                    document.getElementsByClassName('app-header-box')[0].style.backgroundSize = "cover"
+
                 }else {
                     document.body.style.backgroundColor = '#000'
                 }

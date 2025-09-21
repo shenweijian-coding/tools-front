@@ -535,18 +535,20 @@ onUnmounted(() => {
 
 <template>
   <div class="app-page appView" v-loading="loading" v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
-    <div>
-      <div class="app-header-box">
-        <h1 class="app-heade-title">提供一站式设计资源搜索服务</h1>
-        <div class="app-header-input">
-          <!-- <div class="text-white text-left text-green">Tips：淘宝店铺人工可能回复较慢，有问题请联系微信号 【swjznl】</div> -->
-          <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
-          <span v-if="options.list.length">
-            <a-space class="mt-2">
-              <a-button v-for="(item, i) in options.list" :key="i" type="dashed" status="success"
-                @click="getCurDownUrl(item)">{{ item.text }}</a-button>
-            </a-space>
-          </span>
+    <div class="h-full flex justify-center flex-col">
+      <div class="app-header-box flex justify-center bg-black">
+        <div class="w-4/5 px-20 py-16">
+          <h1 class="app-heade-title text-2xl font-bold text-left">提供一站式设计资源搜索服务</h1>
+          <div class="app-header-input flex justify-start flex-col">
+            <div class="text-white text-left py-2 text-base">海量优质设计素材，一键即可获取。支持多平台资源聚合，让设计工作更高效。</div>
+            <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
+            <span v-if="options.list.length" class="flex justify-start">
+              <a-space class="mt-2">
+                <a-button v-for="(item, i) in options.list" :key="i"
+                  @click="getCurDownUrl(item)" size="large" type="primary" status="success">{{ item.text }}</a-button>
+              </a-space>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -585,8 +587,8 @@ onUnmounted(() => {
         </template> -->
       </a-alert>
 
-      <div class="app-web-list" v-loading="listLoading">
-        <a-row>
+      <div class="app-web-list px-30 flex justify-center" v-loading="listLoading">
+        <a-row class="w-4/5 pt-10">
           <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id"
             @click="showWebTip(it)">
             <a-tooltip>
@@ -785,9 +787,9 @@ onUnmounted(() => {
 
 <style lang="less" scoped>
 .app-page {
-  width: 95%;
-  max-width: 1300px;
-  margin: 16px auto auto;
+  // width: 95%;
+  // max-width: 1300px;
+  // margin: 16px auto auto;
 
   .carousel-item {
     height: 130px;
@@ -805,8 +807,8 @@ onUnmounted(() => {
   }
 
   .app-header-box {
-    display: block;
-    border-radius: 8px;
+    // display: block;
+    // border-radius: 8px;
     padding: 10px 0;
     background-repeat: no-repeat;
     background-position: 50%;
@@ -849,9 +851,9 @@ onUnmounted(() => {
   }
 
   .app-web-list {
-    width: 100%;
-    max-width: 1400px;
-    margin: 22px auto 0;
+    // width: 100%;
+    // max-width: 1400px;
+    // margin: 22px auto 0;
 
     .app-weblist-item {
       background-color: hsla(0, 0%, 100%, 1);
@@ -859,13 +861,13 @@ onUnmounted(() => {
       backdrop-filter: blur(10px);
       -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
       box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-      border-radius: 4px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
-      padding: 12px 16px;
+      padding: 24px 30px;
       -webkit-transition: All .25s;
       transition: All .25s;
-      margin: 8px 8px;
+      margin: 20px;
 
       &:hover {
         background-color: rgba(255, 255, 255, .8);
@@ -976,11 +978,6 @@ onUnmounted(() => {
   font-size: 0;
   // background-size: 393.93939%;
   background-position: 0 10.8642%;
-}
-
-.geetest_slider,
-.geetest_slider_button {
-  background-image: url(https://static.geetest.com/static/ant/sprite.1.2.6.png)
 }
 
 .yanzheng-wrap {
