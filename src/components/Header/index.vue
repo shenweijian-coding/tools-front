@@ -133,7 +133,7 @@ const logout = () => {
     <div
       class="sticky top-0 z-40 w-4/5 backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 ">
       <div class="mx-auto max-w-8xl">
-        <div class="px-20 py-4 border-b border-slate-900/10 lg:px-18 lg:border-0">
+        <div class="px-6 py-4 border-b border-slate-900/10 lg:px-18 lg:border-0">
           <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
             <a href="/" v-if="appStore.$state?.webConfig?.logo"><img class="h-8" :src="appStore.$state?.webConfig?.logo" alt="logo" /></a>
             <div class="relative flex items-center justify-between lg:w-full">

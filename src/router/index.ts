@@ -101,7 +101,11 @@ const routes = [{
   {
     path: '/download',
     component: () => import('@/pages/download/index.vue')
-  }
+  },
+      {
+      path: '/freepik',
+      component: () => import('@/pages/freepik/index.vue')
+    },
 ]
 //导入生成的路由数据
 const router = createRouter({

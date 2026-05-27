@@ -537,7 +537,7 @@ onUnmounted(() => {
   <div class="app-page appView" v-loading="loading" v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
     <div class="h-full flex justify-center flex-col">
       <div class="app-header-box flex justify-center bg-black">
-        <div class="w-4/5 px-20 py-16">
+        <div class="w-4/5 px-6 py-16">
           <h1 class="app-heade-title text-2xl font-bold text-left">提供一站式设计资源搜索服务</h1>
           <div class="app-header-input flex justify-start flex-col">
             <div class="text-white text-left py-2 text-base">海量优质设计素材，一键即可获取。支持多平台资源聚合，让设计工作更高效。</div>
@@ -602,9 +602,9 @@ onUnmounted(() => {
                 <span v-else>请先登录</span>
               </template>
               <div class="app-weblist-item cursor-pointer">
-                <div class="hidden item-logo sm:flex">
+                <!-- <div class="hidden item-logo sm:flex">
                   <img :src="it.webLogo ? it.webLogo : (it.url + '/favicon.ico')" :alt="it.name">
-                </div>
+                </div> -->
                 <div class="item-info">
                   <div class="title">
                     <span>{{ it.name }}</span>&nbsp;
@@ -864,7 +864,7 @@ onUnmounted(() => {
       border-radius: 10px;
       display: flex;
       align-items: center;
-      padding: 24px 30px;
+      padding: 24px 20px;
       -webkit-transition: All .25s;
       transition: All .25s;
       margin: 20px;
