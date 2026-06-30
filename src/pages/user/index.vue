@@ -1,7 +1,7 @@
 <template>
-  <div class="w-9/12 mt-2 m-auto bg-white p-2" style="min-height: 500px" v-loading="loading">
-    <a-tabs default-active-key="1" :active-key="activeKey" position="left" size="large" type="line"
-      style="height: 560px" @change="tabChange">
+  <div class="user-center w-9/12 mt-2 m-auto bg-white" v-loading="loading">
+    <a-tabs v-model:active-key="activeKey" position="left" size="large" type="line" class="user-center-tabs"
+      @change="tabChange">
       <a-tab-pane key="1" title="基本信息">
         <BaseInfo :data="data.info" />
       </a-tab-pane>
@@ -23,8 +23,8 @@ import DownLog from './down-log.vue'
 import Spon from './spon.vue'
 import { useUserStore } from '@/store/modules/user/index'
 import { getUserPayInfo, getDownLog } from '@api/user'
-import { useRouter } from 'vue-router';
-let router = useRouter()
+import { useRoute } from 'vue-router';
+const route = useRoute()
 
 const userStore = useUserStore();
 const loading = ref(false);
@@ -42,12 +42,21 @@ const getDownList = async (page = 1) => {
   loading.value = false
 }
 
-if (toRaw(router).currentRoute.value.query.key) {
-  activeKey.value = toRaw(router).currentRoute.value.query.key || '1'
-  if(activeKey.value==2) {
-    getDownList()
+const syncActiveKey = async (key) => {
+  const nextKey = String(key || '1')
+  activeKey.value = nextKey
+  if (nextKey === '2') {
+    await getDownList()
   }
 }
+
+watch(
+  () => route.query.key,
+  (key) => {
+    syncActiveKey(key)
+  },
+  { immediate: true }
+)
 
 (async () => {
   loading.value = true
@@ -56,11 +65,11 @@ if (toRaw(router).currentRoute.value.query.key) {
 })()
 
 const tabChange = async (type) => {
-  activeKey.value = type
+  activeKey.value = String(type)
   loading.value = true
-  if (type == 2) {
-    getDownList()
-  } else if (type == 3) {
+  if (activeKey.value === '2') {
+    await getDownList()
+  } else if (activeKey.value === '3') {
     if (!payInfo.info.length) {
       const res = await getUserPayInfo()
       payInfo.info = res.data.filter(o => o.type) || []
@@ -73,8 +82,30 @@ const tabChange = async (type) => {
 </script>
 
 <style lang="less">
-.arco-tabs-nav-tab-list .arco-tabs-tab {
+.user-center {
+  min-height: 560px;
+  padding: 18px;
+  border: 1px solid #eef0f5;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(27, 21, 64, 0.06);
+}
+
+.user-center-tabs {
+  min-height: 560px;
+}
+
+.user-center-tabs .arco-tabs-content {
+  padding-left: 20px;
+}
+
+.user-center-tabs .arco-tabs-nav-tab-list .arco-tabs-tab {
   line-height: 42px;
-  font-size: 18px;
+  font-size: 16px;
+  color: #4e5969;
+}
+
+.user-center-tabs .arco-tabs-nav-tab-list .arco-tabs-tab-active {
+  color: rgb(var(--primary-6));
+  font-weight: 600;
 }
 </style>

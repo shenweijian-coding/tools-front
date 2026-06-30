@@ -89,20 +89,6 @@ const link = ref('')
 
 const { query } = toRaw(route)
 
-if(!userStore.userAddress && !query.value.able) {
-    getAddress().then(res => {
-        if(res.data) {
-          userStore.setInfo({
-                address: res.data
-            })
-        }
-    })
-}else {
-  userStore.setInfo({
-      address: '中国'
-  })
-}
-
 // 获取网站列表
 const getWebList = () => {
   try {
@@ -534,23 +520,20 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-page appView" v-loading="loading" v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
-    <div class="h-full flex justify-center flex-col">
-      <div class="app-header-box flex justify-center bg-black">
-        <div class="w-4/5 px-6 py-16">
-          <h1 class="app-heade-title text-2xl font-bold text-left">提供一站式设计资源搜索服务</h1>
-          <div class="app-header-input flex justify-start flex-col">
-            <div class="text-white text-left py-2 text-base">海量优质设计素材，一键即可获取。支持多平台资源聚合，让设计工作更高效。</div>
+  <div class="app-page appView" v-loading="loading"
+    v-if="userStore.userAddress.indexOf('上海') == -1 && userStore.userAddress.indexOf('杭州') == -1">
+    <div class="page-shell">
+      <section class="hero-section">
+        <div class="hero-content">
+          <div class="hero-panel">
             <Input @getPlay="getDownUrl" :loading="loading" class="app-search" />
-            <span v-if="options.list.length" class="flex justify-start">
-              <a-space class="mt-2">
-                <a-button v-for="(item, i) in options.list" :key="i"
-                  @click="getCurDownUrl(item)" size="large" type="primary" status="success">{{ item.text }}</a-button>
-              </a-space>
-            </span>
+            <div v-if="options.list.length" class="download-options">
+              <a-button v-for="(item, i) in options.list" :key="i" @click="getCurDownUrl(item)" size="large"
+                type="primary" status="success">{{ item.text }}</a-button>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- 下载素材待处理列表 -->
       <div v-if="false" class="bg-white p-l">
@@ -579,51 +562,44 @@ onUnmounted(() => {
         </a-table>
       </div>
 
-      <a-alert closable class="mt-4" v-if="appStore.$state.webConfig?.notice" type="info" title="">
-        <p v-html="appStore.$state.webConfig?.notice"></p>
-        <!-- <template #action>
-          <a-button size="small" type="text" status="" :href="appStore.$state.webConfig?.q.url"
-            target="_blank">查看常见问题（99%的问题）</a-button>
-        </template> -->
-      </a-alert>
+      <div class="content-wrap">
+        <a-alert closable class="notice-card" v-if="appStore.$state.webConfig?.notice" type="info" title="">
+          <p v-html="appStore.$state.webConfig?.notice"></p>
+        </a-alert>
 
-      <div class="app-web-list px-30 flex justify-center" v-loading="listLoading">
-        <a-row class="w-4/5 pt-10">
-          <a-col :xs="12" :sm="12" :md="8" :lg="4" :xl="4" v-for="it in webList.list" :key="it.id"
-            @click="showWebTip(it)">
-            <a-tooltip>
-              <template #content>
-                <template v-if="!userStore.userIsLogin">
-                  <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
-                  <p class="text-m">权限到期时间：{{ userStore.$state?.auth?.[it.id]?.expireDate || '-' }}</p>
-                  <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
-                  <p class="text-m">站点使用说明：{{ it.desc }}</p>
+        <section class="web-section">
+          <div class="app-web-list" v-loading="listLoading">
+            <div class="web-grid">
+              <a-tooltip v-for="it in webList.list" :key="it.id">
+                <template #content>
+                  <template v-if="!userStore.userIsLogin">
+                    <p class="text-m">站点收费标准：{{ it.cost }}积分/次</p>
+                    <p class="text-m">权限到期时间：{{ userStore.$state?.auth?.[it.id]?.expireDate || '-' }}</p>
+                    <p class="text-m">该站积分余额：{{ userStore.$state?.auth?.[it.id]?.num || 0 }}</p>
+                    <p class="text-m">站点使用说明：{{ it.desc }}</p>
+                  </template>
+                  <span v-else>请先登录</span>
                 </template>
-                <span v-else>请先登录</span>
-              </template>
-              <div class="app-weblist-item cursor-pointer">
-                <!-- <div class="hidden item-logo sm:flex">
-                  <img :src="it.webLogo ? it.webLogo : (it.url + '/favicon.ico')" :alt="it.name">
-                </div> -->
-                <div class="item-info">
-                  <div class="title">
-                    <span>{{ it.name }}</span>&nbsp;
+                <button class="app-weblist-item" @click="showWebTip(it)">
+                  <span class="site-mark">{{ it.name?.slice(0, 1) }}</span>
+                  <span class="item-info">
+                    <span class="title">{{ it.name }}</span>
                     <span
-                      :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'text-dark' : 'text-red'">{{
+                      :class="(userStore.$state?.auth?.[it.id]?.initENum || userStore.$state?.auth?.[it.id]?.num || userStore.$state?.num) ? 'site-status' : 'site-status danger'">{{
     !userStore.userIsLogin ? (userStore.$state.auth?.[it.id]?.expireDate ?
       '剩' + userStore.$state.auth[it.id].eNum + ' / 共' + userStore.$state.auth[it.id].initENum :
       (userStore.$state.auth?.[it.id]?.num ? userStore.$state.auth?.[it.id]?.num : `${it.cost}积分/次`)) :
       '未登录' }}</span>
-                  </div>
-                </div>
-              </div>
-            </a-tooltip>
-          </a-col>
-        </a-row>
+                  </span>
+                </button>
+              </a-tooltip>
+            </div>
+          </div>
+        </section>
       </div>
 
       <!-- 轮播图 -->
-      <div class="flex mt-l" v-if="appStore.$state.webConfig.banner.some(o => o.img)" style="margin-top: 30px;">
+      <div class="banner-row" v-if="appStore.$state.webConfig.banner.some(o => o.img)">
         <a-carousel v-for="it in appStore.$state.webConfig.banner" :key="it.url" class="flex-1 carousel-item"
           :auto-play="true" indicator-type="dot" show-arrow="hover">
           <a-carousel-item v-if="it.img">
@@ -787,125 +763,222 @@ onUnmounted(() => {
 
 <style lang="less" scoped>
 .app-page {
-  // width: 95%;
-  // max-width: 1300px;
-  // margin: 16px auto auto;
+  min-height: calc(100vh - 120px);
+  background:
+    radial-gradient(circle at 12% 6%, rgba(20, 184, 166, 0.16), transparent 28%),
+    radial-gradient(circle at 88% 0%, rgba(59, 130, 246, 0.14), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  color: #111827;
 
-  .carousel-item {
-    height: 130px;
-    overflow: hidden;
-    border-radius: 8px;
-
-    &:nth-child(2) {
-      margin: 0 12px;
-    }
-
-    img {
-      height: 100%;
-      // object-fit: contain;
-    }
+  .page-shell {
+    width: min(1180px, calc(100% - 36px));
+    margin: 0 auto;
+    padding: 30px 0 54px;
   }
 
-  .app-header-box {
-    // display: block;
-    // border-radius: 8px;
-    padding: 10px 0;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    background-size: cover;
-    text-align: center;
-    background-size: 600% 600%;
+  .hero-section {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.07);
+  }
 
-    .app-heade-title {
-      color: #f0f1f5;
-      font-size: 28px;
+  .hero-content {
+    padding: 28px;
+  }
+
+  .section-kicker {
+    display: block;
+    color: #14b8a6;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .hero-panel {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .download-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .content-wrap {
+    margin-top: 26px;
+  }
+
+  .notice-card {
+    margin-bottom: 22px;
+    border: 1px solid rgba(59, 130, 246, 0.14);
+    border-radius: 8px;
+    background: rgba(239, 246, 255, 0.9);
+  }
+
+  .web-section {
+    padding: 26px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.07);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+
+    h2 {
+      margin: 6px 0 0;
+      color: #111827;
+      font-size: 24px;
+      line-height: 1.25;
     }
 
-    .app-header-tips {
-      color: hsla(0, 0%, 100%, .6);
+    p {
+      max-width: 360px;
+      margin: 0;
+      color: #64748b;
       font-size: 14px;
-      margin-bottom: 28px;
-    }
-
-    .app-header-input {
-      // width: 96%;
-      margin: auto;
-
-      // max-width: 780px;
-      .app-search {
-        margin: 12px 0;
-      }
-
-      .app-header-func {
-        color: #eee;
-        text-align: left;
-        line-height: 24px;
-        font-size: 12px;
-        cursor: pointer;
-
-        span {
-          text-decoration: underline
-        }
-      }
+      line-height: 1.7;
+      text-align: right;
     }
   }
 
   .app-web-list {
-    // width: 100%;
-    // max-width: 1400px;
-    // margin: 22px auto 0;
+    min-height: 120px;
+
+    .web-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
 
     .app-weblist-item {
-      background-color: hsla(0, 0%, 100%, 1);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      -webkit-box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-      box-shadow: 0 8px 20px 0 rgb(0 0 0 / 6%);
-      border-radius: 10px;
+      width: 100%;
+      min-height: 76px;
       display: flex;
       align-items: center;
-      padding: 24px 20px;
-      -webkit-transition: All .25s;
-      transition: All .25s;
-      margin: 20px;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 8px;
+      background: #fff;
+      color: #111827;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      transition: all 0.18s ease;
 
       &:hover {
-        background-color: rgba(255, 255, 255, .8);
-        border-radius: 4px;
+        border-color: rgba(20, 184, 166, 0.38);
+        transform: translateY(-2px);
+        box-shadow: 0 18px 34px rgba(15, 23, 42, 0.1);
+
+        .site-mark {
+          background: #0f766e;
+          color: #fff;
+        }
       }
     }
 
-    .item-logo {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      overflow: hidden;
-      background-color: #fff;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
+    .site-mark {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-
-      img {
-        width: 20px;
-        height: 20px;
-        // padding: 4px;
-        border-radius: 4px;
-        border-color: rgba(76 175 80/15%);
-        overflow: hidden;
-        // width: 48px;
-        -webkit-transition: All .25s;
-        transition: All .25s;
-      }
+      flex: 0 0 auto;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #0f766e;
+      font-size: 18px;
+      font-weight: 800;
+      transition: all 0.18s ease;
     }
 
     .item-info {
-      padding: 0 8px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .title {
+        overflow: hidden;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.25;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .site-status {
+      overflow: hidden;
+      color: #0f766e;
+      font-size: 12px;
+      line-height: 1.35;
+      text-overflow: ellipsis;
       white-space: nowrap;
 
-      .tips {
-        font-size: 12px;
-        margin-top: 6px;
-        color: #9c9c9c;
+      &.danger {
+        color: #dc2626;
+      }
+    }
+  }
+
+  .carousel-item {
+    height: 142px;
+    overflow: hidden;
+    border-radius: 8px;
+
+    img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .banner-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  @media (max-width: 920px) {
+    .hero-content {
+      padding: 22px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .page-shell {
+      width: min(100% - 24px, 1180px);
+      padding-top: 18px;
+    }
+
+    .hero-content {
+      padding: 14px;
+    }
+
+    .web-section {
+      padding: 16px;
+    }
+
+    .section-head {
+      display: block;
+
+      p {
+        margin-top: 10px;
+        text-align: left;
       }
     }
   }

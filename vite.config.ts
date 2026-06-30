@@ -65,9 +65,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         external: [],
         // https://rollupjs.org/guide/en/#big-list-of-options
       },
-      watch: {
-        // https://rollupjs.org/guide/en/#watch-options
-      },
       // Turning off brotliSize display can slightly reduce packaging time
       brotliSize: false,
       chunkSizeWarningLimit: 2000,

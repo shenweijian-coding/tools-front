@@ -1,16 +1,12 @@
 <template>
-  <a-input-search :loading="loading" style="height: 58px;background-color: #ffa00c;width: 70%;"
-    placeholder="复制链接到此处，回车或者点击搜索，输入框底部会出现下载按钮，再次点击稍等片刻即可！" v-model="url" button-text="搜索" search-button
-    class="rounded-md" @search="getPlay" size="large">
-    <template #prefix>
-      <icon-search size="20"/>
-    </template>
+  <a-input-search :loading="loading"
+    placeholder="粘贴素材详情页链接，按回车开始搜索" v-model="url" button-text="立即搜索" search-button
+    class="sucai-search-input" @search="getPlay" size="large">
   </a-input-search>
 </template>
 
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue';
-import { IconSearch } from '@arco-design/web-vue/es/icon';
 const props = defineProps({
   loading: {
     type: Boolean
@@ -37,9 +33,59 @@ if (hfUrl) {
   getPlay()
 }
 </script>
-<style>
-.arco-input-append button {
-  height: 100%;
-  width: 120px;
+<style scoped>
+.sucai-search-input {
+  width: 100%;
+  height: 62px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.13);
+}
+
+.sucai-search-input :deep(.arco-input-wrapper) {
+  height: 62px;
+  padding-left: 20px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.sucai-search-input :deep(.arco-input) {
+  font-size: 16px;
+  color: #111827;
+}
+
+.sucai-search-input :deep(.arco-input::placeholder) {
+  color: #94a3b8;
+}
+
+.sucai-search-input :deep(.arco-input-append) {
+  background: transparent;
+  border: 0;
+}
+
+.sucai-search-input :deep(.arco-input-append button) {
+  height: 62px;
+  min-width: 128px;
+  border-radius: 0;
+  border: 0;
+  background: #111827;
+  color: #fff;
+  font-weight: 600;
+}
+
+.sucai-search-input :deep(.arco-input-append button:hover) {
+  background: #0f766e;
+}
+
+@media (max-width: 640px) {
+  .sucai-search-input,
+  .sucai-search-input :deep(.arco-input-wrapper),
+  .sucai-search-input :deep(.arco-input-append button) {
+    height: 54px;
+  }
+
+  .sucai-search-input :deep(.arco-input-append button) {
+    min-width: 94px;
+  }
 }
 </style>

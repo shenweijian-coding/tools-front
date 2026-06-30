@@ -4,6 +4,7 @@ import { useUserStore } from '@/store';
 import { useRoute } from 'vue-router';
 import sDialog from '../s-dialog/index.vue'
 import { Message } from '@arco-design/web-vue';
+import { IconDown } from '@arco-design/web-vue/es/icon';
 import { useAppStore } from '@/store';
 import selSites from './sel-sites.vue'
 import { sendMail } from '@api/home/index'
@@ -12,8 +13,9 @@ import myVideo from './video.vue'
 const appStore = useAppStore()
 const userStore = useUserStore()
 const loading = ref(false)
+const route = useRoute()
 
-const curPath = ref((toRaw(useRoute()).path))
+const curPath = computed(() => route.path)
 const paths = reactive({
   list: [
     {
@@ -26,12 +28,6 @@ const paths = reactive({
       name: '下载记录',
       path: '/user?key=2',
       id: 2,
-      text: ''
-    },
-    {
-      name: '在线充值',
-      path: '/shop',
-      id: 3,
       text: ''
     }]
 })
@@ -120,6 +116,7 @@ const login = async () => {
 
 const close = () => {
   loginInfo.cdkey = ''
+  loginVisible.value = false
 }
 
 const logout = () => {
@@ -129,64 +126,51 @@ const logout = () => {
 </script>
 
 <template>
-  <header class="antialiased Male text-slate-500 flex justify-center bg-gray-100">
-    <div
-      class="sticky top-0 z-40 w-4/5 backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 ">
-      <div class="mx-auto max-w-8xl">
-        <div class="px-6 py-4 border-b border-slate-900/10 lg:px-18 lg:border-0">
-          <div class="relative flex items-center justify-between text-2xl sm:text-2xl font-blimone">
-            <a href="/" v-if="appStore.$state?.webConfig?.logo"><img class="h-8" :src="appStore.$state?.webConfig?.logo" alt="logo" /></a>
-            <div class="relative flex items-center justify-between lg:w-full">
-              <nav class="hidden text-sm font-semibold leading-6 text-black lg:flex">
-                <ul class="flex">
-                  <template v-for="it in paths.list" :key="it.id">
-                    <li class="mr-14"
-                      :class="it.path.indexOf(curPath) !== -1  ? 'border-b-4 rounded-sm border-blue-500 text-blue-500' : ''">
-                      <router-link v-if="!it.target" :to="it.path" class="hover:text-blue-500">{{it.name}}</router-link>
-                      <a v-else :href="it.path" target="it.target"  class="hover:text-white">{{it.name}}</a>
-                    </li>
-                  </template>
-                  <!-- <li class="ml-14 hover:text-white cursor-pointer" @click="videoVisible = true">视频教程</li> -->
-                </ul>
-              </nav>
-              <nav class="text-sm font-semibold leading-6 text-black dark:text-slate-200">
-                <ul class="flex space-x-10">
-                  <li class="flex items-center">
-                    <template v-if="!userStore.userIsLogin">
-                      <span class="flex items-center mr-2">
-                      <span class="text-gray-700">剩余次数：{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }} 次
-                        <span v-if="userStore.$state.numDeadDate">（过期时间：{{ userStore.$state.numDeadDate ? userStore.$state.numDeadDate : '' }}）</span>
-                      </span>
-                    </span>
-                    <a-divider direction="vertical"></a-divider>
-                    </template>
-                    <span v-if="userStore.userIsLogin" @click="openLogin" class="cursor-pointer text-black hover:blue-500">
-                      登录
-                    </span>
-                    <span v-else class="flex items-center">
-                      <a-dropdown trigger="hover">
-                        <span class="cursor-pointer hover:text-blue text-black">用户中心</span>
-                        <template #content>
-                          <a-doption>
-                            <router-link to="/user">个人中心</router-link>
-                          </a-doption>
-                          <a-doption>
-                            <router-link to="/shop">在线充值</router-link>
-                          </a-doption>
-                          <a-doption @click="logout">退出账号</a-doption>
-                        </template>
-                      </a-dropdown>
-                    </span>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+  <header class="site-header">
+    <div class="site-nav">
+      <a href="/" class="brand" aria-label="返回首页">
+        <img v-if="appStore.$state?.webConfig?.logo" :src="appStore.$state?.webConfig?.logo" alt="logo" />
+        <span v-else>素材工具箱</span>
+      </a>
+
+      <nav class="nav-links">
+        <template v-for="it in paths.list" :key="it.id">
+          <router-link v-if="!it.target" :to="it.path" class="nav-link"
+            :class="{ active: it.path.indexOf(curPath) !== -1 }">
+            {{it.name}}
+          </router-link>
+          <a v-else :href="it.path" :target="it.target" class="nav-link">{{it.name}}</a>
+        </template>
+      </nav>
+
+      <div class="nav-actions">
+        <template v-if="!userStore.userIsLogin">
+          <div class="quota-pill">
+            <span class="quota-label">剩余次数</span>
+            <strong>{{ userStore.$state.num >= 0 ? userStore.$state.num : 0 }}</strong>
+            <span v-if="userStore.$state.numDeadDate" class="quota-date">{{ userStore.$state.numDeadDate }}</span>
           </div>
-        </div>
+        </template>
+        <button v-if="userStore.userIsLogin" class="login-btn" @click="openLogin">登录</button>
+        <a-dropdown v-else trigger="hover">
+          <button class="user-btn">
+            <span>用户中心</span>
+            <icon-down />
+          </button>
+          <template #content>
+            <a-doption>
+              <router-link to="/user">个人中心</router-link>
+            </a-doption>
+            <a-doption>
+              <router-link to="/shop">在线充值</router-link>
+            </a-doption>
+            <a-doption @click="logout">退出账号</a-doption>
+          </template>
+        </a-dropdown>
       </div>
     </div>
   </header>
-  <s-dialog :visible="loginVisible" width="400px" @close="close" :closeOnClickOverlay="true">
+  <s-dialog :visible="loginVisible" width="420px" title="登录" @close="close" :closeOnClickOverlay="true">
     <!-- <a-button type="text" @click="toggleLogin">切换 卡密/微信扫码 登录</a-button> -->
     <!-- <a-tabs default-active-key="1"> -->
       <!-- <a-tab-pane key="1" title="邮箱登陆">
@@ -198,7 +182,14 @@ const logout = () => {
         <a-button type="primary" class="w-100 mt-l" @click="mailLogin">登陆</a-button>
       </a-tab-pane> -->
       <!-- <a-tab-pane key="2" title="卡密登录"> -->
-        <a-input-search class="mt-m" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="卡密登录" v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
+        <div class="login-dialog-shell">
+          <div class="login-dialog-head">
+            <h3>卡密登录</h3>
+            <p>输入卡密后即可使用素材搜索服务</p>
+          </div>
+          <a-input-search class="login-code-input" placeholder="卡密 AAA-BBB-CCC-DDD" button-text="登录"
+            v-model="loginInfo.cdkey" search-button @search="login"></a-input-search>
+        </div>
       <!-- </a-tab-pane> -->
     <!-- </a-tabs> -->
   </s-dialog>
@@ -208,6 +199,208 @@ const logout = () => {
 </template>
 
 <style lang="less" scoped>
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 12px 18px;
+  background: rgba(248, 250, 252, 0.88);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.site-nav {
+  width: min(1180px, 100%);
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 118px;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+
+  img {
+    max-width: 140px;
+    height: 34px;
+    object-fit: contain;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.18s ease;
+
+  &:hover {
+    color: #0f766e;
+    background: #f1f5f9;
+  }
+
+  &.active {
+    color: #fff;
+    background: #111827;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+  }
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.quota-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(20, 184, 166, 0.22);
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #0f766e;
+  font-size: 13px;
+  white-space: nowrap;
+
+  strong {
+    color: #064e3b;
+    font-size: 16px;
+  }
+}
+
+.quota-label,
+.quota-date {
+  color: #64748b;
+}
+
+.login-btn,
+.user-btn {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+
+  &:hover {
+    background: #0f766e;
+    transform: translateY(-1px);
+  }
+}
+
+.login-dialog-shell {
+  padding: 8px 2px 14px;
+}
+
+.login-dialog-head {
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+.login-code-input {
+  width: 100%;
+  height: 52px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+
+  :deep(.arco-input-wrapper) {
+    height: 52px;
+    padding-left: 16px;
+    background: #fff;
+    border: 1px solid rgba(17, 24, 39, 0.14);
+  }
+
+  :deep(.arco-input-wrapper:hover),
+  :deep(.arco-input-wrapper.arco-input-focus) {
+    border-color: #111827;
+    box-shadow: none;
+  }
+
+  :deep(.arco-input) {
+    color: #111827;
+    font-size: 15px;
+  }
+
+  :deep(.arco-input::placeholder) {
+    color: #9ca3af;
+  }
+
+  :deep(.arco-input-append) {
+    background: transparent;
+    border: 0;
+  }
+
+  :deep(.arco-input-append button) {
+    min-width: 92px;
+    height: 52px;
+    border: 0;
+    border-radius: 0;
+    background: #111827;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  :deep(.arco-input-append button:hover) {
+    background: #000;
+  }
+}
+
 .get-code{
   margin-top: 20px;
   color: rgb(142, 142, 142);
@@ -215,6 +408,46 @@ const logout = () => {
   justify-content: end;
   &:hover{
     color: #1653ff;
+  }
+}
+
+@media (max-width: 860px) {
+  .site-nav {
+    min-height: auto;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .brand {
+    justify-content: center;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .nav-link {
+    flex: 1;
+    justify-content: center;
+    padding: 0 8px;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .quota-pill {
+    max-width: calc(100% - 112px);
+    overflow: hidden;
+  }
+
+  .quota-date {
+    display: none;
   }
 }
 </style>
